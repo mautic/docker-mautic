@@ -1,7 +1,18 @@
 <?php
 // Args: 0 => makedb.php, 1 => "$MAUTIC_DB_HOST", 2 => "$MAUTIC_DB_USER", 3 => "$MAUTIC_DB_PASSWORD", 4 => "$MAUTIC_DB_NAME"
 $stderr = fopen('php://stderr', 'w');
+
 fwrite($stderr, "\nWriting initial Mautic config\n");
+
+// Check for presence of a Mautic config and if need be write it
+$path = '/var/www/html/app/config/local.php';
+
+if (file_exists($path))
+{
+	fwrite($stderr, "\nMautic configuration exists, skipping this step...\n");
+
+	return;
+}
 
 // Figure out if we have a port in the database host string
 if (strpos($argv[1], ':') !== false)
@@ -24,7 +35,6 @@ $parameters = array(
 	'install_source' => 'Docker'
 );
 
-$path     = '/var/www/html/app/config/local.php';
 $rendered = render($parameters);
 
 $status = file_put_contents($path, $rendered);
