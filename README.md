@@ -4,8 +4,8 @@ Docker Mautic Image
 
 # Supported tags and respective `Dockerfile` links
 
--	[`1.2.0-apache`, `1.2.0`, `1.2-apache`, `1.2`, `1-apache`, `apache`, `1`, `latest` (*apache/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/apache/Dockerfile)
--	[`1.2.0-fpm`, `1.1-fpm`, `1-fpm`, `fpm` (*fpm/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/fpm/Dockerfile)
+-	[`1.2.3-apache`, `1.2.3`, `1.2-apache`, `1.2`, `1-apache`, `apache`, `1`, `latest` (*apache/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/apache/Dockerfile)
+-	[`1.2.3-fpm`, `1.1-fpm`, `1-fpm`, `fpm` (*fpm/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/fpm/Dockerfile)
 
 # License
 
