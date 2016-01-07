@@ -4,8 +4,8 @@ Docker Mautic Image
 
 # Supported tags and respective `Dockerfile` links
 
--	[`1.2.0-apache`, `1.2.0`, `1.2-apache`, `1.2`, `1-apache`, `apache`, `1`, `latest` (*apache/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/apache/Dockerfile)
--	[`1.2.0-fpm`, `1.1-fpm`, `1-fpm`, `fpm` (*fpm/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/fpm/Dockerfile)
+-	[`1.2.1-apache`, `1.2.1`, `1.2-apache`, `1.2`, `1-apache`, `apache`, `1`, `latest` (*apache/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/apache/Dockerfile)
+-	[`1.2.1-fpm`, `1.2-fpm`, `1-fpm`, `fpm` (*fpm/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/fpm/Dockerfile)
 
 # License
 
@@ -32,7 +32,7 @@ Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browse
 
 If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`):
 
-	docker run --name some-mautic -e MAUTIC_DB_HOST=10.1.2.3:3306 \
+	docker run --name some-mautic -e MAUTIC_DB_HOST=10.1.2.1:3306 \
 	    -e MAUTIC_DB_USER=... -e MAUTIC_DB_PASSWORD=... -d mautic/mautic
 
 ## ... via [`docker-compose`](https://github.com/docker/compose)
