@@ -29,5 +29,12 @@ COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 
+# Install Supervisor and Cron
+RUN apt-get update && apt-get install -y supervisor cron
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY crontabFile /crontabFile
+RUN /usr/bin/crontab /crontabFile
+
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["/usr/bin/supervisord"]
