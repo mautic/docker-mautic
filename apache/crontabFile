@@ -27,11 +27,11 @@
 # Every 30 minutes
 # */30 * * * *
 
-1-59/2 * * * * php  /var/www/html/app/console mautic:leadlists:update  >/dev/null 2>&1
-1-59/2 * * * * php /var/www/html/app/console mautic:campaigns:update  >/dev/null 2>&1
-1-59/2 * * * * php /var/www/html/app/console mautic:campaigns:trigger  >/dev/null 2>&1
-1-59/2 * * * * php /var/www/html/app/console mautic:email:process  >/dev/null 2>&1
-*/30 * * * * php /var/www/html/app/console mautic:fetch:email >/dev/null 2>&1
-1-59/2 * * * * php /var/www/html/app/console mautic:webhooks:process >/dev/null 2>&1
+* * * * * /usr/local/bin/php  /var/www/html/app/console mautic:leadlists:update
+* * * * * /usr/local/bin/php /var/www/html/app/console mautic:campaigns:update
+* * * * * /usr/local/bin/php /var/www/html/app/console mautic:campaigns:trigger
+* * * * * /usr/local/bin/php /var/www/html/app/console mautic:email:process 
+* * * * * php /var/www/html/app/console mautic:fetch:email 
+* * * * * php /var/www/html/app/console mautic:webhooks:process 
 # Once a week
 0 6 * * 1 php /var/www/html/app/console mautic:iplookup:download >/dev/null 2>&1
