@@ -13,7 +13,7 @@ RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 1.2.4
+ENV MAUTIC_VERSION 1.3.0
 ENV MAUTIC_SHA1 f0f89343f9ce67b6b4cafb44fd7b15f325ed726f
 
 # Download package and extract to web volume
