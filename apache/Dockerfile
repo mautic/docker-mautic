@@ -13,7 +13,7 @@ RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 1.2.4
+ENV MAUTIC_VERSION 1.3.0
 ENV MAUTIC_SHA1 f0f89343f9ce67b6b4cafb44fd7b15f325ed726f
 
 # Download package and extract to web volume
@@ -29,5 +29,12 @@ COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 
+# Install Supervisor and Cron
+RUN apt-get update && apt-get install -y supervisor cron
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY crontabFile /crontabFile
+RUN /usr/bin/crontab /crontabFile
+
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["/usr/bin/supervisord"]
