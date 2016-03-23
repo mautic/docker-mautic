@@ -69,4 +69,11 @@ if ! [ -e app/config/local.php ]; then
         chown www-data:www-data app/config/local.php
 fi
 
-exec "$@"
+while ( : ) ; do php app/console mautic:leadlists:update ; sleep 900 ; done &
+while ( : ) ; do php app/console mautic:campaigns:update ; sleep 900 ; done &
+while ( : ) ; do php app/console mautic:email:process ; sleep 900 ; done &
+while ( : ) ; do php app/console mautic:fetch:email ; sleep 900 ; done &
+while ( : ) ; do php app/console mautic:webhooks:process ; sleep 900 ; done &
+while ( : ) ; do php app/console mautic:iplookup:download ; sleep 900 ; done &
+
+  exec "$@"
