@@ -9,3 +9,6 @@ mauticdb:
   image: mysql:5.6
   environment:
     MYSQL_ROOT_PASSWORD: p@ssw0rd
+    MYSQL_DATABASE: mautic
+    MYSQL_USER: mautic
+    MYSQL_PASSWORD: p@ssw0rd
