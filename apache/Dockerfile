@@ -1,12 +1,12 @@
 FROM php:5.6-apache
-MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
+MAINTAINER Antonio Milesi Bastos <antonio@milesibastos.com> (@milesibastos)
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
 
 # Install PHP extensions
 RUN apt-get update && apt-get install -y \
-	libc-client-dev libicu-dev libkrb5-dev libmcrypt-dev libssl-dev unzip zip
+	libc-client-dev libicu-dev libkrb5-dev libmcrypt-dev libssl-dev unzip zip cron
 RUN rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos
 RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql zip
@@ -29,6 +29,9 @@ RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VER
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
+
+COPY crons.conf /crons.conf
+RUN /usr/bin/crontab /crons.conf
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]

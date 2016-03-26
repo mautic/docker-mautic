@@ -69,4 +69,7 @@ if ! [ -e app/config/local.php ]; then
         chown www-data:www-data app/config/local.php
 fi
 
+# Start the cron service in the background. Unfortunately upstart doesnt work yet.
+cron -f &
+
 exec "$@"
