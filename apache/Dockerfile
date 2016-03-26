@@ -5,10 +5,11 @@ MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
 RUN a2enmod rewrite
 
 # Install PHP extensions
-RUN apt-get update && apt-get install -y libc-client-dev libicu-dev libkrb5-dev libmcrypt-dev libssl-dev unzip zip
+RUN apt-get update && apt-get install -y \
+	libc-client-dev libicu-dev libkrb5-dev libmcrypt-dev libssl-dev unzip zip
 RUN rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos
-RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql
+RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql zip
 
 VOLUME /var/www/html
 
