@@ -67,6 +67,8 @@ if ! [ -e app/config/local.php ]; then
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
+        mkdir  /var/www/html/app/logs
+        chown www-data:www-data  /var/www/html/app/logs
 fi
 
 exec "$@"
