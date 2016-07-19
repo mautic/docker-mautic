@@ -28,8 +28,12 @@ RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VER
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
-RUN cp /usr/src/php/php.ini-production /usr/local/etc/php/php.ini \
-    && sed -i -e "/always_populate_raw_post_data/ s/^;//" /usr/local/etc/php/php.ini
+RUN tar xf /usr/src/php.tar.xz \
+        -C /usr/local/etc/php/ \
+        --strip-components 1 \
+        php-5.6.23/php.ini-production \
+  && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+  && sed -i -e "/always_populate_raw_post_data/ s/^;//" /usr/local/etc/php/php.ini
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
