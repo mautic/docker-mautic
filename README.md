@@ -21,6 +21,7 @@ The following environment variables are also honored for configuring your Mautic
 -	`-e MAUTIC_DB_USER=...` (defaults to "root")
 -	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -	`-e MAUTIC_DB_NAME=...` (defaults to "mautic")
+-	`-e MAUTIC_RUN_CRON_JOBS=...` (defaults to unset, if set then all cron jobs are run every 15 minutes)
 
 If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
 
