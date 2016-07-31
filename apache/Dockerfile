@@ -14,7 +14,7 @@ VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
 ENV MAUTIC_VERSION 2.0.1
-ENV MAUTIC_SHA1 e04aa9743bcd99e2e23dbf272f9715e00257a2cc
+ENV MAUTIC_SHA1 089c283f60ce9ad19d688445f8128239b81c5145
 
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VERSION}.zip \
@@ -31,7 +31,7 @@ COPY makedb.php /makedb.php
 RUN tar xf /usr/src/php.tar.xz \
         -C /usr/local/etc/php/ \
         --strip-components 1 \
-        php-5.6.23/php.ini-production \
+        php-5.6.24/php.ini-production \
   && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
   && sed -i -e "/always_populate_raw_post_data/ s/^;//" /usr/local/etc/php/php.ini
 
