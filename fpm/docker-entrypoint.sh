@@ -67,6 +67,15 @@ if ! [ -e app/config/local.php ]; then
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
+        mkdir  /var/www/html/app/logs
+        chown www-data:www-data  /var/www/html/app/logs
 fi
+
+while ( : ) ; do echo Updating lead lists...; php app/console mautic:leadlists:update ; sleep 900 ; done &
+while ( : ) ; do echo Updating campaigns...; php app/console mautic:campaigns:update ; sleep 900 ; done &
+while ( : ) ; do echo Processing email...; php app/console mautic:email:process ; sleep 900 ; done &
+while ( : ) ; do echo Fetching email...; php app/console mautic:fetch:email ; sleep 900 ; done &
+while ( : ) ; do echo Processing webhooks...; php app/console mautic:webhooks:process ; sleep 900 ; done &
+while ( : ) ; do echo Downloading geoip database...; php app/console mautic:iplookup:download ; sleep 900 ; done &
 
 exec "$@"

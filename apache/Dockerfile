@@ -8,13 +8,13 @@ RUN a2enmod rewrite
 RUN apt-get update && apt-get install -y libc-client-dev libicu-dev libkrb5-dev libmcrypt-dev libssl-dev unzip zip
 RUN rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos
-RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql
+RUN docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql zip
 
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 1.2.4
-ENV MAUTIC_SHA1 f0f89343f9ce67b6b4cafb44fd7b15f325ed726f
+ENV MAUTIC_VERSION 2.0.1
+ENV MAUTIC_SHA1 089c283f60ce9ad19d688445f8128239b81c5145
 
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VERSION}.zip \
@@ -28,6 +28,12 @@ RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VER
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
+RUN tar xf /usr/src/php.tar.xz \
+        -C /usr/local/etc/php/ \
+        --strip-components 1 \
+        php-5.6.24/php.ini-production \
+  && mv /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini \
+  && sed -i -e "/always_populate_raw_post_data/ s/^;//" /usr/local/etc/php/php.ini
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["apache2-foreground"]
