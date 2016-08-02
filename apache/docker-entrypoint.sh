@@ -72,11 +72,11 @@ if ! [ -e app/config/local.php ]; then
 fi
 
 if [ ! -z $MAUTIC_RUN_CRON_JOBS ]; then
-        while ( : ) ; do echo Updating lead lists...; php app/console mautic:segments:update ; sleep 900 ; done &
-        while ( : ) ; do echo Updating campaigns...; php app/console mautic:campaigns:rebuild ; sleep 900 ; done &
-        while ( : ) ; do echo Processing email...; php app/console mautic:campaigns:trigger ; sleep 900 ; done &
-        while ( : ) ; do echo Fetching email...; php app/console mautic:emails:send ; sleep 900 ; done &
-        while ( : ) ; do echo Processing webhooks...; php app/console mautic:social:monitoring ; sleep 900 ; done &
+        while ( : ) ; do echo Updating segments...; php app/console mautic:segments:update ; sleep 900 ; done &
+        while ( : ) ; do echo Rebuilding campaigns...; php app/console mautic:campaigns:rebuild ; sleep 900 ; done &
+        while ( : ) ; do echo Trigger campaigns...; php app/console mautic:campaigns:trigger ; sleep 900 ; done &
+        while ( : ) ; do echo Sending emails...; php app/console mautic:emails:send ; sleep 900 ; done &
+        while ( : ) ; do echo Monitoring socials...; php app/console mautic:social:monitoring ; sleep 900 ; done &
 fi
 
 exec "$@"
