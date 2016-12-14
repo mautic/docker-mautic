@@ -6,6 +6,7 @@ current="$(curl -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/
 # TODO - Expose SHA signatures for the packages somewhere
 wget -O mautic.zip https://s3.amazonaws.com/mautic/releases/$current.zip
 sha1="$(sha1sum mautic.zip | sed -r 's/ .*//')"
+rm mautic.zip
 
 for variant in apache fpm; do
 	(
@@ -17,10 +18,10 @@ for variant in apache fpm; do
 		' "$variant/Dockerfile"
 
         # To make management easier, we use these files for all variants
-		cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
-		cp makeconfig.php "$variant/makeconfig.php"
-		cp makedb.php "$variant/makedb.php"
+		cp common/docker-entrypoint.sh "$variant/docker-entrypoint.sh"
+		cp common/makeconfig.php "$variant/makeconfig.php"
+		cp common/makedb.php "$variant/makedb.php"
+		cp common/php.ini-production "$variant/php.ini-production"
+		cp common/docker-php-mautic.ini "$variant/docker-php-mautic.ini"
 	)
 done
-
-rm mautic.zip
