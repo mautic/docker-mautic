@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-current="$(curl -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36' -sSL 'https://www.mautic.org/latest.json' | sed -r 's/^.*"current":"([^"]+)".*$/\1/')"
+current="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .name)"
 
 # TODO - Expose SHA signatures for the packages somewhere
 wget -O mautic.zip https://s3.amazonaws.com/mautic/releases/$current.zip
