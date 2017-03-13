@@ -20,6 +20,8 @@ for variant in apache fpm; do
 		cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
 		cp makeconfig.php "$variant/makeconfig.php"
 		cp makedb.php "$variant/makedb.php"
+		cp mautic.crontab "$variant/makedb.php"
+		cp mautic-php.ini "$variant/makedb.php"
 	)
 done
 
