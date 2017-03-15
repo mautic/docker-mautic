@@ -18,8 +18,8 @@ RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 2.7.0
-ENV MAUTIC_SHA1 1e3bd543d0851c0109591676139b2c13ad01b9ad
+ENV MAUTIC_VERSION 2.7.1
+ENV MAUTIC_SHA1 09e39b96139e15d9fbe4e96d88ff5532ace92206
 ENV MAUTIC_RUN_CRON_JOBS true
 
 # Download package and extract to web volume
