@@ -17,11 +17,7 @@ for variant in apache fpm; do
 		' "$variant/Dockerfile"
 
         # To make management easier, we use these files for all variants
-		cp docker-entrypoint.sh "$variant/docker-entrypoint.sh"
-		cp makeconfig.php "$variant/makeconfig.php"
-		cp makedb.php "$variant/makedb.php"
-		cp mautic.crontab "$variant/makedb.php"
-		cp mautic-php.ini "$variant/makedb.php"
+		cp common/* "$variant"/
 	)
 done
 
