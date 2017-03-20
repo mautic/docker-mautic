@@ -26,99 +26,10 @@ $parameters = array(
 );
 
 $path     = '/var/www/html/app/config/local.php';
-$rendered = render($parameters);
+$rendered = "<?php\n\$parameters = ".var_export($parameters, true).";\n";
 
 $status = file_put_contents($path, $rendered);
 
 if ($status === false) {
 	fwrite($stderr, "\nCould not write configuration file to $path, you can create this file with the following contents:\n\n$rendered\n");
-}
-
-/**
- * Renders parameters as a string.
- *
- * @param array $parameters
- *
- * @return string
- */
-function render(array $parameters)
-{
-	$string = "<?php\n";
-	$string .= "\$parameters = array(\n";
-
-	foreach ($parameters as $key => $value)
-	{
-		if ($value !== '')
-		{
-			if (is_string($value))
-			{
-				$value = "'" . addslashes($value) . "'";
-			}
-			elseif (is_bool($value))
-			{
-				$value = ($value) ? 'true' : 'false';
-			}
-			elseif (is_null($value))
-			{
-				$value = 'null';
-			}
-			elseif (is_array($value))
-			{
-				$value = renderArray($value);
-			}
-
-			$string .= "\t'$key' => $value,\n";
-		}
-	}
-
-	$string .= ");\n";
-
-	return $string;
-}
-
-/**
- * Renders an array of parameters as a string.
- *
- * @param array $array
- * @param bool  $addClosingComma
- *
- * @return string
- */
-function renderArray(array $array, $addClosingComma = false)
-{
-	$string = "array(";
-	$first  = true;
-
-	foreach ($array as $key => $value)
-	{
-		if (!$first)
-		{
-			$string .= ',';
-		}
-
-		if (is_string($key))
-		{
-			$string .= '"' . $key . '" => ';
-		}
-
-		if (is_array($value))
-		{
-			$string .= $this->renderArray($value, true);
-		}
-		else
-		{
-			$string .= '"' . addslashes($value) . '"';
-		}
-
-		$first = false;
-	}
-
-	$string .= ")";
-
-	if ($addClosingComma)
-	{
-		$string .= ',';
-	}
-
-	return $string;
 }
