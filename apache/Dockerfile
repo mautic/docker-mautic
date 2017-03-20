@@ -20,7 +20,10 @@ VOLUME /var/www/html
 # Define Mautic version and expected SHA1 signature
 ENV MAUTIC_VERSION 2.7.1
 ENV MAUTIC_SHA1 09e39b96139e15d9fbe4e96d88ff5532ace92206
+
 ENV MAUTIC_RUN_CRON_JOBS true
+ENV MAUTIC_DB_USER root
+ENV MAUTIC_DB_NAME mautic
 
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VERSION}.zip \

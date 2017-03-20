@@ -19,11 +19,9 @@ if [ -z "$MAUTIC_DB_HOST" ]; then
 fi
 
 # If the DB user is 'root' then use the MySQL root password env var
-: ${MAUTIC_DB_USER:=root}
 if [ "$MAUTIC_DB_USER" = 'root' ]; then
         : ${MAUTIC_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
 fi
-: ${MAUTIC_DB_NAME:=mautic}
 
 if [ -z "$MAUTIC_DB_PASSWORD" ]; then
         echo >&2 "error: missing required MAUTIC_DB_PASSWORD environment variable"
@@ -60,7 +58,7 @@ echo >&2 "Database Password: $MAUTIC_DB_PASSWORD"
 
 # Write the database connection to the config so the installer prefills it
 if ! [ -e app/config/local.php ]; then
-        php /makeconfig.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
+        php /makeconfig.php
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
