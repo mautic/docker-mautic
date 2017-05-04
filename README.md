@@ -2,11 +2,6 @@ Docker Mautic Image
 ===================
 <img src="https://www.mautic.org/media/images/github_readme.png" />
 
-# Supported tags and respective `Dockerfile` links
-
--	[`1.2.4-apache`, `1.2.4`, `1.2-apache`, `1.2`, `1-apache`, `apache`, `1`, `latest` (*apache/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/apache/Dockerfile)
--	[`1.2.4-fpm`, `1.1-fpm`, `1-fpm`, `fpm` (*fpm/Dockerfile*)](https://github.com/mautic/docker-mautic/blob/master/fpm/Dockerfile)
-
 # License
 
 Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
