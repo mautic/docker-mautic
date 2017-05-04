@@ -7,8 +7,8 @@ Docker Mautic Image
 Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
 
 # How to use this image
-
-	docker run --name some-mautic --link some-mysql:mysql -d mautic/mautic
+	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql &
+	docker run --name some-mautic --link some-mysql:mysql mautic/mautic
 
 The following environment variables are also honored for configuring your Mautic instance:
 
