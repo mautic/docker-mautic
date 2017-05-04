@@ -3,7 +3,10 @@ set -e
 
 if [ -n "$MYSQL_PORT_3306_TCP" ]; then
         if [ -z "$MAUTIC_DB_HOST" ]; then
-                MAUTIC_DB_HOST='mysql'
+                export MAUTIC_DB_HOST='mysql'
+                if [ "$MAUTIC_DB_USER" = 'root' ] && [ -z "$MAUTIC_DB_PASSWORD" ]; then
+                        export MAUTIC_DB_PASSWORD="$MYSQL_ENV_MYSQL_ROOT_PASSWORD"
+                fi
         else
                 echo >&2 "warning: both MAUTIC_DB_HOST and MYSQL_PORT_3306_TCP found"
                 echo >&2 "  Connecting to MAUTIC_DB_HOST ($MAUTIC_DB_HOST)"
@@ -18,10 +21,6 @@ if [ -z "$MAUTIC_DB_HOST" ]; then
         exit 1
 fi
 
-# If the DB user is 'root' then use the MySQL root password env var
-if [ "$MAUTIC_DB_USER" = 'root' ]; then
-        : ${MAUTIC_DB_PASSWORD:=$MYSQL_ENV_MYSQL_ROOT_PASSWORD}
-fi
 
 if [ -z "$MAUTIC_DB_PASSWORD" ]; then
         echo >&2 "error: missing required MAUTIC_DB_PASSWORD environment variable"
@@ -50,7 +49,7 @@ php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUT
 echo >&2 "========================================================================"
 echo >&2
 echo >&2 "This server is now configured to run Mautic!"
-echo >&2 "You will need the following database information to install Mautic:"
+echo >&2 "The following information will be prefilled into the installer (keep password field empty):"
 echo >&2 "Host Name: $MAUTIC_DB_HOST"
 echo >&2 "Database Name: $MAUTIC_DB_NAME"
 echo >&2 "Database Username: $MAUTIC_DB_USER"
