@@ -16,6 +16,7 @@ The following environment variables are also honored for configuring your Mautic
 -	`-e MAUTIC_DB_USER=...` (defaults to "root")
 -	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -	`-e MAUTIC_DB_NAME=...` (defaults to "mautic")
+-	`-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
 -	`-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
 -	`-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If set to a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 
@@ -42,7 +43,7 @@ Example `docker-compose.yml` for `mautic`:
 	    - mauticdb:mysql
 	  ports:
 	    - 8080:80
-	
+
 	mauticdb:
 	  image: mysql:5.6
 	  environment:
