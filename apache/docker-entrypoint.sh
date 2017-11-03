@@ -122,6 +122,22 @@ fi
 echo >&2
 echo >&2 "========================================================================"
 
+if [ -n "$SYSTEM_TIMEZONE" ]; then
+  echo >&2
+  echo >&2 "Change Timezone to $SYSTEM_TIMEZONE"
+  echo >&2
+  export TZ="$SYSTEM_TIMEZONE";
+fi
+
+echo >&2
+echo >&2 "System Timezone: "
+echo >&2
+
+cat /etc/timezone
+
+echo >&2
+echo >&2 "========================================================================"
+
 "$@" &
 MAINPID=$!
 
