@@ -25,6 +25,7 @@ The following environment variables are also honored for configuring your Mautic
 -	`-e MAUTIC_CRON_ZOHO=...` (defaults to empty) Enables mautic crons for Zoho CRM integration
 -	`-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
 -	`-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
+- `-e SYSTEM_TIMEZONE=...` (defaults to empty) Change System Timezone. Ex: America/Sao_Paulo
 
 If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
 
