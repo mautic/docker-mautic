@@ -33,42 +33,42 @@ fi
 #ENABLES HUBSPOT CRON
 if [ -n "$MAUTIC_CRON_HUBSPOT" ]; then
         echo >&2 "CRON: Activating Hubspot"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Hubspot > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
-        echo "15,45 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushactivity --integration=Hubspot > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Hubspot > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+        echo "15,45 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushactivity --integration=Hubspot > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 #ENABLES SALESFORCE CRON
 if [ -n "$MAUTIC_CRON_SALESFORCE" ]; then
         echo >&2 "CRON: Activating Salesforce"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Salesforce > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
-        echo "12,42 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushactivity --integration=Salesforce > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
-        echo "14,44 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushleadactivity --integration=Salesforce > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
-        echo "16,46 * * * *     www-data   php /var/www/html/app/console mautic:integration:synccontacts --integration=Salesforce > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Salesforce > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+        echo "12,42 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushactivity --integration=Salesforce > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+        echo "14,44 * * * *     www-data   php /var/www/html/app/console mautic:integration:pushleadactivity --integration=Salesforce > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+        echo "16,46 * * * *     www-data   php /var/www/html/app/console mautic:integration:synccontacts --integration=Salesforce > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 #ENABLES SUGARCRM CRON
 if [ -n "$MAUTIC_CRON_SUGARCRM" ]; then
         echo >&2 "CRON: Activating SugarCRM"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --fetch-all --integration=Sugarcrm > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --fetch-all --integration=Sugarcrm > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 #ENABLES PIPEDRIVE CRON
 if [ -n "$MAUTIC_CRON_PIPEDRIVE" ]; then
         echo >&2 "CRON: Activating Pipedrive"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:pipedrive:fetch > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
-        echo "15,45 * * * *     www-data   php /var/www/html/app/console mautic:integration:pipedrive:push > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:pipedrive:fetch > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+        echo "15,45 * * * *     www-data   php /var/www/html/app/console mautic:integration:pipedrive:push > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 #ENABLES ZOHO CRON
 if [ -n "$MAUTIC_CRON_ZOHO" ]; then
         echo >&2 "CRON: Activating ZohoCRM"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Zoho > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads --integration=Zoho > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 #ENABLES DYNAMICS CRON
 if [ -n "$MAUTIC_CRON_DYNAMICS" ]; then
         echo >&2 "CRON: Activating DynamicsCRM"
-        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" > /etc/cron.d/mautic
+        echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
 if ! [ -e index.php -a -e app/AppKernel.php ]; then
