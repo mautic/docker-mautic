@@ -25,6 +25,23 @@ ENV MAUTIC_RUN_CRON_JOBS true
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
 
+
+# DEFINE CRON SCHEDULE VARIABLES
+ENV MAUTIC_CRON_SEGMENTS_UPDATE "8,23,38,52 * * * *"
+ENV MAUTIC_CRON_IMPORT "*/5 * * * *"
+ENV MAUTIC_CRON_CAMPAIGN_REBUILD "5,20,35,50 * * * *"
+ENV MAUTIC_CRON_CAMPAIGN_TRIGGER "2,17,32,47 * * * *"
+ENV MAUTIC_CRON_EMAILS_SEND "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_EMAIL_FETCH "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_SOCIAL_MONITORING "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_MESSAGES_SEND "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_WEBHOOKS_PROCESSS "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_BROADCASTS_SEND "0,15,30,45 * * * *"
+ENV MAUTIC_CRON_MAINTENANCE "* 1 * * *"
+ENV MAUTIC_CRON_IPLOOKUP "0 4 15 * *"
+ENV MAUTIC_CRON_REPORTS_SCHEDULER "*/5 * * * *"
+
+
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VERSION}.zip \
 	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
@@ -37,7 +54,6 @@ RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VER
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
-COPY mautic.crontab /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
