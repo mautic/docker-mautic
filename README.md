@@ -26,6 +26,23 @@ The following environment variables are also honored for configuring your Mautic
 -	`-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
 -	`-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
 
+### Configuring Cron Schedule
+You can also customize the Cron Schedule with the following environment variables:
+
+-	`-e  MAUTIC_CRON_SEGMENTS_UPDATE=` (defaults to: 8,23,38,52 \* \* \* \*)
+-	`-e  MAUTIC_CRON_IMPORT=` (defaults to: \*/5 \* \* \* \*)
+-	`-e  MAUTIC_CRON_CAMPAIGN_REBUILD=` (defaults to: 5,20,35,50 \* \* \* \*)
+-	`-e  MAUTIC_CRON_CAMPAIGN_TRIGGER=` (defaults to: 2,17,32,47 \* \* \* \*)
+-	`-e  MAUTIC_CRON_EMAILS_SEND=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_EMAIL_FETCH=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_SOCIAL_MONITORING=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_MESSAGES_SEND=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_WEBHOOKS_PROCESSS=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_BROADCASTS_SEND=` (defaults to: 0,15,30,45 \* \* \* \*)
+-	`-e  MAUTIC_CRON_MAINTENANCE=` (defaults to: \* 1 \* \* \*)
+-	`-e  MAUTIC_CRON_IPLOOKUP=` (defaults to: 0 4 15 \* \*)
+-	`-e  MAUTIC_CRON_REPORTS_SCHEDULER=` (defaults to: \*/5 \* \* \* \*)
+
 If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
 
 If you'd like to be able to access the instance from the host without the container's IP, standard port mappings can be used:
