@@ -30,6 +30,84 @@ if [ -z "$MAUTIC_DB_PASSWORD" ]; then
         exit 1
 fi
 
+# CRON mautic:segments:update
+if [ -n "$MAUTIC_CRON_SEGMENTS_UPDATE" ]; then
+    echo >&2 "CRON: mautic:segments:update"
+    echo "$MAUTIC_CRON_SEGMENTS_UPDATE   www-data   php /var/www/html/app/console mautic:segments:update > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:import
+if [ -n "$MAUTIC_CRON_IMPORT" ]; then
+    echo >&2 "CRON: mautic:import"
+    echo "$MAUTIC_CRON_IMPORT   www-data   php /var/www/html/app/console mautic:import > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:campaigns:rebuild
+if [ -n "$MAUTIC_CRON_CAMPAIGN_REBUILD" ]; then
+    echo >&2 "CRON: mautic:campaigns:rebuild"
+    echo "$MAUTIC_CRON_CAMPAIGN_REBUILD   www-data   php /var/www/html/app/console mautic:campaigns:rebuild > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:campaigns:trigger
+if [ -n "$MAUTIC_CRON_CAMPAIGN_TRIGGER" ]; then
+    echo >&2 "CRON: mautic:campaigns:trigger"
+    echo "$MAUTIC_CRON_CAMPAIGN_TRIGGER   www-data   php /var/www/html/app/console mautic:campaigns:trigger > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:emails:send
+if [ -n "$MAUTIC_CRON_EMAILS_SEND" ]; then
+    echo >&2 "CRON: mautic:emails:send"
+    echo "$MAUTIC_CRON_EMAILS_SEND   www-data   php /var/www/html/app/console mautic:emails:send > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:email:fetch
+if [ -n "$MAUTIC_CRON_EMAIL_FETCH" ]; then
+    echo >&2 "CRON: mautic:mautic:email:fetch"
+    echo "$MAUTIC_CRON_EMAIL_FETCH   www-data   php /var/www/html/app/console mautic:email:fetch > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:social:monitoring
+if [ -n "$MAUTIC_CRON_SOCIAL_MONITORING" ]; then
+    echo >&2 "CRON: mautic:social:monitoring"
+    echo "$MAUTIC_CRON_SOCIAL_MONITORING   www-data   php /var/www/html/app/console mautic:social:monitoring > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:messages:send
+if [ -n "$MAUTIC_CRON_MESSAGES_SEND" ]; then
+    echo >&2 "CRON: mautic:messages:send"
+    echo "$MAUTIC_CRON_MESSAGES_SEND   www-data   php /var/www/html/app/console mautic:messages:send > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:webhooks:process
+if [ -n "$MAUTIC_CRON_WEBHOOKS_PROCESSS" ]; then
+    echo >&2 "CRON: mautic:webhooks:process"
+    echo "$MAUTIC_CRON_WEBHOOKS_PROCESSS   www-data   php /var/www/html/app/console mautic:webhooks:process > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:broadcasts:send
+if [ -n "$MAUTIC_CRON_BROADCASTS_SEND" ]; then
+    echo >&2 "CRON: mautic:broadcasts:send"
+    echo "$MAUTIC_CRON_BROADCASTS_SEND   www-data   php /var/www/html/app/console mautic:broadcasts:send > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:maintenance:cleanup
+if [ -n "$MAUTIC_CRON_MAINTENANCE" ]; then
+    echo >&2 "CRON: mautic:maintenance:cleanup"
+    echo "$MAUTIC_CRON_MAINTENANCE   www-data   php /var/www/html/app/console mautic:maintenance:cleanup > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:maintenance:cleanup
+if [ -n "$MAUTIC_CRON_IPLOOKUP" ]; then
+    echo >&2 "CRON: mautic:iplookup:download"
+    echo "$MAUTIC_CRON_IPLOOKUP   www-data   php /var/www/html/app/console mautic:iplookup:download > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
+# CRON mautic:reports:scheduler
+if [ -n "$MAUTIC_CRON_REPORTS_SCHEDULER" ]; then
+    echo >&2 "CRON: mautic:reports:scheduler"
+    echo "$MAUTIC_CRON_REPORTS_SCHEDULER   www-data   php /var/www/html/app/console mautic:reports:scheduler > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
+fi
+
 #ENABLES HUBSPOT CRON
 if [ -n "$MAUTIC_CRON_HUBSPOT" ]; then
         echo >&2 "CRON: Activating Hubspot"
@@ -70,6 +148,8 @@ if [ -n "$MAUTIC_CRON_DYNAMICS" ]; then
         echo >&2 "CRON: Activating DynamicsCRM"
         echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
+
+echo >&2 "@reboot  www-data   [[ "$(ls -A /var/www/html/app/cache/ip_data 2>/dev/null)" ]] || php /var/www/html/app/console mautic:iplookup:download > /var/log/cron.pipe 2>&1"
 
 if ! [ -e index.php -a -e app/AppKernel.php ]; then
         echo >&2 "Mautic not found in $(pwd) - copying now..."
