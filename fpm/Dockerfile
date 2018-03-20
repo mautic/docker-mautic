@@ -4,6 +4,7 @@ MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
     cron \
+    git \
     libc-client-dev \
     libicu-dev \
     libkrb5-dev \
