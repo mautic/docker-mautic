@@ -17,8 +17,7 @@ fi
 # Github Pull Tester
 if [ -n "$MAUTIC_TESTER" ]; then
   echo >&2 "Copying Mautic Github Pull Tester"
-  git clone https://github.com/mautic/mautic-tester.git /var/www/tester
-  cp -rf /var/www/tester/tester.php /var/www/html/tester.php
+  wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
 
 if [ -z "$MAUTIC_DB_HOST" ]; then
