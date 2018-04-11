@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-
 if [ -n "$MYSQL_PORT_3306_TCP" ]; then
         if [ -z "$MAUTIC_DB_HOST" ]; then
                 export MAUTIC_DB_HOST='mysql'
