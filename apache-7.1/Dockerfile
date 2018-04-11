@@ -1,4 +1,4 @@
-FROM php:7.0-apache
+FROM php:7.1-apache
 MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
 
 # Install PHP extensions
