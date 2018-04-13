@@ -123,11 +123,15 @@ fi
 echo >&2
 echo >&2 "========================================================================"
 
+
+
 # Github Pull Tester
 if [ -n "$MAUTIC_TESTER" ]; then
   echo >&2 "Copying Mautic Github Pull Tester"
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
+
+
 
 "$@" &
 MAINPID=$!
