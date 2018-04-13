@@ -51,8 +51,6 @@ COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 
-RUN ["chmod", "+x", "/entrypoint.sh"]
-
 # Copy default crontab
 COPY mautic.crontab /etc/cron.d/mautic
 
@@ -61,6 +59,9 @@ COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
+
+# Apply necessary permissions
+RUN ["chmod", "+x", "/entrypoint.sh"]
 
 # Starting...
 ENTRYPOINT ["sh", "/entrypoint.sh"]
