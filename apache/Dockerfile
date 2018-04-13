@@ -1,6 +1,6 @@
 FROM php:7.1-apache
 
-MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
+LABEL maintainer="Michael Babker <michael.babker@mautic.org> (@mbabker)"
 
 # Install PHP extensions and clear all apt-cache
 RUN apt-get update && apt-get install --no-install-recommends -y \
