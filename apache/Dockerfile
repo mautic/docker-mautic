@@ -1,4 +1,5 @@
-FROM php:7.0-apache
+FROM php:7.1-apache
+
 MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
 
 # Install PHP extensions
@@ -13,17 +14,24 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libssl-dev \
     unzip \
     zip \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
+
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql zip
 
+# Define Mautic volume to persist data
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
 ENV MAUTIC_VERSION 2.13.0
 ENV MAUTIC_SHA1 fc130eefbde2eb22a4d1de3aa5815b98c177d782
 
+# By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
+
+# Setting an root user for test
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
 
@@ -41,8 +49,12 @@ COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
+
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
 
+# Apply necessary permissions
+RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
+
 CMD ["apache2-foreground"]
