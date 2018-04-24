@@ -7,16 +7,37 @@ Docker Mautic Image
 Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
 
 # How to use this image
+
+You can access and customize Docker Mautic from [Official Docker Hub image](https://hub.docker.com/r/mautic/mautic/).
+
+# Pulling image from Docker Hub
+
+`docker pull mautic/mautic`
+
+# Running Basic Container
+
 	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql &
 	docker run --name some-mautic --link some-mysql:mysql mautic/mautic
 
+## Customizing Mautic Container
+
 The following environment variables are also honored for configuring your Mautic instance:
 
+### Database Config
 -	`-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
 -	`-e MAUTIC_DB_USER=...` (defaults to "root")
 -	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -	`-e MAUTIC_DB_NAME=...` (defaults to "mautic")
 -	`-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+
+If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`):
+
+	docker run --name some-mautic -e MAUTIC_DB_HOST=10.1.2.3:3306 \
+	    -e MAUTIC_DB_USER=... -e MAUTIC_DB_PASSWORD=... -d mautic/mautic
+
+If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
+
+### Enable / Disable Crons
 -	`-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
 -	`-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If set to a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 -	`-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
@@ -25,20 +46,17 @@ The following environment variables are also honored for configuring your Mautic
 -	`-e MAUTIC_CRON_ZOHO=...` (defaults to empty) Enables mautic crons for Zoho CRM integration
 -	`-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
 -	`-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
+
+### Enable / Disable Features
 -	`-e MAUTIC_TESTER=...` (defaults to empty) Enables Mautic Github Pull Tester  [documentation](https://github.com/mautic/mautic-tester)
 
-If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
-
+## Accesing the Instance
 If you'd like to be able to access the instance from the host without the container's IP, standard port mappings can be used:
 
 	docker run --name some-mautic --link some-mysql:mysql -p 8080:80 -d mautic
 
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
 
-If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`):
-
-	docker run --name some-mautic -e MAUTIC_DB_HOST=10.1.2.3:3306 \
-	    -e MAUTIC_DB_USER=... -e MAUTIC_DB_PASSWORD=... -d mautic/mautic
 
 ## ... via [`docker-compose`](https://github.com/docker/compose)
 
