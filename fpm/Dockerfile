@@ -15,7 +15,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     zip \
     && rm /etc/cron.daily/*
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
-    && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo pdo_mysql zip
+    && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo_mysql zip \
+    && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip
     
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
