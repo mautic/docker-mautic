@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libkrb5-dev \
     libmcrypt-dev \
     libssl-dev \
+    sudo \
     unzip \
     zip \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
