@@ -131,6 +131,12 @@ if [ -n "$MAUTIC_TESTER" ]; then
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
 
+
+# Get the mautic official composer.json from github
+# -O overrides existing composer.json files
+wget -O https://github.com/mautic/mautic/raw/staging/composer.json
+
+
 "$@" &
 MAINPID=$!
 
