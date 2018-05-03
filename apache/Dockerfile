@@ -25,6 +25,9 @@ RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
+# Fix cache permissions
+RUN mkdir /var/www/.composer && chown -R www-data:www-data /var/www/.composer
+
 # Define Mautic volume to persist data
 VOLUME /var/www/html
 
