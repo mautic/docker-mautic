@@ -1,6 +1,7 @@
 FROM php:7.1-apache
 
-MAINTAINER Michael Babker <michael.babker@mautic.org> (@mbabker)
+LABEL vendor="Mautic"
+LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
 
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
