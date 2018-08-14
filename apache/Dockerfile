@@ -41,7 +41,7 @@ ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
 
 # Download package and extract to web volume
-RUN curl -o mautic.zip -SL https://s3.amazonaws.com/mautic/releases/${MAUTIC_VERSION}.zip \
+RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
 	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
 	&& mkdir /usr/src/mautic \
 	&& unzip mautic.zip -d /usr/src/mautic \
