@@ -16,7 +16,7 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 
 # Running Basic Container
 
-	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql &
+	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7 &
 	docker run --name some-mautic --link some-mysql:mysql mautic/mautic
 
 ## Customizing Mautic Container
