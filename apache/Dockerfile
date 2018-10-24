@@ -31,8 +31,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 2.14.0
-ENV MAUTIC_SHA1 1a926d8d3752c85bc3cc2543625d8762e44ca206
+ENV MAUTIC_VERSION 2.14.2
+ENV MAUTIC_SHA1 d896eb2389047509c841d8478191234bea432e44
 
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
