@@ -14,7 +14,7 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 
 If you want yo pull the latest stable image from DockerHub:
 
- docker pull mautic/mautic:latest
+  docker pull mautic/mautic:latest
 
 There are also another images that fit your needs:
 
