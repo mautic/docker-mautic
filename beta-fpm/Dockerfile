@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.2-fpm
 
 LABEL vendor="Mautic"
 LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
@@ -30,8 +30,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 2.14.0
-ENV MAUTIC_SHA1 1a926d8d3752c85bc3cc2543625d8762e44ca206
+ENV MAUTIC_VERSION 2.15.0-beta
+ENV MAUTIC_SHA1 b4a9755f258796011eae2898138437cc51f694f1
 
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
@@ -55,11 +55,8 @@ COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
-
 # Apply necessary permissions
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["apache2-foreground"]
+CMD ["php-fpm"]
