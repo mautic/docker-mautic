@@ -14,7 +14,7 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 
 If you want yo pull the latest stable image from DockerHub:
 
-`docker pull mautic/mautic:latest`
+ docker pull mautic/mautic:latest
 
 There are also another images that fit your needs:
 
@@ -26,8 +26,7 @@ There are also another images that fit your needs:
 | beta-apache | 7.2.12 | Apache | >= 2.15.0 |
 | beta-fpm | 7.2.12 | Nginx | >= 2.15.0 |
 
-** You can use the beta images to test latest beta releases of Mautic with current
-PHP version.**
+* You can use the beta images to test latest beta releases of Mautic with current PHP version.
 
 # Running Basic Container
 
