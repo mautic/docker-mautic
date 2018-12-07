@@ -26,18 +26,27 @@ There are also another images that fit your needs:
 | beta-apache | 7.2.12 | Apache | >= 2.15.0 |
 | beta-fpm | 7.2.12 | Nginx | >= 2.15.0 |
 
-* You can use the beta images to test latest beta releases of Mautic with current PHP version.
+**You can use the beta images to test latest beta releases of Mautic with current PHP version.**
 
 # Running Basic Container
 
 	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7 &
-	docker run --name some-mautic --link some-mysql:mysql mautic/mautic
+	docker run --name some-mautic -p 80:8080 --link some-mysql:mysql mautic/mautic
+
+This will run a basic mysql service within Mautic on http://localhost:8080.
+
+# Testing Mautic Beta
+
+	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7 &
+	docker run --name some-mautic -p 80:8080 --link some-mysql:mysql mautic/mautic:beta-apache
+
+This will run a basic mysql service within Mautic Beta on http://localhost:8080.
 
 ## Customizing Mautic Container
 
 The following environment variables are also honored for configuring your Mautic instance:
 
-### Database Config
+#### Database Config
 -	`-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
 -	`-e MAUTIC_DB_USER=...` (defaults to "root")
 -	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
