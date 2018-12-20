@@ -64,6 +64,13 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 ### Enable / Disable Features
 -	`-e MAUTIC_TESTER=...` (defaults to empty) Enables Mautic Github Pull Tester  [documentation](https://github.com/mautic/mautic-tester)
 
+### Mautic Versioning
+
+Mautic Docker has two ENV that you can specify an version do start your new container:
+
+ - `-e MAUTIC_VERSION` (Defaults to "2.15.0")
+ - `-e MAUTIC_SHA1` (Defalts to "b07bd42bb092cc96785d2541b33700b55f74ece7")
+
 ## Accesing the Instance
 If you'd like to be able to access the instance from the host without the container's IP, standard port mappings can be used:
 
