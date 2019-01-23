@@ -3,6 +3,7 @@ pipeline:
     image: plugins/docker
     repo: claimcompass/mautic
     dockerfile: apache/Dockerfile
+    context: apache
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     auto_tag_suffix: apache
