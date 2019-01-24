@@ -1,5 +1,7 @@
 FROM php:7.1-apache
 
+ENV PORT 8080
+
 LABEL vendor="Mautic"
 LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
 
@@ -64,4 +66,5 @@ RUN a2enmod rewrite
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["apache2-foreground"]
+#CMD ["apache2-foreground"]
+CMD sed -i "s/80/$PORT/g" /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf && docker-php-entrypoint apache2-foreground
