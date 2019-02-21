@@ -57,6 +57,9 @@ COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
+# Increase php memory limit
+RUN echo "memory_limit = 256M" >> /usr/local/etc/php/conf.d/mautic-php.ini
+
 # Apply necessary permissions
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
