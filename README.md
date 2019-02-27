@@ -22,7 +22,7 @@ There are also another images that fit your needs:
 |-----|:-----:|:------------:|:---------------:|
 | latest | 7.1.23 | Apache | <= 2.15.0 |
 | apache | 7.1.23 | Apache | <= 2.15.0 |
-| nginx | 7.1.23 | Nginx | <= 2.15.0 |
+| fpm | 7.1.23 | Nginx | <= 2.15.0 |
 | beta-apache | 7.2.12 | Apache | >= 2.15.0 |
 | beta-fpm | 7.2.12 | Nginx | >= 2.15.0 |
 
