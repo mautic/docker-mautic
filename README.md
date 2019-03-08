@@ -73,6 +73,11 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 ### Enable / Disable Features
 -	`-e MAUTIC_TESTER=...` (defaults to empty) Enables Mautic Github Pull Tester  [documentation](https://github.com/mautic/mautic-tester)
 
+
+### Persistent Data Volumes
+
+On first run Mautic is unpacked at `/var/www/html`. You need to attach a volume on this path to persist data.
+
 ### Mautic Versioning
 
 Mautic Docker has two ENV that you can specify an version do start your new container:
