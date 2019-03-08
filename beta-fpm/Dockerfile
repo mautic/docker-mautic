@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     cron \
     git \
     wget \
+    sudo \
     libc-client-dev \
     libicu-dev \
     libkrb5-dev \
