@@ -30,39 +30,54 @@ There are also another images that fit your needs:
 
 # Running Basic Container
 
-	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7 &
-	docker run --name some-mautic -p 80:8080 --link some-mysql:mysql mautic/mautic
+Setting up MySQL Server:
+
+	$ docker volume create mysql_data
+
+	$ docker run --name percona -d \
+        -p 3306:3306 \
+        -e MYSQL_ROOT_PASSWORD=mypassword \
+        -v mysql_data:/var/lib/mysql \
+        percona/percona-server:5.7 \
+         --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+
+Running Mautic:
+
+	$ docker volume create mautic_data
+
+	$ docker run --name mautic -d \
+        --restart=always \
+        -e MAUTIC_DB_HOST=127.0.0.1 \
+        -e MAUTIC_DB_USER=root \
+        -e MAUTIC_DB_PASSWORD=mypassword \
+        -e MAUTIC_DB_NAME=mautic \
+        -e MAUTIC_RUN_CRON_JOBS=true \
+        -e MAUTIC_TRUSTED_PROXIES=0.0.0.0/0 \
+        -p 8080:80 \
+        -v mautic_data:/var/www/html \
+        mautic/mautic:latest
 
 This will run a basic mysql service within Mautic on http://localhost:8080.
-
-# Testing Mautic Beta
-
-	docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw mysql:5.7 &
-	docker run --name some-mautic -p 80:8080 --link some-mysql:mysql mautic/mautic:beta-apache
-
-This will run a basic mysql service within Mautic Beta on http://localhost:8080.
 
 ## Customizing Mautic Container
 
 The following environment variables are also honored for configuring your Mautic instance:
 
-#### Database Config
+#### Database Options
 -	`-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
 -	`-e MAUTIC_DB_USER=...` (defaults to "root")
 -	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -	`-e MAUTIC_DB_NAME=...` (defaults to "mautic")
 -	`-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
 
-If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`):
+If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`).
 
-	docker run --name some-mautic -e MAUTIC_DB_HOST=10.1.2.3:3306 \
-	    -e MAUTIC_DB_USER=... -e MAUTIC_DB_PASSWORD=... -d mautic/mautic
 
 If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
 
-### Enable / Disable Crons
+### Mautic Options
 -	`-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
--	`-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If set to a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
+-	`-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behing a reverse proxy you can set a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 -	`-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
 -	`-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
 -	`-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
