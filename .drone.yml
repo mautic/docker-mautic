@@ -8,9 +8,9 @@ steps:
       repo: claimcompass/mautic
       dockerfile: apache/Dockerfile
       context: apache
-      docker_username:
+      username:
         from_secret: docker_username
-      docker_password:
+      password:
         from_secret: docker_password
       auto_tag: true
       auto_tag_suffix: apache
