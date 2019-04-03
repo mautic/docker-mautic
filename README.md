@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/mautic/docker-mautic.svg)](https://travis-ci.org/mautic/docker-mautic)
+
 Docker Mautic Image
 ===================
 <img src="https://www.mautic.org/media/images/github_readme.png" />
@@ -136,6 +139,11 @@ services:
       - mautic_db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+
+volumes:
+  - mautic_data:
+  - mautic_db:
+
 ```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
