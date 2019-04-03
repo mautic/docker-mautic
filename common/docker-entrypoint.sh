@@ -131,8 +131,6 @@ if [ -n "$MAUTIC_TESTER" ]; then
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
 
-# Setting up file permissions
-chown -R www-data:www-data /var/www/html/
 
 "$@" &
 MAINPID=$!
