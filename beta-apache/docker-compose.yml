@@ -30,3 +30,7 @@ services:
       MYSQL_DATABASE: mautic
       MYSQL_USER: mautic
       MYSQL_PASSWORD: mauticdbpass
+
+volumes:
+  - mautic_data:
+  - mautic_db:
