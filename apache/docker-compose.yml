@@ -1,0 +1,32 @@
+version: "2"
+
+services:
+  mautic:
+    #image: mautic/mautic
+    build: ./
+    container_name: mautic
+    depends_on:
+      - mauticdb
+    links:
+      - mauticdb
+    ports:
+      - 8080:80
+    volumes:
+      - mautic_data:/var/www/html
+    environment:
+      MAUTIC_DB_HOST: mauticdb
+      MAUTIC_DB_USER: mautic
+      MAUTIC_DB_PASSWORD: mauticdbpass
+
+  mauticdb:
+    image: mysql:5.6
+    container_name: mauticdb
+    ports:
+      - 3306:3306
+    volumes:
+      - mautic_db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlrootpassword
+      MYSQL_DATABASE: mautic
+      MYSQL_USER: mautic
+      MYSQL_PASSWORD: mauticdbpass
