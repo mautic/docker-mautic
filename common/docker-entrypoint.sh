@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+if [ ! -f /usr/local/etc/php/php.ini ]; then
+	cat <<EOF > /usr/local/etc/php/php.ini
+date.timezone = "${PHP_INI_DATE_TIMEZONE}"
+memory_limit = ${PHP_MEMORY_LIMIT}
+upload_max_filesize = ${PHP_MAX_UPLOAD}
+max_execution_time = ${PHP_MAX_EXECUTION_TIME}
+EOF
+fi
+
+
 if [ -n "$MYSQL_PORT_3306_TCP" ]; then
         if [ -z "$MAUTIC_DB_HOST" ]; then
                 export MAUTIC_DB_HOST='mysql'
@@ -13,7 +23,6 @@ if [ -n "$MYSQL_PORT_3306_TCP" ]; then
                 echo >&2 "  instead of the linked mysql container"
         fi
 fi
-
 
 
 if [ -z "$MAUTIC_DB_HOST" ]; then
