@@ -32,5 +32,5 @@ services:
       MYSQL_PASSWORD: mauticdbpass
 
 volumes:
-  - mautic_data:
-  - mautic_db:
+  mautic_data:
+  mautic_db:
