@@ -108,25 +108,35 @@ Access your new Mautic on `http://localhost:8080` or `http://host-ip:8080` in a 
 ## ... via [`docker-compose`](https://github.com/docker/compose)
 
 Example `docker-compose.yml` for `mautic`:
+```yml
+version: "2"
 
-    mautic:
-      image: mautic/mautic:latest
-      links:
-        - mauticdb:mysql
-      ports:
-        - 8080:80
-      volumes:
-        - mautic_data:/var/www/html
-      environment:
-        - MAUTIC_DB_HOST=127.0.0.1
-        - MAUTIC_DB_USER=root
-        - MAUTIC_DB_PASSWORD=mysecret
-        - MAUTIC_DB_NAME=mautic
+services:
+  mautic:
+    image: mautic/mautic:latest
+    container_name: mautic
+    depends_on:
+      - mauticdb
+    ports:
+      - 8080:80
+    volumes:
+      - mautic_data:/var/www/html
+    environment:
+      - MAUTIC_DB_HOST=mauticdb
+      - MAUTIC_DB_USER=root
+      - MAUTIC_DB_PASSWORD=mysqlrootpassword
+	    - MAUTIC_DB_NAME=mautic
 
-    mauticdb:
-      image: mysql:5.6
-      environment:
-        MYSQL_ROOT_PASSWORD=mysecret
+  mauticdb:
+    image: mysql:5.6
+    container_name: mauticdb
+    ports:
+      - 3306:3306
+    volumes:
+      - mautic_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysqlrootpassword
+```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
 

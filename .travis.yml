@@ -1,0 +1,33 @@
+dist: trusty
+sudo: required
+
+services: docker
+
+language: bash
+
+branches:
+  only:
+    - master
+
+before_script:
+  - env | sort
+  - dir="${VARIANT}"
+
+script:
+  - cd "$dir"
+  - docker-compose build
+  - docker images
+  - travis_retry docker-compose up -d && sleep 60
+  - docker-compose ps
+  - docker-compose logs
+  - docker-compose ps "mauticdb" | grep "Up"
+  - docker-compose ps "mautic" | grep "Up"
+
+notifications:
+  email: false
+
+env: # Environments
+    - VARIANT=beta-fpm
+    - VARIANT=beta-apache
+    - VARIANT=fpm
+    - VARIANT=apache
