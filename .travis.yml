@@ -8,6 +8,7 @@ language: bash
 branches:
   only:
     - master
+    - feature/travis
 
 before_script:
   - env | sort
