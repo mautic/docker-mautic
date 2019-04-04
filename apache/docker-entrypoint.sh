@@ -15,6 +15,7 @@ if [ -n "$MYSQL_PORT_3306_TCP" ]; then
 fi
 
 
+
 if [ -z "$MAUTIC_DB_HOST" ]; then
         echo >&2 "error: missing MAUTIC_DB_HOST and MYSQL_PORT_3306_TCP environment variables"
         echo >&2 "  Did you forget to --link some_mysql_container:mysql or set an external db"
@@ -122,7 +123,6 @@ fi
 
 echo >&2
 echo >&2 "========================================================================"
-
 
 
 # Github Pull Tester
