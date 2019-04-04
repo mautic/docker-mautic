@@ -32,7 +32,7 @@ current=$( curl -fsSL 'https://api.github.com/repos/mautic/mautic/tags' |tac|tac
 
 # TODO - Expose SHA signatures for the packages somewhere
 echo "get current SHA signature"
-curl -s https://github.com/mautic/mautic/releases/download/$current/$current.zip -o mautic.zip
+curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/$current/$current.zip
 sha1="$(sha1sum mautic.zip | sed -r 's/ .*//')"
 
 echo "update docker images"
