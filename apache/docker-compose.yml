@@ -9,8 +9,6 @@ services:
       - mauticdb
     links:
       - mauticdb
-    ports:
-      - 8080:80
     volumes:
       - mautic_data:/var/www/html
     environment:
