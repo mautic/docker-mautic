@@ -12,7 +12,7 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 
 # Pulling image from Docker Hub
 
-If you want yo pull the latest stable image from DockerHub:
+If you want to pull the latest stable image from DockerHub:
 
 	docker pull mautic/mautic:latest
 
