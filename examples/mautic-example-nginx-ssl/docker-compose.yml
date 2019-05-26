@@ -1,6 +1,7 @@
 version: "2"
 services:
   mautic:
+    restart: unless-stopped
     image: mautic/mautic
     depends_on:
       - mysql
@@ -12,6 +13,7 @@ services:
       MAUTIC_DB_PASSWORD: mauticdbpass
       MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
   mysql:
+    restart: unless-stopped
     image: mysql:5.6
     environment:
       MYSQL_ROOT_PASSWORD: mysqlrootpassword
@@ -20,6 +22,7 @@ services:
       MYSQL_PASSWORD: mauticdbpass
 
   nginx:
+    restart: unless-stopped
     image: nginx
     ports:
       - "443:443"
