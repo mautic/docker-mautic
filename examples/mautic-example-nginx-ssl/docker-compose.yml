@@ -11,6 +11,9 @@ services:
       MAUTIC_DB_USER: mautic
       MAUTIC_DB_PASSWORD: mauticdbpass
       MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+    volumes:
+      - mautic-web:/var/www/html
+
   mysql:
     image: mysql:5.6
     environment:
@@ -18,6 +21,8 @@ services:
       MYSQL_DATABASE: mautic
       MYSQL_USER: mautic
       MYSQL_PASSWORD: mauticdbpass
+    volumes:
+      - mysql:/var/lib/mysql
 
   nginx:
     image: nginx
@@ -41,4 +46,6 @@ services:
       exec nginx -g 'daemon off;'"
 
 volumes:
+  mautic-web:
   sslcerts:
+  mysql:
