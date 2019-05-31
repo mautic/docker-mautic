@@ -4,8 +4,6 @@ services:
     image: mautic/mautic
     depends_on:
       - mysql
-    ports:
-      - "80:80"
     environment:
       MAUTIC_DB_HOST: mysql
       MAUTIC_DB_USER: mautic
@@ -22,6 +20,7 @@ services:
   nginx:
     image: nginx
     ports:
+      - "80:80"
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
