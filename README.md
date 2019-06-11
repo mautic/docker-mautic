@@ -77,7 +77,7 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 
 ### Mautic Options
 -   `-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
--   `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behing a reverse proxy you can set a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
+-   `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behind a reverse proxy you can set a list of comma-separated CIDR network addresses it sets those addresses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 -   `-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
 -   `-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
 -   `-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
