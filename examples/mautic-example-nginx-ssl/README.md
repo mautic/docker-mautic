@@ -8,12 +8,17 @@ This example shows how to configure nginx to act as a reverse proxy with ssl sup
 
 #### How to use this example:
 
-1. run ```docker-compose up``` in this directory
-2. add this line to your /etc/hosts file ```127.0.4.123 mautic.local```
-3. access https://mautic.local
-4. add the presented certificate to a trusted certificates list in your browser (the certificate is a self-signed certificate created on the first run of this example)
-5. go through Mautic setup (fill ```mauticdbpass``` as mysql password on db setup page
-6. test Mautic
+1. `cp .env.example .env`
+1. change the passwords if you care about security
+1. run `docker-compose up` in this directory
+1. add this line to your /etc/hosts file:
+
+        127.0.4.123 mautic.local
+
+1. access https://mautic.local
+1. add the presented certificate to a trusted certificates list in your browser (the certificate is a self-signed certificate created on the first run of this example)
+1. go through Mautic setup (on the database setup page, use whatever password is set for `MYSQL_MAUTIC_PASSWORD` in your `.env` file)
+1. test Mautic
 
 #### Notes
 * The certificate should be made trustworthy. It may not be enough to just click trough the warning in some browsers.
