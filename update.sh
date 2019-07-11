@@ -4,7 +4,7 @@ set -e
 current="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .name)"
 
 # TODO - Expose SHA signatures for the packages somewhere
-wget -O mautic.zip https://s3.amazonaws.com/mautic/releases/$current.zip
+wget -O mautic.zip https://github.com/mautic/mautic/releases/download/$current/$current.zip
 sha1="$(sha1sum mautic.zip | sed -r 's/ .*//')"
 
 for variant in apache fpm; do
