@@ -55,6 +55,7 @@ COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
+RUN chmod 644 /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
 # Enable Apache Rewrite Module
