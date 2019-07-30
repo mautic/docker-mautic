@@ -94,6 +94,12 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 -	`-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
 -	`-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
 
+### PHP options
+-	`-e PHP_INI_DATE_TIMEZONE=...` (defaults to `UTC`) Set PHP timezone
+-	`-e PHP_MEMORY_LIMIT=...` (defaults to `256M`) Set PHP memory limit
+-	`-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
+-	`-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
+
 
 ### Persistent Data Volumes
 
