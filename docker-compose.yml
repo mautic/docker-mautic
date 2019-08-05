@@ -1,26 +1,39 @@
 version : "3.5"
 
 services:
-  mautic_server:
+  server:
     image: mautic/mautic:latest
-    links:
-      - mautic_db
+    depends_on: 
+      - db
     ports:
       - 8080:80
-#    environment:
-#      - MAUTIC_DB_HOST=mauticdb    # defaulls to linked MySal DB instance
-#      - MAUTIC_DB_USER=root        # defaults to root  
-#      - MAUTIC_DB_NAME=mautic      # defaults to mautic
-#      - MAUTIC_DB_PASSWORD=mautic  # defaults to MYSQL_ROOT_PASSWORD from linked DB container
+    environment:
+      MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+      MAUTIC_DB_HOST: mautic_db    
+      MAUTIC_DB_USER: root        
+      MAUTIC_DB_NAME: mautic      
+      MAUTIC_DB_PASSWORD: mautic  
     volumes:
       - mautic_data:/var/www/html
+    networks:
+      mautic_network:
+        aliases:
+          - mautic
+          - mautic-server
 
-  mautic_db:
+  db:
     image: mysql:5.6
     environment:
       - MYSQL_ROOT_PASSWORD=mautic
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      mautic_network:
+        aliases:
+          - mautic_db
+
+networks:
+  mautic_network:
 
 volumes: 
   mautic_data:
