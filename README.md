@@ -126,7 +126,7 @@ Example `docker-compose.yml` for `mautic`:
     mauticdb:
       image: mysql:5.6
       environment:
-        MYSQL_ROOT_PASSWORD=mysecret
+        - MYSQL_ROOT_PASSWORD=mysecret
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
 
