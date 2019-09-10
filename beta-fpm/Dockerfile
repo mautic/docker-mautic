@@ -18,15 +18,19 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     zip \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/cron.daily/*
-
-RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
+    && rm /etc/cron.daily/* \
+    && docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure opcache --enable-opcache \
     && docker-php-ext-install imap intl mbstring mysqli pdo_mysql zip opcache bcmath \
-    && docker-php-ext-enable imap intl mbstring mysqli pdo_mysql zip opcache bcmath
+    && docker-php-ext-enable imap intl mbstring mysqli pdo_mysql zip opcache bcmath \
+    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer  \
+    && curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
+	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
+	&& mkdir /usr/src/mautic \
+	&& unzip mautic.zip -d /usr/src/mautic \
+	&& rm mautic.zip \
+	&& chown -R www-data:www-data /usr/src/mautic
 
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Define Mautic volume to persist data
 VOLUME /var/www/html
@@ -43,17 +47,10 @@ ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
 
 # Download package and extract to web volume
-RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
-	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
-	&& mkdir /usr/src/mautic \
-	&& unzip mautic.zip -d /usr/src/mautic \
-	&& rm mautic.zip \
-	&& chown -R www-data:www-data /usr/src/mautic
-
+ 
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh
-COPY makeconfig.php /makeconfig.php
-COPY makedb.php /makedb.php
+COPY *.php /usr/src/mautic 
 COPY mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
