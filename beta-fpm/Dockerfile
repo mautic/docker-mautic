@@ -50,7 +50,7 @@ ENV MAUTIC_DB_NAME mautic
  
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh
-COPY *.php /usr/src/mautic 
+COPY ./*.php /usr/src/mautic/
 COPY mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
