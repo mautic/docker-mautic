@@ -72,7 +72,7 @@ if [ -n "$MAUTIC_CRON_DYNAMICS" ]; then
         echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
-if ! [ -e index.php -a -e app/AppKernel.php ]; then
+if ! [ -e index.php ] && [ -e app/AppKernel.php ]; then
         echo >&2 "Mautic not found in $(pwd) - copying now..."
 
         if [ "$(ls -A)" ]; then
@@ -134,9 +134,6 @@ if [ -n "$MAUTIC_TESTER" ]; then
   echo >&2 "Copying Mautic Github Pull Tester"
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
-
-# Setting up file permissions
-chown -R www-data:www-data /var/www/html/
 
 "$@" &
 MAINPID=$!

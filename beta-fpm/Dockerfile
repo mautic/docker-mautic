@@ -32,8 +32,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 2.15.0
-ENV MAUTIC_SHA1 b07bd42bb092cc96785d2541b33700b55f74ece7
+ENV MAUTIC_VERSION 2.15.2
+ENV MAUTIC_SHA1 4452818b3a806b7eaac9fe507717564229da5fef
 
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
@@ -55,6 +55,7 @@ COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
+RUN chmod 644 /etc/cron.d/mautic
 COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
 # Apply necessary permissions
