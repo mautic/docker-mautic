@@ -13,7 +13,7 @@ ENV MAUTIC_RUN_CRON_JOBS true
 # Setting an root user for test
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
-
+COPY . /
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
     cron \
