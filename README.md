@@ -118,7 +118,7 @@ Example `docker-compose.yml` for `mautic`:
       volumes:
         - mautic_data:/var/www/html
       environment:
-        - MAUTIC_DB_HOST=127.0.0.1
+        - MAUTIC_DB_HOST=mauticdb
         - MYSQL_PORT_3306_TCP=3306
         - MAUTIC_DB_USER=root
         - MAUTIC_DB_PASSWORD=mysecret
@@ -126,6 +126,7 @@ Example `docker-compose.yml` for `mautic`:
 
     mauticdb:
       image: mysql:5.6
+      hostname: mauticdb
       environment:
         - MYSQL_ROOT_PASSWORD=mysecret
 
