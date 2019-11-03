@@ -43,6 +43,12 @@ ENV MAUTIC_RUN_CRON_JOBS true
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
 
+# Setting PHP properties
+ENV PHP_INI_DATE_TIMEZONE='UTC' \
+	PHP_MEMORY_LIMIT=512M \
+	PHP_MAX_UPLOAD=128M \
+	PHP_MAX_EXECUTION_TIME=300
+
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
 	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
@@ -57,7 +63,6 @@ COPY makeconfig.php /makeconfig.php
 COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
-COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
 
 # Apply necessary permissions
 RUN ["chmod", "+x", "/entrypoint.sh"]
