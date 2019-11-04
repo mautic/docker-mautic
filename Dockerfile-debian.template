@@ -1,4 +1,4 @@
-FROM php:7.1-apache
+FROM php:7.1-%%VARIANT%%
 
 LABEL vendor="Mautic"
 LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
@@ -54,17 +54,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION=2.15.2 \
-    MAUTIC_SHA1=4452818b3a806b7eaac9fe507717564229da5fef \
+ENV MAUTIC_VERSION=%%VERSION%% \
+    MAUTIC_SHA1=%%VERSION_SHA1%% \
     MAUTIC_RUN_CRON_JOBS=true \
     MAUTIC_DB_USER=root \
     MAUTIC_DB_NAME=mautic
-
-# Setting PHP properties
-ENV PHP_INI_DATE_TIMEZONE='UTC' \
-	PHP_MEMORY_LIMIT=512M \
-	PHP_MAX_UPLOAD=128M \
-	PHP_MAX_EXECUTION_TIME=300
 
 # Download package and extract to web volume
 RUN set -ex; \
@@ -79,13 +73,11 @@ RUN set -ex; \
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php makedb.php /
 COPY mautic.crontab /etc/cron.d/mautic
-RUN chmod 644 /etc/cron.d/mautic
-
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
+COPY mautic-php.ini /usr/local/etc/php/conf.d/mautic-php.ini
+%%VARIANT_EXTRAS%%
 
 # Apply necessary permissions
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["apache2-foreground"]
+CMD ["%%CMD%%"]
