@@ -19,8 +19,9 @@ script:
   - docker images
   - travis_retry docker-compose up -d && sleep 60
   - docker-compose ps
-  - docker-compose logs
+  - docker-compose logs "mauticdb"
   - docker-compose ps "mauticdb" | grep "Up"
+  - docker-compose logs "mautic"
   - docker-compose ps "mautic" | grep "Up"
 
 notifications:
