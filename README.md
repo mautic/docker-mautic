@@ -121,29 +121,42 @@ Access your new Mautic on `http://localhost:8080` or `http://host-ip:8080` in a 
 
 Example `docker-compose.yml` for `mautic`:
 
-    mautic:
-      image: mautic/mautic:latest
-      links:
-        - mauticdb:mysql
-      ports:
-        - 8080:80
-      volumes:
-        - mautic_data:/var/www/html
-      environment:
-        - MAUTIC_DB_HOST=127.0.0.1
-        - MYSQL_PORT_3306_TCP=3306
-        - MAUTIC_DB_USER=root
-        - MAUTIC_DB_PASSWORD=mysecret
-        - MAUTIC_DB_NAME=mautic
+```yaml
+version: '3.7'
 
-    mauticdb:
-      image: mysql:5.6
-      environment:
-        - MYSQL_ROOT_PASSWORD=mysecret
+services:
+  mautic:
+    image: mautic/mautic:latest
+    links:
+      - mauticdb:mysql
+    ports:
+      - 8080:80
+    volumes:
+      - ./mautic_data:/var/www/html
+    environment:
+      - MAUTIC_DB_HOST=mauticdb
+      - MYSQL_PORT_3306_TCP=3306
+      - MAUTIC_DB_USER=root
+      - MAUTIC_DB_PASSWORD=mysecret
+      - MAUTIC_DB_NAME=mautic
+    networks:
+      - mautic-net
+
+  mauticdb:
+    image: mysql:5.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysecret
+    networks:
+      - mautic-net
+
+networks:
+  mautic-net:
+    driver: bridge
+```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
 
-Run `docker inspect mautic_mauticdb_1 | grep IPAddress` to find out correct IP address of database container and setup the reference to mautic container in MAUTIC_DB_HOST environment variable.
+> This compose file was tested on compose file version 3.0+ (docker engine 1.13.0+), see the relation of compose file and docker engine [here](https://docs.docker.com/compose/compose-file/compose-versioning/).
 
 
 # Supported Docker versions
