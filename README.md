@@ -115,10 +115,13 @@ Example `docker-compose.yml` for `mautic`:
 version: '3.7'
 
 services:
+
   mautic:
     image: mautic/mautic:latest
     links:
       - mauticdb:mysql
+    depends_on:
+      - mauticdb
     ports:
       - 8080:80
     volumes:
@@ -129,11 +132,12 @@ services:
       - MAUTIC_DB_USER=root
       - MAUTIC_DB_PASSWORD=mysecret
       - MAUTIC_DB_NAME=mautic
+      - MAUTIC_RUN_CRON_JOBS=true
     networks:
       - mautic-net
 
   mauticdb:
-    image: mysql:5.6
+    image: percona/percona-server:5.7
     environment:
       - MYSQL_ROOT_PASSWORD=mysecret
     networks:
