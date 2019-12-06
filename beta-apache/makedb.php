@@ -29,7 +29,7 @@ do
 			exit(1);
 		}
 
-		sleep(3);
+		sleep(5);
 	}
 }
 while ($mysql->connect_error);
