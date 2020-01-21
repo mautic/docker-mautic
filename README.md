@@ -12,19 +12,9 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 
 # Pulling image from Docker Hub
 
-If you want yo pull the latest stable image from DockerHub:
+If you want to pull the latest stable image from DockerHub:
 
-	docker pull mautic/mautic:latest
-
-There are also another images that fit your needs:
-
-| Tag | PHP | Web Server | Compatibility |
-|-----|:-----:|:------------:|:---------------:|
-| latest | 7.1.23 | Apache | <= 2.15.0 |
-| apache | 7.1.23 | Apache | <= 2.15.0 |
-| fpm | 7.1.23 | Nginx | <= 2.15.0 |
-| beta-apache | 7.2.12 | Apache | >= 2.15.0 |
-| beta-fpm | 7.2.12 | Nginx | >= 2.15.0 |
+    docker pull mautic/mautic:latest
 
 **You can use the beta images to test latest beta releases of Mautic with current PHP version.**
 
@@ -32,9 +22,9 @@ There are also another images that fit your needs:
 
 Setting up MySQL Server:
 
-	$ docker volume create mysql_data
+    $ docker volume create mysql_data
 
-	$ docker run --name percona -d \
+    $ docker run --name percona -d \
         -p 3306:3306 \
         -e MYSQL_ROOT_PASSWORD=mypassword \
         -v mysql_data:/var/lib/mysql \
@@ -43,9 +33,9 @@ Setting up MySQL Server:
 
 Running Mautic:
 
-	$ docker volume create mautic_data
+    $ docker volume create mautic_data
 
-	$ docker run --name mautic -d \
+    $ docker run --name mautic -d \
         --restart=always \
         -e MAUTIC_DB_HOST=127.0.0.1 \
         -e MAUTIC_DB_USER=root \
@@ -64,11 +54,11 @@ This will run a basic mysql service within Mautic on http://localhost:8080.
 The following environment variables are also honored for configuring your Mautic instance:
 
 #### Database Options
--	`-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
--	`-e MAUTIC_DB_USER=...` (defaults to "root")
--	`-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
--	`-e MAUTIC_DB_NAME=...` (defaults to "mautic")
--	`-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+-   `-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
+-   `-e MAUTIC_DB_USER=...` (defaults to "root")
+-   `-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
+-   `-e MAUTIC_DB_NAME=...` (defaults to "mautic")
+-   `-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
 
 If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`).
 
@@ -76,17 +66,29 @@ If you'd like to use an external database instead of a linked `mysql` container,
 If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
 
 ### Mautic Options
--	`-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
--	`-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behing a reverse proxy you can set a list of comma separated CIDR network addresses it sets those addreses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
--	`-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
--	`-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
--	`-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
--	`-e MAUTIC_CRON_ZOHO=...` (defaults to empty) Enables mautic crons for Zoho CRM integration
--	`-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
--	`-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
+-   `-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
+-   `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behind a reverse proxy you can set a list of comma-separated CIDR network addresses it sets those addresses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
+-   `-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
+-   `-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
+-   `-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
+-   `-e MAUTIC_CRON_ZOHO=...` (defaults to empty) Enables mautic crons for Zoho CRM integration
+-   `-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
+-   `-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
 
 ### Enable / Disable Features
--	`-e MAUTIC_TESTER=...` (defaults to empty) Enables Mautic Github Pull Tester  [documentation](https://github.com/mautic/mautic-tester)
+-   `-e MAUTIC_TESTER=...` (defaults to empty) Enables Mautic Github Pull Tester  [documentation](https://github.com/mautic/mautic-tester)
+
+### PHP options
+-	`-e PHP_INI_DATE_TIMEZONE=...` (defaults to `UTC`) Set PHP timezone
+-	`-e PHP_MEMORY_LIMIT=...` (defaults to `256M`) Set PHP memory limit
+-	`-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
+-	`-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
+
+### PHP options
+-	`-e PHP_INI_DATE_TIMEZONE=...` (defaults to `UTC`) Set PHP timezone
+-	`-e PHP_MEMORY_LIMIT=...` (defaults to `256M`) Set PHP memory limit
+-	`-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
+-	`-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
 
 
 ### Persistent Data Volumes
@@ -109,26 +111,53 @@ Access your new Mautic on `http://localhost:8080` or `http://host-ip:8080` in a 
 
 Example `docker-compose.yml` for `mautic`:
 
-	mautic:
-	  image: mautic/mautic:latest
-	  links:
-	    - mauticdb:mysql
-	  ports:
-	    - 8080:80
-		volumes:
-	    - mautic_data:/var/www/html
-		environment:
-	    - MAUTIC_DB_HOST=127.0.0.1
-	    - MAUTIC_DB_USER=root
-	    - MAUTIC_DB_PASSWORD=mysecret
-	    - MAUTIC_DB_NAME=mautic
+```yaml
+version: '2'
 
-	mauticdb:
-	  image: mysql:5.6
-	  environment:
-	    MYSQL_ROOT_PASSWORD=mysecret
+services:
+
+  mauticdb:
+    image: percona/percona-server:5.7
+    container_name: mauticdb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysecret
+    command:
+      --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    networks:
+      - mautic-net
+
+  mautic:
+    image: mautic/mautic:latest
+    container_name: mautic
+    links:
+      - mauticdb:mysql
+    depends_on:
+      - mauticdb
+    ports:
+      - 8080:80
+    volumes:
+      - mautic_data:/var/www/html
+    environment:
+      - MAUTIC_DB_HOST=mauticdb
+      - MYSQL_PORT_3306_TCP=3306
+      - MAUTIC_DB_USER=root
+      - MAUTIC_DB_PASSWORD=mysecret
+      - MAUTIC_DB_NAME=mautic
+      - MAUTIC_RUN_CRON_JOBS=true
+    networks:
+      - mautic-net
+
+networks:
+  mautic-net:
+    driver: bridge
+```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
+
+> This compose file was tested on compose file version 3.0+ (docker engine 1.13.0+), see the relation of compose file and docker engine [here](https://docs.docker.com/compose/compose-file/compose-versioning/).
+
 
 # Supported Docker versions
 

@@ -1,6 +1,19 @@
 #!/bin/bash
 set -e
 
+if [ ! -f /usr/local/etc/php/php.ini ]; then
+	cat <<EOF > /usr/local/etc/php/php.ini
+date.timezone = "${PHP_INI_DATE_TIMEZONE}"
+always_populate_raw_post_data = -1
+memory_limit = ${PHP_MEMORY_LIMIT}
+file_uploads = On
+upload_max_filesize = ${PHP_MAX_UPLOAD}
+post_max_size = ${PHP_MAX_UPLOAD}
+max_execution_time = ${PHP_MAX_EXECUTION_TIME}
+EOF
+fi
+
+
 if [ -n "$MYSQL_PORT_3306_TCP" ]; then
         if [ -z "$MAUTIC_DB_HOST" ]; then
                 export MAUTIC_DB_HOST='mysql'
@@ -124,15 +137,12 @@ echo >&2
 echo >&2 "========================================================================"
 
 
-
 # Github Pull Tester
 if [ -n "$MAUTIC_TESTER" ]; then
   echo >&2 "Copying Mautic Github Pull Tester"
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
 
-# Setting up file permissions
-chown -R www-data:www-data /var/www/html/
 
 "$@" &
 MAINPID=$!
