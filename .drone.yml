@@ -9,18 +9,8 @@ steps:
       dockerfile: apache/Dockerfile
       context: apache
       username:
-        from_secret: docker_username
+        from_secret: acr_username
       password:
-        from_secret: docker_password
+        from_secret: acr_password
       auto_tag: true
       auto_tag_suffix: apache
-
----
-kind: secret
-name: docker_username
-data: ImTPIF1iIPRomR9HSULyhhpaJPh7ra1B_9x8f4oGW4yJP0vr9mx9MMeCAya-kA==
-
----
-kind: secret
-name: docker_password
-data: H_95E1Hli8oInHrP07Ep5D4Mm1FfuT4ibxY2ou2bJIuFMv8ISmZbAD6YndxDDSEN6Y3W_4rfHQ==
