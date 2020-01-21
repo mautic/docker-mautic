@@ -14,4 +14,3 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-    secrets: [ docker_username, docker_password ]
