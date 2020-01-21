@@ -10,8 +10,8 @@ steps:
       context: apache
       auto_tag: true
       auto_tag_suffix: apache
-    environment:
-      USERNAME:
+      username:
         from_secret: docker_username
-      PASSWORD:
+      password:
         from_secret: docker_password
+    secrets: [ docker_username, docker_password ]
