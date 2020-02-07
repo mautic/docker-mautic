@@ -149,6 +149,11 @@ services:
     networks:
       - mautic-net
 
+volumes:
+  mysql_data:
+    driver: local
+  mautic_data:
+    driver: local
 networks:
   mautic-net:
     driver: bridge
