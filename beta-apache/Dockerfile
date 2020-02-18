@@ -32,8 +32,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 VOLUME /var/www/html
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 2.15.3
-ENV MAUTIC_SHA1 d6ec21376ceacd8bbb8d9ee58e81d8050a79c0b8
+ENV MAUTIC_VERSION 2.16.0
+ENV MAUTIC_SHA1 94ced007fd99e63eaeec435012784b6bbe834b84
 
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
@@ -44,17 +44,17 @@ ENV MAUTIC_DB_NAME mautic
 
 # Setting PHP properties
 ENV PHP_INI_DATE_TIMEZONE='UTC' \
-	PHP_MEMORY_LIMIT=512M \
-	PHP_MAX_UPLOAD=128M \
-	PHP_MAX_EXECUTION_TIME=300
+    PHP_MEMORY_LIMIT=512M \
+    PHP_MAX_UPLOAD=128M \
+    PHP_MAX_EXECUTION_TIME=300
 
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
-	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
-	&& mkdir /usr/src/mautic \
-	&& unzip mautic.zip -d /usr/src/mautic \
-	&& rm mautic.zip \
-	&& chown -R www-data:www-data /usr/src/mautic
+    && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
+    && mkdir /usr/src/mautic \
+    && unzip mautic.zip -d /usr/src/mautic \
+    && rm mautic.zip \
+    && chown -R www-data:www-data /usr/src/mautic
 
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh
