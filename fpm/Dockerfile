@@ -9,22 +9,51 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
     wget \
     sudo \
-    libc-client-dev \
-    libicu-dev \
-    libkrb5-dev \
-    libmcrypt-dev \
-    libssl-dev \
-    libz-dev \
     unzip \
-    zip \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
-RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
-    && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath \
-    && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath
+# Install PHP extensions
+RUN set -ex; \
+    \
+    savedAptMark="$(apt-mark showmanual)"; \
+    \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        libc-client-dev \
+        libicu-dev \
+        libkrb5-dev \
+        libmcrypt-dev \
+        libssl-dev \
+        libz-dev \
+    ; \
+    \
+    docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos; \
+    docker-php-ext-install -j "$(nproc)" \
+        bcmath \
+        imap \
+        intl \
+        mcrypt \
+        mysqli \
+        opcache \
+        pdo_mysql \
+        zip \
+    ; \
+    \
+# reset apt-mark's "manual" list so that "purge --auto-remove" will remove all build dependencies
+    apt-mark auto '.*' > /dev/null; \
+    apt-mark manual $savedAptMark; \
+    ldd "$(php -r 'echo ini_get("extension_dir");')"/*.so \
+        | awk '/=>/ { print $3 }' \
+        | sort -u \
+        | xargs -r dpkg-query -S \
+        | cut -d: -f1 \
+        | sort -u \
+        | xargs -rt apt-mark manual; \
+    \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
+    rm -rf /var/lib/apt/lists/*
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
