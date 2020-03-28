@@ -68,7 +68,6 @@ RUN chmod 644 /etc/cron.d/mautic
 RUN a2enmod rewrite
 
 # Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["apache2-foreground"]
