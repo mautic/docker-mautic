@@ -51,11 +51,11 @@ ENV PHP_INI_DATE_TIMEZONE='UTC' \
 
 # Download package and extract to web volume
 RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
-    && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
-    && mkdir /usr/src/mautic \
-    && unzip mautic.zip -d /usr/src/mautic \
-    && rm mautic.zip \
-    && chown -R www-data:www-data /usr/src/mautic
+	&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
+	&& mkdir /usr/src/mautic \
+        && unzip mautic.zip -d /usr/src/mautic \
+        && rm mautic.zip \
+        && chown -R www-data:www-data /usr/src/mautic
 
 # Copy init scripts and custom .htaccess
 COPY docker-entrypoint.sh /entrypoint.sh
