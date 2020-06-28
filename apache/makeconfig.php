@@ -16,6 +16,9 @@ if(array_key_exists('MAUTIC_DB_HOST', $_ENV)) {
     }
     else {
         $host = $_ENV['MAUTIC_DB_HOST'];
+        if(array_key_exists('MAUTIC_DB_PORT', $_ENV)) {
+            $parameters['db_port'] = $_ENV['MAUTIC_DB_PORT'];
+        }
     }
     $parameters['db_host'] = $host;
 }
@@ -31,6 +34,8 @@ if(array_key_exists('MAUTIC_DB_USER', $_ENV)) {
 if(array_key_exists('MAUTIC_DB_PASSWORD', $_ENV)) {
     $parameters['db_password'] = $_ENV['MAUTIC_DB_PASSWORD'];
 }
+
+// only if behind a reverse proxy
 if(array_key_exists('MAUTIC_TRUSTED_PROXIES', $_ENV)) {
     $proxies = explode(',', $_ENV['MAUTIC_TRUSTED_PROXIES']);
     $parameters['trusted_proxies'] = $proxies;
