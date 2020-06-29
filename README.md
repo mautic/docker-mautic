@@ -18,7 +18,7 @@ If you want to pull the latest **development** image from Mautic 3 Series on Doc
 
     docker pull mautic/mautic:latest
 
-**Note that during the 3.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'.**
+**_Note that during the 3.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
 
 If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
