@@ -8,6 +8,8 @@ Mautic is distributed under the GPL v3 license. Full details of the license can 
 
 # How to use Docker-Mautic
 
+Docker-Mautic provides a basic environment for Mautic to run correctly.
+
 Docker images are always simple and functional by design, if you need to add specific features to your Mautic Setup just create a new image based on this official image. You can access and customize Docker Mautic from [Official Docker Hub image](https://hub.docker.com/r/mautic/mautic/).
 
 _This repository refers to Mautic 3 Series. If you would like information about Mautic 2, see [README](mautic2.x/README.md) at 'mautic2.x' folder._
