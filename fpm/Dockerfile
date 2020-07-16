@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libicu-dev \
     libkrb5-dev \
     libmcrypt-dev \
+    libzip-dev \
     libssl-dev \
     libz-dev \
     unzip \
@@ -21,9 +22,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
+RUN pecl install mcrypt-1.0.3
+
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath \
+    && docker-php-ext-install imap intl mbstring mysqli pdo_mysql zip opcache bcmath \
     && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath
 
 # Install composer
