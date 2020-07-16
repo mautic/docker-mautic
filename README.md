@@ -32,7 +32,7 @@ If you want to pull the latest **stable** image from Mautic 2 Series on DockerHu
 
 # Running Basic Container
 
-Setting up a Network:
+Setting up a Network to connect Mautic and MySQL:
 
     $ docker network create mauticnet
 
