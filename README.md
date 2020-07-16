@@ -1,6 +1,6 @@
 # Docker Mautic Image
 
-<img src="https://www.mautic.org/media/images/github_readme.png" />
+<img src="https://www.mautic.org/sites/default/files/2020-03/Mautic_Logo_RGB_LB.png" />
 
 # License
 
