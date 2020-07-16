@@ -16,9 +16,9 @@ _This repository refers to Mautic 3 Series. If you would like information about 
 
 # Pulling Mautic images from Docker Hub
 
-If you want to pull the latest **development** image from Mautic 3 Series on DockerHub:
+If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
-    docker pull mautic/mautic:latest
+    docker pull mautic/mautic:v3
 
 **_Note that during the 3.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
 
