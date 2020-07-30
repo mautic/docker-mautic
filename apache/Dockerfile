@@ -4,6 +4,10 @@ LABEL vendor="Mautic"
 
 LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
 
+ENV PHP_MAX_UPLOAD=512M
+
+ENV PHP_MEMORY_LIMIT=512M
+
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ca-certificates \
