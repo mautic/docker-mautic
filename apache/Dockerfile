@@ -48,7 +48,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install imap && \
-    docker-php-ext-enable imap 
+    docker-php-ext-enable imap
 
 RUN docker-php-ext-configure gd --with-freetype-dir=/usr/lib --with-png-dir=/usr/lib --with-jpeg-dir=/usr/lib \
     && docker-php-ext-install  gd \
