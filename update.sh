@@ -1,24 +1,28 @@
 #!/bin/bash
 set -e
 
-current="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .tag_name)"
+mautic_2_latest_version=2.16.5
+mautic_3_latest_version="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .tag_name)"
 
-# TODO - Expose SHA signatures for the packages somewhere
-wget -O mautic.zip https://github.com/mautic/mautic/releases/download/$current/$current.zip
-sha1="$(sha1sum mautic.zip | sed -r 's/ .*//')"
 
-for variant in apache fpm; do
-	(
-		set -x
+for mautic_version in $mautic_2_latest_version $mautic_3_latest_version; do (
 
-		sed -ri '
-			s/^(ENV MAUTIC_VERSION) .*/\1 '"$current"'/;
-			s/^(ENV MAUTIC_SHA1) .*/\1 '"$sha1"'/;
-		' "$variant/Dockerfile"
+    # TODO - Expose SHA signatures for the packages somewhere
+    filename=`mktemp`
+    echo Loading https://github.com/mautic/mautic/releases/download/${mautic_version}/${mautic_version}.zip
+    sha1=`wget --quiet --show-progress -O - https://github.com/mautic/mautic/releases/download/${mautic_version}/${mautic_version}.zip | sha1sum | head -c 40`
+
+    path="mautic${mautic_version:0:1}/"
+
+    echo ${path}: ${mautic_version} ${sha1}
+
+    for variant in apache fpm; do (
+        sed -ri '
+            s/^(ENV MAUTIC_VERSION) .*/\1 '"${mautic_version}"'/;
+            s/^(ENV MAUTIC_SHA1) .*/\1 '"${sha1}"'/;
+        ' "${path}${variant}/Dockerfile"
 
         # To make management easier, we use these files for all variants
-		cp common/* "$variant"/
-	)
-done
-
-rm mautic.zip
+        cp ${path}common/* ${path}${variant}/
+    ) done
+) done
