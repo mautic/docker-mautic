@@ -110,7 +110,6 @@ echo >&2 "Database Name: $MAUTIC_DB_NAME"
 echo >&2 "Database Username: $MAUTIC_DB_USER"
 echo >&2 "Database Password: $MAUTIC_DB_PASSWORD"
 
-
 # Write the database connection to the config so the installer prefills it
 if ! [ -e app/config/local.php ]; then
         php /makeconfig.php
