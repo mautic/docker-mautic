@@ -22,6 +22,9 @@ if(array_key_exists('MAUTIC_DB_HOST', $_ENV)) {
 if(array_key_exists('MAUTIC_DB_NAME', $_ENV)) {
     $parameters['db_name'] = $_ENV['MAUTIC_DB_NAME'];
 }
+if(array_key_exists('MAUTIC_DB_TABLE_PREFIX', $_ENV)) {
+    $parameters['db_table_prefix'] = $_ENV['MAUTIC_DB_TABLE_PREFIX'];
+}
 if(array_key_exists('MAUTIC_DB_USER', $_ENV)) {
     $parameters['db_user'] = $_ENV['MAUTIC_DB_USER'];
 }

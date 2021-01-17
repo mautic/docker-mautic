@@ -1,0 +1,54 @@
+version: "2"
+services:
+  mautic:
+    restart: unless-stopped
+    image: mautic/mautic
+    depends_on:
+      - mysql
+    ports:
+      - "80:80"
+    environment:
+      MAUTIC_DB_HOST: mysql
+      MAUTIC_DB_USER: mautic
+      MAUTIC_DB_PASSWORD: mauticdbpass
+      MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+    volumes:
+      - mautic-web:/var/www/html
+
+  mysql:
+    restart: unless-stopped
+    image: mysql:5.6
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlrootpassword
+      MYSQL_DATABASE: mautic
+      MYSQL_USER: mautic
+      MYSQL_PASSWORD: mauticdbpass
+    volumes:
+      - mysql:/var/lib/mysql
+
+  nginx:
+    restart: unless-stopped
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - sslcerts:/etc/ssl/private
+    depends_on:
+      - mautic
+    entrypoint:
+      - "bash"
+      - "-c"
+    command: |
+      "if [ ! -f /etc/ssl/private/mautic.crt ]; then
+        echo 'ssl certificate missing, installing openssl to create a new one'
+        apt-get update && apt-get install openssl -y
+        openssl req -x509 -newkey rsa:2048 -sha256 -nodes -keyout /etc/ssl/private/mautic.key -out /etc/ssl/private/mautic.crt -subj '/CN=mautic.local' -days 3650
+        echo 'Created new ssl certificate'
+      fi
+      exec nginx -g 'daemon off;'"
+
+volumes:
+  mautic-web:
+  sslcerts:
+  mysql:

@@ -1,4 +1,4 @@
-FROM php:7.2-fpm
+FROM php:7.1-apache
 
 LABEL vendor="Mautic"
 LABEL maintainer="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>"
@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     libc-client-dev \
     libicu-dev \
     libkrb5-dev \
+    libmcrypt-dev \
     libssl-dev \
     libz-dev \
     unzip \
@@ -22,8 +23,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install imap intl mbstring mysqli pdo_mysql zip opcache bcmath \
-    && docker-php-ext-enable imap intl mbstring mysqli pdo_mysql zip opcache bcmath
+    && docker-php-ext-install imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath\
+    && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
@@ -63,8 +64,11 @@ COPY makedb.php /makedb.php
 COPY mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 
+# Enable Apache Rewrite Module
+RUN a2enmod rewrite
+
 # Apply necessary permissions
 RUN ["chmod", "+x", "/entrypoint.sh"]
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["php-fpm"]
+CMD ["apache2-foreground"]

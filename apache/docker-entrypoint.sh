@@ -2,7 +2,7 @@
 set -e
 
 if [ ! -f /usr/local/etc/php/php.ini ]; then
-	cat <<EOF > /usr/local/etc/php/php.ini
+cat <<EOF > /usr/local/etc/php/php.ini
 date.timezone = "${PHP_INI_DATE_TIMEZONE}"
 always_populate_raw_post_data = -1
 memory_limit = ${PHP_MEMORY_LIMIT}
@@ -26,7 +26,6 @@ if [ -n "$MYSQL_PORT_3306_TCP" ]; then
                 echo >&2 "  instead of the linked mysql container"
         fi
 fi
-
 
 
 if [ -z "$MAUTIC_DB_HOST" ]; then
@@ -111,6 +110,7 @@ echo >&2 "Database Name: $MAUTIC_DB_NAME"
 echo >&2 "Database Username: $MAUTIC_DB_USER"
 echo >&2 "Database Password: $MAUTIC_DB_PASSWORD"
 
+
 # Write the database connection to the config so the installer prefills it
 if ! [ -e app/config/local.php ]; then
         php /makeconfig.php
@@ -136,14 +136,6 @@ fi
 
 echo >&2
 echo >&2 "========================================================================"
-
-
-# Github Pull Tester
-if [ -n "$MAUTIC_TESTER" ]; then
-  echo >&2 "Copying Mautic Github Pull Tester"
-  wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
-fi
-
 
 "$@" &
 MAINPID=$!

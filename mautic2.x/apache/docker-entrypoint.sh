@@ -28,6 +28,7 @@ if [ -n "$MYSQL_PORT_3306_TCP" ]; then
 fi
 
 
+
 if [ -z "$MAUTIC_DB_HOST" ]; then
         echo >&2 "error: missing MAUTIC_DB_HOST and MYSQL_PORT_3306_TCP environment variables"
         echo >&2 "  Did you forget to --link some_mysql_container:mysql or set an external db"
@@ -142,6 +143,7 @@ if [ -n "$MAUTIC_TESTER" ]; then
   echo >&2 "Copying Mautic Github Pull Tester"
   wget https://raw.githubusercontent.com/mautic/mautic-tester/master/tester.php
 fi
+
 
 "$@" &
 MAINPID=$!
