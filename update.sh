@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-current="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .name)"
+current="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .tag_name)"
 
 # TODO - Expose SHA signatures for the packages somewhere
 wget -O mautic.zip https://github.com/mautic/mautic/releases/download/$current/$current.zip
