@@ -3,7 +3,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 
 8,23,38,52 * * * *     www-data   php /var/www/html/bin/console mautic:segments:update > /var/log/cron.pipe 2>&1
        */5 * * * *     www-data   php /var/www/html/bin/console mautic:import > /var/log/cron.pipe 2>&1
-5,20,35,50 * * * *     www-data   php /var/www/html/bin/console mautic:campaigns:rebuild > /var/log/cron.pipe 2>&1
+5,20,35,50 * * * *     www-data   php /var/www/html/bin/console mautic:campaigns:update > /var/log/cron.pipe 2>&1
 2,17,32,47 * * * *     www-data   php /var/www/html/bin/console mautic:campaigns:trigger > /var/log/cron.pipe 2>&1
 0,15,30,45 * * * *     www-data   php /var/www/html/bin/console mautic:messages:send > /var/log/cron.pipe 2>&1
 0,15,30,45 * * * *     www-data   php /var/www/html/bin/console mautic:emails:send > /var/log/cron.pipe 2>&1
