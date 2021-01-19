@@ -16,21 +16,21 @@ fi
 
 if [ -n "$MYSQL_PORT_3306_TCP" ]; then
         if [ -z "$MAUTIC_DB_HOST" ]; then
-                export MAUTIC_DB_HOST='mysql'
+                export MAUTIC_DB_HOST='dbms'
                 if [ "$MAUTIC_DB_USER" = 'root' ] && [ -z "$MAUTIC_DB_PASSWORD" ]; then
                         export MAUTIC_DB_PASSWORD="$MYSQL_ENV_MYSQL_ROOT_PASSWORD"
                 fi
         else
                 echo >&2 "warning: both MAUTIC_DB_HOST and MYSQL_PORT_3306_TCP found"
                 echo >&2 "  Connecting to MAUTIC_DB_HOST ($MAUTIC_DB_HOST)"
-                echo >&2 "  instead of the linked mysql container"
+                echo >&2 "  instead of the linked dbms container"
         fi
 fi
 
 
 if [ -z "$MAUTIC_DB_HOST" ]; then
         echo >&2 "error: missing MAUTIC_DB_HOST and MYSQL_PORT_3306_TCP environment variables"
-        echo >&2 "  Did you forget to --link some_mysql_container:mysql or set an external db"
+        echo >&2 "  Did you forget to --link some_dbms_container:dbms or set an external db"
         echo >&2 "  with -e MAUTIC_DB_HOST=hostname:port?"
         exit 1
 fi

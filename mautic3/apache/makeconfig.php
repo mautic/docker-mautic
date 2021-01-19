@@ -9,7 +9,7 @@ $parameters = array(
 );
 
 if(array_key_exists('MAUTIC_DB_HOST', $_ENV)) {
-    // Figure out if we have a port in the database host string
+    // Figure out if we have a port in the DBMS host string
     if (strpos($_ENV['MAUTIC_DB_HOST'], ':') !== false) {
         list($host, $port) = explode(':', $_ENV['MAUTIC_DB_HOST'], 2);
         $parameters['db_port'] = $port;

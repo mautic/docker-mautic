@@ -1,30 +1,29 @@
 version: "2"
+
 services:
   mautic:
     restart: unless-stopped
-    image: mautic/mautic
+    image: ghcr.io/netresearch/mautic:3-apache
     depends_on:
-      - mysql
-    ports:
-      - "80:80"
+      - dbms
     environment:
-      MAUTIC_DB_HOST: mysql
+      MAUTIC_DB_HOST: dbms
       MAUTIC_DB_USER: mautic
       MAUTIC_DB_PASSWORD: mauticdbpass
       MAUTIC_TRUSTED_PROXIES: '["0.0.0.0/0"]'
     volumes:
       - mautic-web:/var/www/html
 
-  mysql:
+  dbms:
     restart: unless-stopped
-    image: mariadb
+    image: mariadb:10.2
     environment:
       MYSQL_ROOT_PASSWORD: mysqlrootpassword
       MYSQL_DATABASE: mautic
       MYSQL_USER: mautic
       MYSQL_PASSWORD: mauticdbpass
     volumes:
-      - mysql:/var/lib/mysql
+      - database:/var/lib/mysql
 
   nginx:
     restart: unless-stopped
@@ -34,8 +33,6 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - sslcerts:/etc/ssl/private
-    depends_on:
-      - mautic
     entrypoint:
       - "bash"
       - "-c"
@@ -51,4 +48,4 @@ services:
 volumes:
   mautic-web:
   sslcerts:
-  mysql:
+  database:

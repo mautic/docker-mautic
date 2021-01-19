@@ -11,13 +11,13 @@ ENV MAUTIC_SHA1 291ebabd2f12a0d8eced65a0adaa597db8371a39
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
 
-# Setting an Default database user for Mysql
+# Setting a default database user for the DBMS
 ENV MAUTIC_DB_USER root
 
-# Setting an Default database name for Mysql
+# Setting a default database name for the DBMS
 ENV MAUTIC_DB_NAME mautic
 
-# Setting PHP properties
+# Setting PHP default properties
 ENV PHP_INI_DATE_TIMEZONE='UTC' \
     PHP_MEMORY_LIMIT=512M \
     PHP_MAX_UPLOAD=512M \
@@ -110,13 +110,13 @@ VOLUME /var/www/html
 # Define session store as volume - performance
 VOLUME /tmp
 
-# Copy init scripts and custom .htaccess
+# Copy init scripts
 COPY docker-entrypoint.sh /entrypoint.sh
 COPY makeconfig.php /makeconfig.php
 COPY mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 
-# Enable Apache Rewrite Module
+# Enable Apache rewrite module
 RUN a2enmod rewrite
 
 # Apply necessary permissions
