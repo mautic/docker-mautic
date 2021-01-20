@@ -1,9 +1,10 @@
 #!/bin/bash
 set -e
 
-mautic_2_latest_version=2.16.5
-mautic_3_latest_version="$(curl https://api.github.com/repos/mautic/mautic/releases/latest -s | jq -r .tag_name)"
-
+# fetch latest version for 3.x and 2.x
+#                               ----------- fetch all releases from mautic ----------- | -- list all tags - | filter '2.[0-999].[0-999]' only first
+mautic_2_latest_version="$(curl https://api.github.com/repos/mautic/mautic/releases -s | jq -r .[].tag_name | grep  '^2\.[0-9]*\.[0-9]*$' -m1)"
+mautic_3_latest_version="$(curl https://api.github.com/repos/mautic/mautic/releases -s | jq -r .[].tag_name | grep  '^3\.[0-9]*\.[0-9]*$' -m1)"
 
 for mautic_version in $mautic_2_latest_version $mautic_3_latest_version; do (
 
