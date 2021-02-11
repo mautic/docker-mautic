@@ -214,6 +214,13 @@ You are invited to contribute new features, fixes, or updates, large or small; w
 
 # Building
 
+This is a multi-stage Dockerfile, therefore you require buildkit enabled to be able to build your own container image.
+
+- https://docs.docker.com/develop/develop-images/build_enhancements/
+- https://docs.docker.com/develop/develop-images/multistage-build/
+
+See [workflows/docker-publish.yml](.github/workflows/docker-publish.yml) for examples on how to build your own image.
+
 ## Mautic Versioning
 
 The Dockerfile has two ARG where you can specify the version to be built into container image:
