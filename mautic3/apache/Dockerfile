@@ -1,5 +1,16 @@
 ARG PHP_VERSION=7.4
-FROM php:${PHP_VERSION}-apache
+
+FROM php:7.4-apache AS php-7.4-apache
+
+ENV GD_CONFIGURE --with-freetype=/usr/lib --with-jpeg=/usr/lib
+
+
+FROM php:7.3-apache AS php-7.3-apache
+
+ENV GD_CONFIGURE --with-freetype-dir=/usr/lib --with-jpeg-dir=/usr/lib --with-png-dir=/usr/lib
+
+
+FROM php-${PHP_VERSION}-apache
 
 LABEL vendor="Mautic" \
       maintainer.1="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>" \
@@ -88,7 +99,7 @@ RUN apt-get update \
 #    mariadb-client \
 # Install PHP extensions
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
- && docker-php-ext-configure gd --with-freetype=/usr/lib --with-jpeg=/usr/lib \
+ && docker-php-ext-configure gd ${GD_CONFIGURE} \
  && docker-php-ext-configure opcache --enable-opcache \
  && docker-php-ext-install ${PHP_EXT_LIST} \
  && docker-php-ext-enable ${PHP_EXT_LIST} \
