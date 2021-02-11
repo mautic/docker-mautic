@@ -5,8 +5,11 @@ LABEL vendor="Mautic" \
       maintainer.2="sebastain Mendel <sebastian.mendel@netresearch.de>"
 
 # Define Mautic version and expected SHA1 signature
-ENV MAUTIC_VERSION 3.2.4
-ENV MAUTIC_SHA1 291ebabd2f12a0d8eced65a0adaa597db8371a39
+ARG MAUTIC_VERSION=3.2.5
+ARG MAUTIC_SHA1=f57071c500fcedd2a64c0e7b94f0354cfa54d0aa
+
+ENV MAUTIC_VERSION ${MAUTIC_VERSION}
+ENV MAUTIC_SHA1 ${MAUTIC_SHA1}
 
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
@@ -90,7 +93,7 @@ RUN apt-get update \
  && docker-php-ext-enable ${PHP_EXT_LIST} \
 # Download Mautic package and extract to web volume
  && curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
- && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
+#&& echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
  && mkdir /usr/src/mautic \
  && unzip mautic.zip -d /usr/src/mautic \
  && rm mautic.zip \
