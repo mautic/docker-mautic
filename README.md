@@ -19,6 +19,16 @@ If you want to pull the latest **stable** v3 image from netresearch/docker-mauti
     docker pull ghcr.io/netresearch/mautic:3-apache
     docker pull ghcr.io/netresearch/mautic:3-fpm
 
+There are also previous minor versions available (Apache only currently), f.e.:
+
+- ghcr.io/netresearch/mautic:3.0-apache
+  - ghcr.io/netresearch/mautic:3.0.2-apache
+- ghcr.io/netresearch/mautic:3.1-apache
+  - ghcr.io/netresearch/mautic:3.1.2-apache
+- ghcr.io/netresearch/mautic:3.2-apache
+  - ghcr.io/netresearch/mautic:3.2.5-apache
+
+
 If you want to pull the latest **stable** v2 image from netresearch/docker-mautic:
 
     docker pull ghcr.io/netresearch/mautic:2-apache
@@ -167,7 +177,11 @@ Run `docker-compose up`, wait for it to initialize completely, and visit `https:
 
 # Updating
 
-You can update your Mautic instance by pulling and starting a new container image
+You can update your Mautic instance by pulling and starting a new container image.
+
+In case of docker-compose.yml you just need to replace the Mautic container image with a newer one.
+
+Please keep in mind that you cannot upgrade from 3.0 to 3.2 directly:
 
 You need to follow this upgrade path: 2.? -> 3.0.0 -> 3.1.0 -> 3.x
 
@@ -202,9 +216,19 @@ You are invited to contribute new features, fixes, or updates, large or small; w
 
 ## Mautic Versioning
 
-The Dockerfile has two ENV where you can specify an version to be built into cotnainer image:
+The Dockerfile has two ARG where you can specify the version to be built into container image:
 
 - `MAUTIC_VERSION`
 - `MAUTIC_SHA1`
 
-You can update this to latest version by running `./update.sh`
+You can update the default values for this to the latest version by running `./update.sh`
+
+Or you can overrride this during build with `--buld-arg` to build Mautic 3.0.2 or 3.1.2
+
+## PHP Version
+
+The Dockerfile has an ARG PHP_VERSION, which defaults to "7.4".
+
+- `PHP_VERSION`
+
+You can ovverride this during build with `--build-arg PHP_VERSION=7.3` when you build Mautic 3.0 or 3.1 images
