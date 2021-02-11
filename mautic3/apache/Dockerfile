@@ -82,21 +82,20 @@ RUN apt-get update \
 #    libaprutil1-dev \
 #    nano \
 #    mariadb-client \
-
+# Install PHP extensions
  && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
  && docker-php-ext-configure gd --with-freetype=/usr/lib --with-jpeg=/usr/lib \
  && docker-php-ext-configure opcache --enable-opcache \
  && docker-php-ext-install ${PHP_EXT_LIST} \
  && docker-php-ext-enable ${PHP_EXT_LIST} \
-
-# Download package and extract to web volume
+# Download Mautic package and extract to web volume
  && curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
  && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
  && mkdir /usr/src/mautic \
  && unzip mautic.zip -d /usr/src/mautic \
  && rm mautic.zip \
  && chown -R www-data:www-data /usr/src/mautic \
-
+# clean up
  && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $REQUIREMENTS_BUILD \
  && rm -rf /var/lib/apt/lists/* \
  && rm /etc/cron.daily/*

@@ -85,7 +85,18 @@ if [ -n "$MAUTIC_CRON_DYNAMICS" ]; then
         echo "10,40 * * * *     www-data   php /var/www/html/bin/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
+# ToDo
+#
+# 1. Copy source file to working dir
+#    1. ? always? ... to ensure update is processed?
+#    2. ? does this overwerite configuration?
+# 2. Write configuration if not existing
+# 3. Run migration/upgrade
+#    1. ? always? depending on what? an step 2?
+
 if ! [ -e index.php -a -e app/AppKernel.php ]; then
+        # No Mautic source files found in target location
+        # -> New installation
         echo >&2 "Mautic not found in $(pwd) - copying now..."
 
         if [ "$(ls -A)" ]; then
@@ -102,16 +113,22 @@ echo >&2 "======================================================================
 echo >&2
 echo >&2 "This server is now configured to run Mautic!"
 
-# Write the database connection to the config so the installer prefills it
 if ! [ -e app/config/local.php ]; then
+        # Write the database connection to the config so the installer prefills it
         php /makeconfig.php
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
         mkdir -p /var/www/html/app/logs
         chown www-data:www-data /var/www/html/app/logs
+else
+        php /var/www/html/bin/console doctrine:migrations:migrate \
+                --no-interaction \
+                --env=prod \
+                --no-debug
 fi
 
+# ToDo add health checks
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
     if [ ! -e /var/log/cron.pipe ]; then
         mkfifo /var/log/cron.pipe

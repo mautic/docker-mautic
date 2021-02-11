@@ -165,6 +165,27 @@ volumes:
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `https://localhost` or `https://host-ip`.
 
+# Updating
+
+You can update your Mautic instance by pulling and starting a new container image
+
+You need to follow this upgrade path: 2.? -> 3.0.0 -> 3.1.0 -> 3.x
+
+# Developer notes
+
+- Upgrade procedure is implemented as in https://github.com/mautic/mautic/blob/features/upgrade.php
+- Check https://github.com/mautic/mautic/blob/features/app/release_metadata.json when building new versions
+- Requiremetns are gathered from
+  - https://github.com/mautic/mautic/blob/features/composer.json
+  - https://github.com/mautic/mautic/issues/8171
+  - https://github.com/mautic/mautic-documentation/issues/89
+  - https://docs.mautic.org/en/mautic-3-upgrade/upgrade-steps
+  - https://github.com/mautic/mautic/blob/features/app/bundles/InstallBundle/Configurator/Step/CheckStep.php
+  - "mautic.install.function." in https://github.com/mautic/mautic/blob/features/app/bundles/InstallBundle/Translations/en_US/messages.ini#L49
+- Configuration
+  - https://docs.mautic.org/en/setup/cron-jobs
+
+
 # User Feedback
 
 ## Issues
