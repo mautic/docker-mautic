@@ -19,8 +19,8 @@ for mautic_version in $mautic_2_latest_version $mautic_3_latest_version; do (
 
     for variant in apache fpm; do (
         sed -ri '
-            s/^(ENV MAUTIC_VERSION) .*/\1 '"${mautic_version}"'/;
-            s/^(ENV MAUTIC_SHA1) .*/\1 '"${sha1}"'/;
+            s/^(ARG MAUTIC_VERSION=) .*/\1 '"${mautic_version}"'/;
+            s/^(ARG MAUTIC_SHA1=) .*/\1 '"${sha1}"'/;
         ' "${path}${variant}/Dockerfile"
 
         # To make management easier, we use these files for all variants
