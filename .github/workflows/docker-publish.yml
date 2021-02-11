@@ -18,6 +18,7 @@ jobs:
           docker buildx build mautic3/apache
           --build-arg MAUTIC_SHA1=f57071c500fcedd2a64c0e7b94f0354cfa54d0aa
           --build-arg MAUTIC_VERSION=3.2.5
+          --build-arg PHP_VERSION=7.4
           --file mautic3/apache/Dockerfile
           --tag ghcr.io/netresearch/mautic:3.2.5-apache
 
@@ -44,6 +45,7 @@ jobs:
           docker buildx build mautic3/apache
           --build-arg MAUTIC_SHA1=291ebabd2f12a0d8eced65a0adaa597db8371a39
           --build-arg MAUTIC_VERSION=3.1.2
+          --build-arg PHP_VERSION=7.3
           --file mautic3/apache/Dockerfile
           --tag ghcr.io/netresearch/mautic:3.1.2-apache
 
@@ -68,6 +70,7 @@ jobs:
           docker buildx build mautic3/apache
           --build-arg MAUTIC_SHA1=291ebabd2f12a0d8eced65a0adaa597db8371a39
           --build-arg MAUTIC_VERSION=3.0.2
+          --build-arg PHP_VERSION=7.3
           --file mautic3/apache/Dockerfile
           --tag ghcr.io/netresearch/mautic:3.0.2-apache
 

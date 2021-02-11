@@ -1,4 +1,5 @@
-FROM php:7.4-apache
+ARG PHP_VERSION=7.4
+FROM php:${PHP_VERSION}-apache
 
 LABEL vendor="Mautic" \
       maintainer.1="Luiz Eduardo Oliveira Fonseca <luiz@powertic.com>" \
