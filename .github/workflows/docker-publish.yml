@@ -88,8 +88,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker buildx build mautic3/fpm \
-          --file mautic3/fpm/Dockerfile \
+        run: >
+          docker buildx build mautic3/fpm
+          --file mautic3/fpm/Dockerfile
           --tag ghcr.io/netresearch/mautic:3-fpm
         
       - name: Log into registry
@@ -106,8 +107,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker buildx build mautic2/apache \
-          --file mautic2/apache/Dockerfile \
+        run: >
+          docker buildx build mautic2/apache
+          --file mautic2/apache/Dockerfile
           --tag ghcr.io/netresearch/mautic:2-apache
         
       - name: Log into registry
@@ -124,8 +126,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker buildx build mautic2/fpm \
-          --file mautic2/fpm/Dockerfile \
+        run: >
+          docker buildx build mautic2/fpm
+          --file mautic2/fpm/Dockerfile
           --tag ghcr.io/netresearch/mautic:2-fpm
         
       - name: Log into registry
