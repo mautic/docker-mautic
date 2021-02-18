@@ -119,16 +119,22 @@ if ! [ -e app/config/local.php ]; then
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
-        mkdir -p /var/www/html/app/logs
-        chown www-data:www-data /var/www/html/app/logs
+        mkdir -p /var/www/html/var/logs
+        chown www-data:www-data /var/www/html/var/logs
 else
+        rm -rf /var/www/html/var/cache/*
         php /var/www/html/bin/console doctrine:migrations:migrate \
                 --no-interaction \
                 --env=prod \
                 --no-debug
 fi
 
+# clear any cache remains
+rm -rf /var/www/html/var/cache/*
+
 # ToDo add health checks
+
+# configure CRON
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
     if [ ! -e /var/log/cron.pipe ]; then
         mkfifo /var/log/cron.pipe
