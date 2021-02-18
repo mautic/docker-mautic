@@ -119,8 +119,8 @@ if ! [ -e app/config/local.php ]; then
 
         # Make sure our web user owns the config file if it exists
         chown www-data:www-data app/config/local.php
-        mkdir -p /var/www/html/app/logs
-        chown www-data:www-data /var/www/html/app/logs
+        mkdir -p /var/www/html/var/logs
+        chown www-data:www-data /var/www/html/var/logs
 else
         php /var/www/html/bin/console doctrine:migrations:migrate \
                 --no-interaction \
