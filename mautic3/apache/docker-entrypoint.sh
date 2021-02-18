@@ -133,6 +133,8 @@ fi
 rm -rf /var/www/html/var/cache/*
 
 # ToDo add health checks
+
+# configure CRON
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
     if [ ! -e /var/log/cron.pipe ]; then
         mkfifo /var/log/cron.pipe
