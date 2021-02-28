@@ -100,7 +100,7 @@ if ! [ -e index.php -a -e app/AppKernel.php ]; then
 fi
 
 # Ensure the MySQL Database is created
-php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
+php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME" "$MAUTIC_DB_SSL_CA_CERT"
 
 echo >&2 "========================================================================"
 echo >&2
@@ -119,6 +119,21 @@ if ! [ -e app/config/local.php ]; then
         chown www-data:www-data app/config/local.php
         mkdir -p /var/www/html/app/logs
         chown www-data:www-data /var/www/html/app/logs
+fi
+
+if [[ ! -z "$MAUTIC_DB_SSL_CA_CERT" && ! -e app/config/config_local.php ]]; then 
+        echo >&2 "DB SSL CA configuration found but doctrine not configured"
+
+        echo -e "<?php\n" >> app/config/config_local.php
+        echo -e "\$container->loadFromExtension('doctrine', [" >> app/config/config_local.php
+        echo -e "    'dbal' => [" >> app/config/config_local.php
+        echo -e "        'options' => [" >> app/config/config_local.php
+        echo -e "            PDO::MYSQL_ATTR_SSL_CA => '$MAUTIC_DB_SSL_CA_CERT'" >> app/config/config_local.php
+        echo -e "        ]" >> app/config/config_local.php
+        echo -e "    ]" >> app/config/config_local.php
+        echo -e "]);" >> app/config/config_local.php
+
+        echo >&2 "app/config/config_local.php with doctrine ssl options successfully set up"
 fi
 
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then

@@ -59,6 +59,7 @@ The following environment variables are also honored for configuring your Mautic
 -   `-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -   `-e MAUTIC_DB_NAME=...` (defaults to "mautic")
 -   `-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+-   `-e MAUTIC_DB_SSL_CA_CERT=...` (defaults to empty) Set the path to the CA Cert to enable SSL connection to the database. You have the responsability to provide the CA cert yourself (thanks to a volume for example)
 
 If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`).
 
