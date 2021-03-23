@@ -16,20 +16,20 @@ jobs:
       - name: Build image
         run: >
           docker buildx build mautic3/apache
-          --build-arg MAUTIC_SHA1=eeb751abe0cd17de90a61b48ee8c306b50bd2226
-          --build-arg MAUTIC_VERSION=3.3.1
+          --build-arg MAUTIC_SHA1=720bf3bdf76d404b6ec773c14788d2f68b1e77cc
+          --build-arg MAUTIC_VERSION=3.3.2
           --build-arg PHP_VERSION=7.4
           --file mautic3/apache/Dockerfile
-          --tag ghcr.io/netresearch/mautic:3.3.1-apache
+          --tag ghcr.io/netresearch/mautic:3.3.2-apache
 
       - name: Log into registry
         run: echo "${{ secrets.CR_PAT }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push image
         run: |
-          docker tag ghcr.io/netresearch/mautic:3.3.1-apache ghcr.io/netresearch/mautic:3.3-apache
-          docker tag ghcr.io/netresearch/mautic:3.3.1-apache ghcr.io/netresearch/mautic:3-apache
-          docker push ghcr.io/netresearch/mautic:3.3.1-apache
+          docker tag ghcr.io/netresearch/mautic:3.3.2-apache ghcr.io/netresearch/mautic:3.3-apache
+          docker tag ghcr.io/netresearch/mautic:3.3.2-apache ghcr.io/netresearch/mautic:3-apache
+          docker push ghcr.io/netresearch/mautic:3.3.2-apache
           docker push ghcr.io/netresearch/mautic:3.3-apache
           docker push ghcr.io/netresearch/mautic:3-apache
 
