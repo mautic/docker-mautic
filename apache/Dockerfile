@@ -54,8 +54,8 @@ RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install  gd \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install intl mbstring mysqli curl pdo_mysql zip opcache bcmath gd \
-    && docker-php-ext-enable intl mbstring mysqli curl pdo_mysql zip opcache bcmath gd
+    && docker-php-ext-install intl mbstring mysqli curl pdo_mysql zip opcache bcmath gd sockets \
+    && docker-php-ext-enable intl mbstring mysqli curl pdo_mysql zip opcache bcmath gd sockets
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer

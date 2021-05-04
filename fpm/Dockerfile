@@ -27,8 +27,8 @@ RUN pecl install mcrypt-1.0.3
 
 RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-configure opcache --enable-opcache \
-    && docker-php-ext-install imap intl mbstring mysqli pdo_mysql zip opcache bcmath \
-    && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath
+    && docker-php-ext-install imap intl mbstring mysqli pdo_mysql zip opcache bcmath sockets \
+    && docker-php-ext-enable imap intl mbstring mcrypt mysqli pdo_mysql zip opcache bcmath sockets
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
