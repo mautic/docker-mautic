@@ -18,9 +18,21 @@ _This repository refers to Mautic 3 Series. If you would like information about 
 
 If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
-    docker pull mautic/mautic:v3
+    docker pull mautic/mautic:v4
 
-**_Note that during the 3.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
+**_Note that during the 4.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
+
+If you want to pull the latest **stable** image from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4
+
+If you want to pull the latest **stable** image based on Apache2 from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4-apache
+
+If you want to pull the latest **stable** image based on FPM from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4-fpm
 
 If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
@@ -33,18 +45,6 @@ If you want to pull the latest **stable** image based on Apache2 from Mautic 3 S
 If you want to pull the latest **stable** image based on FPM from Mautic 3 Series on DockerHub:
 
     docker pull mautic/mautic:v3-fpm
-
-If you want to pull the latest **stable** image from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2
-
-If you want to pull the latest **stable** image based on Apache2 from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2-apache
-
-If you want to pull the latest **stable** image based on FPM from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2-fpm
 
 # Running Basic Container
 
