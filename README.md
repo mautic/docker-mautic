@@ -144,6 +144,12 @@ Mautic Docker has two ENV that you can specify an version do start your new cont
 - `-e MAUTIC_VERSION` (Defaults to "3.0.0")
 - `-e MAUTIC_SHA1` (Defalts to "ed4287367b8484aa146a1fa904b261ab30d9c6e7")
 
+### Mautic configuration
+
+Additional configuration variables can be added to mautic's local config by prepending them with `MAUTIC_CONFIG_`.  This will be re-applied every time the container is re-started, so can be used for external config management of mautic instances.
+
+- `-e MAUTIC_CONFIG_DEBUG=1` Set debug=1 in `local.php`
+
 ## Accesing the Instance
 
 Access your new Mautic on `http://localhost:8080` or `http://host-ip:8080` in a browser.

@@ -110,15 +110,13 @@ echo >&2 "Database Name: $MAUTIC_DB_NAME"
 echo >&2 "Database Username: $MAUTIC_DB_USER"
 echo >&2 "Database Password: $MAUTIC_DB_PASSWORD"
 
-# Write the database connection to the config so the installer prefills it
-if ! [ -e app/config/local.php ]; then
-        php /makeconfig.php
+# Write the provided configuration to the config so the installer prefills it
+php /makeconfig.php
 
-        # Make sure our web user owns the config file if it exists
-        chown www-data:www-data app/config/local.php
-        mkdir -p /var/www/html/app/logs
-        chown www-data:www-data /var/www/html/app/logs
-fi
+# Make sure our web user owns the config file if it exists
+chown www-data:www-data app/config/local.php
+mkdir -p /var/www/html/app/logs
+chown www-data:www-data /var/www/html/app/logs
 
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
     if [ ! -e /var/log/cron.pipe ]; then
