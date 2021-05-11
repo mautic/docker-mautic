@@ -3,10 +3,20 @@ $stderr = fopen('php://stderr', 'w');
 
 fwrite($stderr, "\nWriting initial Mautic config\n");
 
-$parameters = array(
-	'db_driver'      => 'pdo_mysql',
-	'install_source' => 'Docker'
-);
+$path     = '/var/www/html/app/config/local.php';
+
+// grab existing config if it exists
+if(file_exists($path)) {
+    include($path);
+}
+
+// if existing config is nonexistant or broken, create blank config
+if(is_null($parameters)) {
+	$parameters = array(
+		'db_driver'      => 'pdo_mysql',
+		'install_source' => 'Docker'
+	);
+}
 
 if(array_key_exists('MAUTIC_DB_HOST', $_ENV)) {
     // Figure out if we have a port in the database host string
@@ -39,7 +49,14 @@ if(array_key_exists('PHP_INI_DATE_TIMEZONE', $_ENV)) {
     $parameters['default_timezone'] = $_ENV['PHP_INI_DATE_TIMEZONE'];
 }
 
-$path     = '/var/www/html/app/config/local.php';
+// anything starting MAUTIC_CONFIG_ should be assumed to be a config variable,
+// so lowercased and shoved as-is into the parameters
+foreach($_ENV as $k=>$v) {
+	if( substr( $k, 0, 14 ) === 'MAUTIC_CONFIG_' )	{
+		$parameters[strtolower( substr( $k, 14 ) )] = $v;
+	}
+}
+
 $rendered = "<?php\n\$parameters = ".var_export($parameters, true).";\n";
 
 $status = file_put_contents($path, $rendered);
