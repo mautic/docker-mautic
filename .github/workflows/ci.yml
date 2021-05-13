@@ -21,4 +21,4 @@ jobs:
         with:
           context: ${{ matrix.image }}
           push: false
-          tags: mautic/docker-${{ matrix.image }}:latest
+          tags: mautic/mautic:v4-${{ matrix.image }}
