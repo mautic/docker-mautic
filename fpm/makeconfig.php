@@ -31,10 +31,6 @@ if(array_key_exists('MAUTIC_DB_USER', $_ENV)) {
 if(array_key_exists('MAUTIC_DB_PASSWORD', $_ENV)) {
     $parameters['db_password'] = $_ENV['MAUTIC_DB_PASSWORD'];
 }
-if(array_key_exists('MAUTIC_TRUSTED_PROXIES', $_ENV)) {
-    $proxies = explode(',', $_ENV['MAUTIC_TRUSTED_PROXIES']);
-    $parameters['trusted_proxies'] = $proxies;
-}
 
 if(array_key_exists('PHP_INI_DATE_TIMEZONE', $_ENV)) {
     $parameters['default_timezone'] = $_ENV['PHP_INI_DATE_TIMEZONE'];
