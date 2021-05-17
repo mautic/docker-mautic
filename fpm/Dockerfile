@@ -62,10 +62,10 @@ RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${
     && chown -R www-data:www-data /usr/src/mautic
 
 # Copy init scripts and custom .htaccess
-COPY docker-entrypoint.sh /entrypoint.sh
-COPY makeconfig.php /makeconfig.php
-COPY makedb.php /makedb.php
-COPY mautic.crontab /etc/cron.d/mautic
+COPY common/docker-entrypoint.sh /entrypoint.sh
+COPY common/makeconfig.php /makeconfig.php
+COPY common/makedb.php /makedb.php
+COPY common/mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 
 # Apply necessary permissions

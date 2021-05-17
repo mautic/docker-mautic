@@ -83,6 +83,15 @@ Setting Up Mautic:
 
 This will run a basic Mautic on http://localhost:8080.
 
+## Building your own containers
+
+You can build your own containers easily using the docker build command in the root of this directory:
+
+```
+docker build . -f apache/Dockerfile -t mautic/mautic:v4-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:v4-fpm
+```
+
 ## Customizing Mautic Container
 
 The following environment variables are also honored for configuring your Mautic instance:

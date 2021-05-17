@@ -19,6 +19,6 @@ jobs:
       - name: Build ${{ matrix.image }} image
         uses: docker/build-push-action@v2
         with:
-          context: ${{ matrix.image }}
+          file: ${{ matrix.image }}/Dockerfile
           push: false
           tags: mautic/mautic:v4-${{ matrix.image }}
