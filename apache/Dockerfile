@@ -76,6 +76,9 @@ ENV MAUTIC_DB_USER root
 # Setting an Default database name for Mysql
 ENV MAUTIC_DB_NAME mautic
 
+# Set up mysql port
+ENV MAUTIC_DB_PORT 3306
+
 # Setting PHP properties
 ENV PHP_INI_DATE_TIMEZONE='UTC' \
     PHP_MEMORY_LIMIT=512M \

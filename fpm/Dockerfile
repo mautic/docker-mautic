@@ -46,6 +46,7 @@ ENV MAUTIC_RUN_CRON_JOBS true
 # Setting an root user for test
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
+ENV MAUTIC_DB_PORT 3306
 
 # Setting PHP properties
 ENV PHP_INI_DATE_TIMEZONE='UTC' \
