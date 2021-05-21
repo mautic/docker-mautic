@@ -174,6 +174,28 @@ if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
   echo >&2
 fi
 
+# clear mautic cache
+sudo -Eu www-data php /var/www/html/bin/console mautic:cache:clear
+
+echo >&2 "========================================================================"
+echo >&2 "Applying any needed database migrations"
+echo >&2
+sudo -Eu www-data php /var/www/html/bin/console doctrine:migration:migrate -n
+echo >&2 "========================================================================"
+echo >&2
+echo >&2
+
+# if we have the credentials to do a maxmind download
+if grep -Fq "'ip_lookup_auth' => '" /var/www/html/app/config/local.php; then
+  echo >&2 "========================================================================"
+  echo >&2 "Grabbing latest ip lookup database"
+  echo >&2
+  sudo -Eu www-data php /var/www/html/bin/console mautic:iplookup:download
+  echo >&2 "========================================================================"
+  echo >&2
+  echo >&2
+fi
+
 if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
   echo >&2 "========================================================================"
   echo >&2 "Activating cron"
