@@ -102,37 +102,105 @@ fi
 php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
 
 echo >&2 "========================================================================"
-echo >&2
 echo >&2 "This server is now configured to run Mautic!"
 echo >&2 "The following information will be prefilled into the installer (keep password field empty):"
 echo >&2 "Host Name: $MAUTIC_DB_HOST"
 echo >&2 "Database Name: $MAUTIC_DB_NAME"
 echo >&2 "Database Username: $MAUTIC_DB_USER"
 echo >&2 "Database Password: $MAUTIC_DB_PASSWORD"
+echo >&2 "========================================================================"
+echo >&2
+echo >&2
 
 # Write the provided configuration to the config so the installer prefills it
+echo >&2 "========================================================================"
 php /makeconfig.php
+echo >&2 "========================================================================"
+echo >&2
+echo >&2
 
-# Make sure our web user owns the config file if it exists
+# Make sure our web user owns the config file
 chown www-data:www-data app/config/local.php
-mkdir -p /var/www/html/app/logs
-chown www-data:www-data /var/www/html/app/logs
 
-if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
-    if [ ! -e /var/log/cron.pipe ]; then
-        mkfifo /var/log/cron.pipe
-        chown www-data:www-data /var/log/cron.pipe
+# Make sure logs exists and is owned by www-data
+mkdir -p /var/www/html/app/logs
+chown -R www-data:www-data /var/www/html/app/logs
+
+# Make sure cache exists and is owned by www-data
+mkdir -p /var/www/html/var/cache/prod
+chown -R www-data:www-data /var/www/html/var/cache
+
+if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
+  echo >&2 "========================================================================"
+  echo >&2 "Mautic not currently installed (no secret_key in local.php)"
+  echo >&2
+
+  if [ -n "$MAUTIC_URL" ] && [ -n "$MAUTIC_ADMIN_EMAIL" ] && [ -n "$MAUTIC_ADMIN_PASSWORD" ]; then
+
+    echo >&2 "URL & Admin credentials supplied, attempting automated mautic installation."
+    echo >&2
+
+    INSTALL_PARAMS=("$MAUTIC_URL")
+
+    if [ -n "$MAUTIC_INSTALL_FORCE" ]; then
+      INSTALL_PARAMS+=(-f)
+    else
+      if ! [[ $MAUTIC_URL =~ https://.* ]]; then
+        echo >&2 "URL not using HTTPS and MAUTIC_INSTALL_FORCE not provided.  please provide"
+        echo >&2 "a https url or set MAUTIC_INSTALL_FORCE true to continue."
+        echo >&2
+        echo >&2 "========================================================================"
+        sleep 5
+        exit 1
+      fi
     fi
-    (tail -f /var/log/cron.pipe | while read line; do echo "[CRON] $line"; done) &
-    CRONLOGPID=$!
-    cron -f &
-    CRONPID=$!
-else
-    echo >&2 "Not running cron as requested."
+
+    if [ -n "$MAUTIC_ADMIN_USERNAME" ]; then
+      INSTALL_PARAMS+=(--admin_username="$MAUTIC_ADMIN_USERNAME")
+    fi
+    if [ -n "$MAUTIC_ADMIN_FIRSTNAME" ]; then
+      INSTALL_PARAMS+=(--admin_firstname="$MAUTIC_ADMIN_FIRSTNAME")
+    fi
+    if [ -n "$MAUTIC_ADMIN_LASTNAME" ]; then
+      INSTALL_PARAMS+=(--admin_lastname="$MAUTIC_ADMIN_LASTNAME")
+    fi
+
+    sudo -Eu www-data php /var/www/html/bin/console mautic:install ${INSTALL_PARAMS[@]}
+  else
+    echo >&2 "URL & Admin credentials not supplied, please install mautic manually."
+  fi
+  echo >&2 "========================================================================"
+  echo >&2
+  echo >&2
 fi
 
-echo >&2
+if [[ "$MAUTIC_RUN_CRON_JOBS" == "true" ]]; then
+  echo >&2 "========================================================================"
+  echo >&2 "Activating cron"
+  if [ ! -e /var/log/cron.pipe ]; then
+      mkfifo /var/log/cron.pipe
+      chown www-data:www-data /var/log/cron.pipe
+  fi
+  (tail -f /var/log/cron.pipe | while read line; do echo "[CRON] $line"; done) &
+  CRONLOGPID=$!
+  cron -f &
+  CRONPID=$!
+  echo >&2 "========================================================================"
+  echo >&2
+  echo >&2
+else
+  echo >&2 "========================================================================"
+  echo >&2 "Not running cron"
+  echo >&2 "========================================================================"
+  echo >&2
+  echo >&2
+fi
+
 echo >&2 "========================================================================"
+echo >&2 "Starting mautic"
+echo >&2 "========================================================================"
+echo >&2
+echo >&2
 
 "$@" &
 MAINPID=$!

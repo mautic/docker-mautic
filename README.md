@@ -144,6 +144,23 @@ Mautic Docker has two ENV that you can specify an version do start your new cont
 - `-e MAUTIC_VERSION` (Defaults to "3.0.0")
 - `-e MAUTIC_SHA1` (Defalts to "ed4287367b8484aa146a1fa904b261ab30d9c6e7")
 
+### Automated installation
+
+If you wish your mautic instance to automatically run the installer when the container
+is first started, provide the following environment variables:
+
+- `-e MAUTIC_URL` The URL at which your mautic instance will be accessed
+- `-e MAUTIC_ADMIN_EMAIL` The email address of your initial admin user
+- `-e MAUTIC_ADMIN_PASSWORD` The password of your initial admin user
+
+You can also optionally provide other installation variables:
+
+- `-e MAUTIC_INSTALL_FORCE` If the URL used above is HTTP instead of HTTPS,
+  automated installation will fail.  Set to true to allow this.
+- `-e MAUTIC_ADMIN_USERNAME` The username of your initial admin user
+- `-e MAUTIC_ADMIN_FIRSTNAME` The first name of your initial admin user
+- `-e MAUTIC_ADMIN_LASTNAME` The last name of your initial admin user
+
 ### Mautic configuration
 
 Additional configuration variables can be added to mautic's local config by prepending them with `MAUTIC_CONFIG_`.  This will be re-applied every time the container is re-started, so can be used for external config management of mautic instances.

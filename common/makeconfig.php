@@ -1,13 +1,15 @@
 <?php
 $stderr = fopen('php://stderr', 'w');
 
-fwrite($stderr, "\nWriting initial Mautic config\n");
-
 $path     = '/var/www/html/app/config/local.php';
 
 // grab existing config if it exists
 if(file_exists($path)) {
-    include($path);
+  fwrite($stderr, "Updating existing mautic config\n");
+  include($path);
+}
+else {
+  fwrite($stderr, "Creating new existing mautic config\n");
 }
 
 // if existing config is nonexistant or broken, create blank config
@@ -47,6 +49,19 @@ if(array_key_exists('MAUTIC_DB_PASSWORD', $_ENV)) {
 
 if(array_key_exists('PHP_INI_DATE_TIMEZONE', $_ENV)) {
     $parameters['default_timezone'] = $_ENV['PHP_INI_DATE_TIMEZONE'];
+}
+
+if(array_key_exists('MAUTIC_ADMIN_EMAIL', $_ENV)) {
+    $parameters['admin_email'] = $_ENV['MAUTIC_ADMIN_EMAIL'];
+}
+if(array_key_exists('MAUTIC_ADMIN_PASSWORD', $_ENV)) {
+    $parameters['admin_password'] = $_ENV['MAUTIC_ADMIN_PASSWORD'];
+}
+
+// special case because this won't be propagated using the command-line installer
+if(array_key_exists('MAUTIC_TRUSTED_PROXIES', $_ENV)) {
+    $proxies = json_decode($_ENV['MAUTIC_TRUSTED_PROXIES']);
+    $parameters['trusted_proxies'] = $proxies;
 }
 
 // anything starting MAUTIC_CONFIG_ should be assumed to be a config variable,
