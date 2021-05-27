@@ -85,19 +85,6 @@ if [ -n "$MAUTIC_CRON_DYNAMICS" ]; then
         echo "10,40 * * * *     www-data   php /var/www/html/app/console mautic:integration:fetchleads -i Dynamics > /var/log/cron.pipe 2>&1" >> /etc/cron.d/mautic
 fi
 
-if ! [ -e index.php -a -e app/AppKernel.php ]; then
-        echo >&2 "Mautic not found in $(pwd) - copying now..."
-
-        if [ "$(ls -A)" ]; then
-                echo >&2 "WARNING: $(pwd) is not empty - press Ctrl+C now if this is an error!"
-                ( set -x; ls -A; sleep 10 )
-        fi
-
-        tar cf - --one-file-system -C /usr/src/mautic . | tar xf -
-
-        echo >&2 "Complete! Mautic has been successfully copied to $(pwd)"
-fi
-
 # Ensure the MySQL Database is created
 php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
 
@@ -119,18 +106,15 @@ echo >&2 "======================================================================
 echo >&2
 echo >&2
 
-# Make sure our web user owns the config file
-chown www-data:www-data app/config/local.php
+# Make sure our folder tree exists in our volume
+for path in spool cache logs media/files media/images; do
+  mkdir -p "/data/${path}"
+done
 
-# Make sure logs exists and is owned by www-data
-mkdir -p /var/www/html/app/logs
-chown -R www-data:www-data /var/www/html/app/logs
+# Make sure our web user owns everything in our volume
+chown -R www-data:www-data "/data"
 
-# Make sure cache exists and is owned by www-data
-mkdir -p /var/www/html/var/cache/prod
-chown -R www-data:www-data /var/www/html/var/cache
-
-if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
+if ! grep -Fq "secret_key" /data/local.php; then
   echo >&2 "========================================================================"
   echo >&2 "Mautic not currently installed (no secret_key in local.php)"
   echo >&2
@@ -188,7 +172,7 @@ if [[ "$MAUTIC_RUN_MIGRATIONS" == "true" ]]; then
 fi
 
 # if we have the credentials to do a maxmind download
-if grep -Fq "'ip_lookup_auth' => '" /var/www/html/app/config/local.php; then
+if grep -Fq "'ip_lookup_auth' => '" /data/local.php; then
   echo >&2 "========================================================================"
   echo >&2 "Grabbing latest ip lookup database"
   echo >&2

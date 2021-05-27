@@ -13,7 +13,7 @@ services:
       MAUTIC_DB_PASSWORD: mauticdbpass
       MAUTIC_TRUSTED_PROXIES: '["0.0.0.0/0"]'
     volumes:
-      - mautic-web:/var/www/html
+      - mautic-web:/data
 
   mysql:
     restart: unless-stopped

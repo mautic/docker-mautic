@@ -34,7 +34,7 @@ RUN docker-php-ext-configure imap --with-imap --with-imap-ssl --with-kerberos \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Define Mautic volume to persist data
-VOLUME /var/www/html
+VOLUME /data
 
 # Define Mautic version and expected SHA1 signature
 ENV MAUTIC_VERSION 4.0.0-rc
@@ -56,14 +56,19 @@ ENV PHP_INI_DATE_TIMEZONE='UTC' \
     PHP_MEMORY_LIMIT=512M \
     PHP_MAX_UPLOAD=128M \
     PHP_MAX_EXECUTION_TIME=300
-
+  
 # Download package and extract to web volume
-RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
-    && echo "$MAUTIC_SHA1 *mautic.zip" | sha1sum -c - \
-    && mkdir /usr/src/mautic \
-    && unzip mautic.zip -d /usr/src/mautic \
-    && rm mautic.zip \
-    && chown -R www-data:www-data /usr/src/mautic
+RUN curl -o /tmp/mautic.zip -SL https://github.com/mautic/mautic/releases/download/${MAUTIC_VERSION}/${MAUTIC_VERSION}.zip \
+    && echo "$MAUTIC_SHA1 */tmp/mautic.zip" | sha1sum -c - \
+    && rm -rf /var/www/html \
+    && mkdir /var/www/html \
+    && unzip /tmp/mautic.zip -d /var/www/html \
+    && rm /tmp/mautic.zip \
+    && chown -R www-data:www-data /var/www/html
+
+# Drop in redirectors to volume
+COPY common/paths_local.php /var/www/html/app/config/paths_local.php
+COPY common/parameters_local.php /var/www/html/app/config/parameters_local.php
 
 # Copy init scripts and custom .htaccess
 COPY common/docker-entrypoint.sh /entrypoint.sh
