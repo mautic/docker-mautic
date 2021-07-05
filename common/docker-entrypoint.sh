@@ -159,7 +159,7 @@ if ! grep -Fq "secret_key" /data/local.php; then
 fi
 
 # clear mautic cache
-sudo -Eu www-data php /var/www/html/bin/console mautic:cache:clear
+rm -rf /data/cache/*
 
 if [[ "$MAUTIC_RUN_MIGRATIONS" == "true" ]]; then
     echo >&2 "========================================================================"
