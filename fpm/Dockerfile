@@ -43,6 +43,9 @@ ENV MAUTIC_SHA1 ded92ab7403f3c5c5ef0844b0933e0965502d7a5
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
 
+# By default disable automatic migrations
+ENV MAUTIC_RUN_MIGRATIONS false
+
 # Setting an root user for test
 ENV MAUTIC_DB_USER root
 ENV MAUTIC_DB_NAME mautic
