@@ -1,6 +1,31 @@
 #!/usr/bin/env bash
 set -e
 
+# create temporary backup files for mautic themes media and config
+BACKUPPATH=/backup
+BASEPATH=/var/www/html
+MEDIA="$BASEPATH/media"
+THEMES="$BASEPATH/themes"
+CONFIG_FILE="$BASEPATH/app/config/local.php"
+
+if [ ! -d "$BACKUPPATH" ]; then
+        mkdir "$BACKUPPATH"
+fi
+
+if [ -d "$BASEPATH" ]; then
+        if [ -d "$MEDIA" ]; then
+                cp -rf "$MEDIA" "$BACKUPPATH/"
+        fi
+        if [ -d "$THEMES" ]; then
+                cp -rf "$THEMES" "$BACKUPPATH/"
+        fi
+        if [ -f "$CONFIG_FILE" ]; then
+                cp -f "$CONFIG_FILE" "$BACKUPPATH/"
+        fi
+fi
+rm -rf $BASEPATH/*
+
+
 if [ ! -f /usr/local/etc/php/php.ini ]; then
 cat <<EOF > /usr/local/etc/php/php.ini
 date.timezone = "${PHP_INI_DATE_TIMEZONE}"
@@ -127,6 +152,23 @@ else
                 --no-interaction \
                 --env=prod \
                 --no-debug
+fi
+
+# apply and delete temporary backup files
+if [ -f "$BACKUPPATH/local.php" ]; then
+        cp -f "$BACKUPPATH/local.php" "$CONFIG_FILE"
+fi
+
+if [ -d "$BACKUPPATH/media" ]; then
+        cp -ur "$BACKUPPATH/media" "$BASEPATH"
+fi
+
+if [ -d "$BACKUPPATH/themes" ]; then
+        cp -ur "$BACKUPPATH/themes" "$BASEPATH"
+fi
+
+if [ -d "$BACKUPPATH" ]; then
+        rm -rf $BACKUPPATH
 fi
 
 # clear any cache remains

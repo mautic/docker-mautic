@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
-# create temporary backup files for mautic themes media and config
 BACKUPPATH=/backup
 BASEPATH=/var/www/html
 MEDIA="$BASEPATH/media"
@@ -154,7 +153,6 @@ else
                 --no-debug
 fi
 
-# apply and delete temporary backup files
 if [ -f "$BACKUPPATH/local.php" ]; then
         cp -f "$BACKUPPATH/local.php" "$CONFIG_FILE"
 fi
