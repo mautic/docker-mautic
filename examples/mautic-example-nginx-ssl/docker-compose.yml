@@ -2,7 +2,7 @@ version: "2"
 services:
   mautic:
     restart: unless-stopped
-    image: mautic/mautic
+    image: mautic/mautic:v4-apache
     depends_on:
       - mysql
     ports:
@@ -11,7 +11,7 @@ services:
       MAUTIC_DB_HOST: mysql
       MAUTIC_DB_USER: mautic
       MAUTIC_DB_PASSWORD: mauticdbpass
-      MAUTIC_TRUSTED_PROXIES: 0.0.0.0/0
+      MAUTIC_TRUSTED_PROXIES: '["0.0.0.0/0"]'
     volumes:
       - mautic-web:/var/www/html
 

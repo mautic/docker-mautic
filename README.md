@@ -18,9 +18,21 @@ _This repository refers to Mautic 3 Series. If you would like information about 
 
 If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
-    docker pull mautic/mautic:v3
+    docker pull mautic/mautic:v4
 
-**_Note that during the 3.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
+**_Note that during the 4.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
+
+If you want to pull the latest **stable** image from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4
+
+If you want to pull the latest **stable** image based on Apache2 from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4-apache
+
+If you want to pull the latest **stable** image based on FPM from Mautic 4 Series on DockerHub:
+
+    docker pull mautic/mautic:v4-fpm
 
 If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
 
@@ -33,18 +45,6 @@ If you want to pull the latest **stable** image based on Apache2 from Mautic 3 S
 If you want to pull the latest **stable** image based on FPM from Mautic 3 Series on DockerHub:
 
     docker pull mautic/mautic:v3-fpm
-
-If you want to pull the latest **stable** image from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2
-
-If you want to pull the latest **stable** image based on Apache2 from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2-apache
-
-If you want to pull the latest **stable** image based on FPM from Mautic 2 Series on DockerHub:
-
-    docker pull mautic/mautic:v2-fpm
 
 # Running Basic Container
 
@@ -102,7 +102,7 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 ### Mautic Options
 
 - `-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
-- `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If it's Mautic behind a reverse proxy you can set a list of comma-separated CIDR network addresses it sets those addresses as trusted proxies. You can use `0.0.0.0/0` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
+- `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If Mautic sits behind a reverse proxy, you can set a json array of CIDR network addresses here, and mautic will set those addresses as trusted proxies. You can use `["0.0.0.0/0"]` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 - `-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
 - `-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
 - `-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
@@ -167,14 +167,14 @@ services:
 
   mautic:
     container_name: mautic
-    image: mautic/mautic:v3
+    image: mautic/mautic:v4-apache
     volumes:
       - mautic_data:/var/www/html
     environment:
       - MAUTIC_DB_HOST=database
       - MAUTIC_DB_USER=root
       - MAUTIC_DB_PASSWORD=mypassword
-      - MAUTIC_DB_NAME=mautic3
+      - MAUTIC_DB_NAME=mautic4
     restart: always
     networks:
       - mauticnet
