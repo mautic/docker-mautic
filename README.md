@@ -83,6 +83,15 @@ Setting Up Mautic:
 
 This will run a basic Mautic on http://localhost:8080.
 
+## Building your own containers
+
+You can build your own containers easily using the docker build command in the root of this directory:
+
+```
+docker build . -f apache/Dockerfile -t mautic/mautic:v4-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:v4-fpm
+```
+
 ## Customizing Mautic Container
 
 The following environment variables are also honored for configuring your Mautic instance:
@@ -102,6 +111,7 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 ### Mautic Options
 
 - `-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
+- `-e MAUTIC_RUN_MIGRATIONS=...` (defaults to false - disabled) If set to true runs database migrations automatically on startup.
 - `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If Mautic sits behind a reverse proxy, you can set a json array of CIDR network addresses here, and mautic will set those addresses as trusted proxies. You can use `["0.0.0.0/0"]` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
 - `-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
 - `-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
@@ -134,6 +144,29 @@ Mautic Docker has two ENV that you can specify an version do start your new cont
 
 - `-e MAUTIC_VERSION` (Defaults to "3.0.0")
 - `-e MAUTIC_SHA1` (Defalts to "ed4287367b8484aa146a1fa904b261ab30d9c6e7")
+
+### Automated installation
+
+If you wish your mautic instance to automatically run the installer when the container
+is first started, provide the following environment variables:
+
+- `-e MAUTIC_URL` The URL at which your mautic instance will be accessed
+- `-e MAUTIC_ADMIN_EMAIL` The email address of your initial admin user
+- `-e MAUTIC_ADMIN_PASSWORD` The password of your initial admin user
+
+You can also optionally provide other installation variables:
+
+- `-e MAUTIC_INSTALL_FORCE` If the URL used above is HTTP instead of HTTPS,
+  automated installation will fail.  Set to true to allow this.
+- `-e MAUTIC_ADMIN_USERNAME` The username of your initial admin user
+- `-e MAUTIC_ADMIN_FIRSTNAME` The first name of your initial admin user
+- `-e MAUTIC_ADMIN_LASTNAME` The last name of your initial admin user
+
+### Mautic configuration
+
+Additional configuration variables can be added to mautic's local config by prepending them with `MAUTIC_CONFIG_`.  This will be re-applied every time the container is re-started, so can be used for external config management of mautic instances.
+
+- `-e MAUTIC_CONFIG_DEBUG=1` Set debug=1 in `local.php`
 
 ## Accesing the Instance
 

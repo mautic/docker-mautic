@@ -70,11 +70,17 @@ ENV MAUTIC_SHA1 ded92ab7403f3c5c5ef0844b0933e0965502d7a5
 # By default enable cron jobs
 ENV MAUTIC_RUN_CRON_JOBS true
 
+# By default disable automatic migrations
+ENV MAUTIC_RUN_MIGRATIONS false
+
 # Setting an Default database user for Mysql
 ENV MAUTIC_DB_USER root
 
 # Setting an Default database name for Mysql
 ENV MAUTIC_DB_NAME mautic
+
+# Set up mysql port
+ENV MAUTIC_DB_PORT 3306
 
 # Setting PHP properties
 ENV PHP_INI_DATE_TIMEZONE='UTC' \
@@ -91,10 +97,10 @@ RUN curl -o mautic.zip -SL https://github.com/mautic/mautic/releases/download/${
     && chown -R www-data:www-data /usr/src/mautic
 
 # Copy init scripts and custom .htaccess
-COPY docker-entrypoint.sh /entrypoint.sh
-COPY makeconfig.php /makeconfig.php
-COPY makedb.php /makedb.php
-COPY mautic.crontab /etc/cron.d/mautic
+COPY common/docker-entrypoint.sh /entrypoint.sh
+COPY common/makeconfig.php /makeconfig.php
+COPY common/makedb.php /makedb.php
+COPY common/mautic.crontab /etc/cron.d/mautic
 RUN chmod 644 /etc/cron.d/mautic
 
 # Enable Apache Rewrite Module
