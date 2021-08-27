@@ -179,7 +179,7 @@ services:
     networks:
       - mauticnet
     ports:
-      - "8880:80"
+      - "8080:80"
 ```
 
 Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
