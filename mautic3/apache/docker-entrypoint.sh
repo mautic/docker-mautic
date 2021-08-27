@@ -154,17 +154,20 @@ else
                 --no-debug
 fi
 
-# apply and delete temporary backup files
+# apply and delete temporary backup files and ensure www-data ownership
 if [ -f "$BACKUPPATH/local.php" ]; then
         cp -f "$BACKUPPATH/local.php" "$CONFIG_FILE"
+        chown www-data:www-data "$CONFIG_FILE"
 fi
 
 if [ -d "$BACKUPPATH/media" ]; then
         cp -ur "$BACKUPPATH/media" "$BASEPATH"
+        chown -R www-data:www-data "$BASEPATH/media"
 fi
 
 if [ -d "$BACKUPPATH/themes" ]; then
         cp -ur "$BACKUPPATH/themes" "$BASEPATH"
+        chown -R www-data:www-data "$BASEPATH/themes"
 fi
 
 if [ -d "$BACKUPPATH" ]; then
