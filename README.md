@@ -1,10 +1,5 @@
 Docker Mautic Image
 ===================
-<img src="https://www.mautic.org/media/images/github_readme.png" />
-
-# License
-
-Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
 
 # How to use this image
 
@@ -15,8 +10,6 @@ You can access and customize Docker Mautic from [Official Docker Hub image](http
 If you want to pull the latest stable image from DockerHub:
 
     docker pull mautic/mautic:latest
-
-**You can use the beta images to test latest beta releases of Mautic with current PHP version.**
 
 # Running Basic Container
 
@@ -176,3 +169,7 @@ You can also reach the Mautic community through its [online forums](https://www.
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
 
 Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/mautic/docker-mautic/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+
+# License
+
+Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
