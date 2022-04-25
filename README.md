@@ -172,4 +172,4 @@ Before you start to code, we recommend discussing your plans through a [GitHub i
 
 # License
 
-Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
+Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/HEAD/LICENSE.txt).
