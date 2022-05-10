@@ -95,6 +95,10 @@ if ! [ -e index.php -a -e app/AppKernel.php ]; then
 
         tar cf - --one-file-system -C /usr/src/mautic . | tar xf -
 
+        echo >&2 "Copying Mautic composer config now..."
+        cp /usr/src/mautic-src/mautic-$MAUTIC_VERSION/composer.json .
+        cp /usr/src/mautic-src/mautic-$MAUTIC_VERSION/composer.lock .
+
         echo >&2 "Complete! Mautic has been successfully copied to $(pwd)"
 fi
 
