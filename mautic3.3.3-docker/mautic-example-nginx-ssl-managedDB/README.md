@@ -8,7 +8,7 @@ This example shows how to configure nginx to act as a reverse proxy with ssl sup
 
 #### How to use this example:
 
-1. run ```docker-compose -f docker-compose-managed_database.yaml up``` in this directory
+1. run ```docker-compose up``` in this directory
 2. add these lines to your /etc/hosts file 
 ```127.0.0.1       pilotdev9.eastbayinfo.org ```
 ``` 127.0.4.123 mautic.local ```

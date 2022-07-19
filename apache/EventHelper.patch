@@ -1,0 +1,32 @@
+--- EventHelper-orig.php	2021-03-22 04:07:50.408226601 +0000
++++ EventHelper-new.php	2021-03-22 04:26:57.614949548 +0000
+@@ -70,25 +70,25 @@
+         }
+ 
+         if (key_exists('utm_content', $query)) {
+-            $utmValues->setUtmCampaign($query['utm_content']);
++            $utmValues->setUtmContent($query['utm_content']);
+         } elseif (key_exists('utm_content', $queryReferer)) {
+             $utmValues->setUtmContent($queryReferer['utm_content']);
+         }
+ 
+         if (key_exists('utm_medium', $query)) {
+-            $utmValues->setUtmCampaign($query['utm_medium']);
++            $utmValues->setUtmMedium($query['utm_medium']);
+         } elseif (key_exists('utm_medium', $queryReferer)) {
+             $utmValues->setUtmMedium($queryReferer['utm_medium']);
+         }
+ 
+         if (key_exists('utm_source', $query)) {
+-            $utmValues->setUtmCampaign($query['utm_source']);
++            $utmValues->setUtmSource($query['utm_source']);
+         } elseif (key_exists('utm_source', $queryReferer)) {
+             $utmValues->setUtmSource($queryReferer['utm_source']);
+         }
+ 
+         if (key_exists('utm_term', $query)) {
+-            $utmValues->setUtmCampaign($query['utm_term']);
++            $utmValues->setUtmTerm($query['utm_term']);
+         } elseif (key_exists('utm_term', $queryReferer)) {
+             $utmValues->setUtmTerm($queryReferer['utm_term']);
+         }

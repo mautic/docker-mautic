@@ -1,0 +1,52 @@
+version: "2"
+services:
+  mautic333:
+    container_name: $MAUTIC_DOMAIN
+    restart: unless-stopped
+    image: mautic/mautic3.3.3
+    depends_on:
+      - mauticdb
+    ports:
+      - "127.0.0.1:80:80"
+    environment:
+      - MAUTIC_DB_HOST=mauticdb
+      - MAUTIC_DB_PORT=3306
+      - MAUTIC_DB_USER=root
+      - MAUTIC_DB_PASSWORD=password
+      - MAUTIC_DB_NAME=mautic333
+      - PHP_INI_DATE_TIMEZONE=UTC
+      - PHP_MEMORY_LIMIT=512M
+      - PHP_MAX_UPLOAD=30M
+      - PHP_MAX_EXECUTION_TIME=300
+      - MAUTIC_RUN_CRON_JOBS=true
+    volumes:
+      - /docker-volumes/production-site:/var/www/html
+
+  mauticdb:
+    image: mysql:5.7
+    restart: unless-stopped
+    volumes:
+      - /docker-volumes/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  nginx:
+    restart: unless-stopped
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - /docker-volumes/production.conf:/etc/nginx/conf.d/default.conf
+      - /docker-volumes/dh-param/dhparam-2048.pem:/etc/ssl/certs/dhparam-2048.pem
+      - /docker-volumes/ssl/live/$MAUTIC_DOMAIN/:/etc/letsencrypt/live/$MAUTIC_DOMAIN
+      - /docker-volumes/ssl/archive/$MAUTIC_DOMAIN:/etc/letsencrypt/archive/$MAUTIC_DOMAIN
+    depends_on:
+      - $MAUTIC_DOMAIN
+    entrypoint:
+      - "bash"
+      - "-c"
+    command: |
+        "echo 'NGINX .................................'
+        exec nginx -g 'daemon off;'"
