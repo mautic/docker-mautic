@@ -53,8 +53,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          context: .
-          file: apache/Dockerfile
+          context: common
+          file: ../apache/Dockerfile
           platforms: linux/arm64,linux/amd64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
