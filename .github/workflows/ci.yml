@@ -21,4 +21,5 @@ jobs:
         with:
           context: ${{ matrix.image }}
           push: false
+          platforms: linux/arm64,linux/amd64
           tags: mautic/docker-${{ matrix.image }}:latest
