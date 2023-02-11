@@ -99,7 +99,7 @@ if ! [ -e index.php -a -e app/AppKernel.php ]; then
 fi
 
 # Ensure the MySQL Database is created
-php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
+#php /makedb.php "$MAUTIC_DB_HOST" "$MAUTIC_DB_USER" "$MAUTIC_DB_PASSWORD" "$MAUTIC_DB_NAME"
 
 echo >&2 "========================================================================"
 echo >&2 "This server is now configured to run Mautic!"
@@ -123,14 +123,14 @@ echo >&2
 chown www-data:www-data app/config/local.php
 
 # Make sure logs exists and is owned by www-data
-mkdir -p /var/www/html/app/logs
-chown -R www-data:www-data /var/www/html/app/logs
+mkdir -p /var/www/var/logs
+chown -R www-data:www-data /var/www/var/logs
 
 # Make sure cache exists and is owned by www-data
-mkdir -p /var/www/html/var/cache/prod
-chown -R www-data:www-data /var/www/html/var/cache
+mkdir -p /var/www/var/cache/prod
+chown -R www-data:www-data /var/www/var/cache
 
-if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
+if ! grep -Fq "secret_key" /var/www/docroot/app/config/local.php; then
   echo >&2 "========================================================================"
   echo >&2 "Mautic not currently installed (no secret_key in local.php)"
   echo >&2
@@ -165,7 +165,7 @@ if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
       INSTALL_PARAMS+=(--admin_lastname="$MAUTIC_ADMIN_LASTNAME")
     fi
 
-    sudo -Eu www-data php /var/www/html/bin/console mautic:install ${INSTALL_PARAMS[@]}
+    sudo -Eu www-data php /var/www/bin/console mautic:install ${INSTALL_PARAMS[@]}
   else
     echo >&2 "URL & Admin credentials not supplied, please install mautic manually."
   fi
@@ -175,24 +175,24 @@ if ! grep -Fq "secret_key" /var/www/html/app/config/local.php; then
 fi
 
 # clear mautic cache
-sudo -Eu www-data php /var/www/html/bin/console mautic:cache:clear
+#sudo -Eu www-data php /var/www/html/bin/console mautic:cache:clear
 
 if [[ "$MAUTIC_RUN_MIGRATIONS" == "true" ]]; then
     echo >&2 "========================================================================"
     echo >&2 "Applying any needed database migrations"
     echo >&2
-    sudo -Eu www-data php /var/www/html/bin/console doctrine:migration:migrate -n
+    sudo -Eu www-data php /var/www/bin/console doctrine:migration:migrate -n
     echo >&2 "========================================================================"
     echo >&2
     echo >&2
 fi
 
 # if we have the credentials to do a maxmind download
-if grep -Fq "'ip_lookup_auth' => '" /var/www/html/app/config/local.php; then
+if grep -Fq "'ip_lookup_auth' => '" /var/www/docroot/app/config/local.php; then
   echo >&2 "========================================================================"
   echo >&2 "Grabbing latest ip lookup database"
   echo >&2
-  sudo -Eu www-data php /var/www/html/bin/console mautic:iplookup:download
+  sudo -Eu www-data php /var/www/bin/console mautic:iplookup:download
   echo >&2 "========================================================================"
   echo >&2
   echo >&2

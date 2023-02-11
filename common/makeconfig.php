@@ -1,7 +1,7 @@
 <?php
 $stderr = fopen('php://stderr', 'w');
 
-$path     = '/var/www/html/app/config/local.php';
+$path     = '/var/www/docroot/app/config/local.php';
 
 // grab existing config if it exists
 if(file_exists($path)) {
