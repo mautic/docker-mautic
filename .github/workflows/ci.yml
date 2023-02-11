@@ -33,8 +33,8 @@ jobs:
         with:
           file: new_version/Dockerfile
           context: .
-          build-args: 
-            - MAUTIC_VERSION: ${{ matrix.mautic_version }} .
+          build-args: |
+            MAUTIC_VERSION=${{ matrix.mautic_version }}
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.mautic_version }}
           labels: ${{ steps.meta.outputs.labels }}
