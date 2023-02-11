@@ -29,10 +29,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           file: new_version/Dockerfile
-          context: --build-arg MAUTIC_VERSION=${{ matrix.mautic_version }} .
+          context: .
+          build-args: 
+            - MAUTIC_VERSION: ${{ matrix.mautic_version }} .
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.mautic_version }}
           labels: ${{ steps.meta.outputs.labels }}
