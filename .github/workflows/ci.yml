@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mautic_version: [4.4.6, 5.x-dev]
+        mautic_version: [4.x-dev, 5.x-dev]
     permissions:
       contents: read
       packages: write
