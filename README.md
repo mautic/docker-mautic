@@ -78,7 +78,7 @@ Setting Up Mautic:
         -e MAUTIC_RUN_CRON_JOBS=true \
         -p 8080:80 \
         --net=mauticnet \
-        -v mautic_data:/var/www/html \
+        -v mautic_data:/data \
         mautic/mautic:v3
 
 This will run a basic Mautic on http://localhost:8080.
@@ -136,7 +136,7 @@ If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL serv
 
 ### Persistent Data Volumes
 
-On first run Mautic is unpacked at `/var/www/html`. You need to attach a volume on this path to persist data.
+Mautic stores the data needed to persisit at `/data` - You need to attach a volume to this path to persist data.
 
 ### Mautic Versioning
 
@@ -202,7 +202,7 @@ services:
     container_name: mautic
     image: mautic/mautic:v4-apache
     volumes:
-      - mautic_data:/var/www/html
+      - mautic_data:/data
     environment:
       - MAUTIC_DB_HOST=database
       - MAUTIC_DB_USER=root
