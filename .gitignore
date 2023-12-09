@@ -1,0 +1,5 @@
+# Exclude files copied from 'common/'
+!apache/Dockerfile
+!fpm/Dockerfile
+apache/*
+fpm/*
