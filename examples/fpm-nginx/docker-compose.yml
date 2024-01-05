@@ -1,0 +1,89 @@
+version: '3'
+
+x-mautic-volumes:
+  &mautic-volumes
+  - ./mautic/config:/var/www/html/config:z
+  - ./mautic/logs:/var/www/html/var/logs:z
+  - ./mautic/media/files:/var/www/html/docroot/media/files:z
+  - ./mautic/media/images:/var/www/html/docroot/media/images:z
+  - ./cron:/opt/mautic/cron:z
+  - mautic-docroot:/var/www/html/docroot:z
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - 33061:3306
+    volumes: 
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - mautic-docroot:/var/www/html/docroot:z
+    depends_on:
+      - mautic_web
+    ports:
+      - 8002:80
+
+  mautic_web:
+    image: ghcr.io/mollux/docker-mautic:5.x-dev-fpm
+    links:
+      - db:mysql
+    volumes: *mautic-volumes
+
+    environment:
+      - MAUTIC_LOAD_TEST_DATA=true
+      - MAUTIC_ADMIN_PASSWORD=mautic
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    healthcheck:
+      test: cgi-fcgi -bind -connect 127.0.0.1:9000
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 100
+    depends_on:
+      db:
+        condition: service_healthy
+
+  mautic_cron:
+    image: ghcr.io/mollux/docker-mautic:5.x-dev-fpm
+    links:
+      - db:mysql
+    volumes: *mautic-volumes
+    environment:
+      - MAUTIC_ROLE=mautic_cron
+    depends_on:
+      mautic_web:
+        condition: service_healthy
+
+  mautic_worker:
+    image: ghcr.io/mollux/docker-mautic:5.x-dev-fpm
+    links:
+      - db:mysql
+    volumes: *mautic-volumes
+    environment:
+      - MAUTIC_ROLE=mautic_worker
+    depends_on:
+      mautic_web:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
+  mautic-docroot:
