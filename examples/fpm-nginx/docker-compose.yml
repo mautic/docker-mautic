@@ -13,12 +13,10 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    ports:
-      - 33061:3306
     volumes: 
       - mysql-data:/var/lib/mysql
     healthcheck:
@@ -46,7 +44,6 @@ services:
 
     environment:
       - MAUTIC_LOAD_TEST_DATA=true
-      - MAUTIC_ADMIN_PASSWORD=mautic
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_PORT=${MYSQL_PORT}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
