@@ -7,14 +7,15 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: mollux/docker-mautic
+  IMAGE_NAME: mollux/docker-mautic #${{ github.repository }}
 
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        mautic_version: [4.x-dev, 5.x-dev]
+        mautic_version: [5.x-dev]
+        image_type: [apache, fpm]
     permissions:
       contents: read
       packages: write
@@ -33,10 +34,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          file: new_version/Dockerfile
+          file: ${{ matrix.image_type }}/Dockerfile
           context: .
           build-args: |
             MAUTIC_VERSION=${{ matrix.mautic_version }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.mautic_version }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.mautic_version }}-${{ matrix.image_type }}
           labels: ${{ steps.meta.outputs.labels }}
