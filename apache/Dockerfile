@@ -57,7 +57,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
 
 RUN cd /opt && \
-    composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
+    COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
     rm -rf /opt/mautic/var/cache/js && \
     find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
