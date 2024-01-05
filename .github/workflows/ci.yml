@@ -2,7 +2,7 @@ name: Build and publish a Docker image
 
 on:
   workflow_dispatch:
-#  pull_request:
+  pull_request:
   push:
 
 env:
