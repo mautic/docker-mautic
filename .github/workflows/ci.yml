@@ -42,6 +42,7 @@ jobs:
         with:
           file: ${{ matrix.image_type }}/Dockerfile
           context: .
+          cache-from: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.mautic_version }}-${{ matrix.image_type }}
           platforms: linux/amd64,linux/arm64
           build-args: |
             MAUTIC_VERSION=${{ matrix.mautic_version }}
