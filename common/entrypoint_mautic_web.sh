@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # wait untill the db is fully up before proceeding
-while [[ $(mysqladmin --host=db --user=$MYSQL_USER --password=$MYSQL_PASSWORD ping) != "mysqld is alive" ]]; do
+while [[ $(mysqladmin --host=$MYSQL_HOST --port=$MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD ping) != "mysqld is alive" ]]; do
 	sleep 1
 done
 
