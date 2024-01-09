@@ -3,9 +3,6 @@ FROM php:8.1-apache as builder
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
 
-# Define Mautic version by package tag
-ARG MAUTIC_VERSION=5.x-dev
-
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
     ca-certificates \
@@ -55,6 +52,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
+
+# Define Mautic version by package tag
+ARG MAUTIC_VERSION=5.x-dev
 
 RUN cd /opt && \
     COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
