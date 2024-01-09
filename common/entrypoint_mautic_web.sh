@@ -36,5 +36,10 @@ if [ "$MAUTIC_LOAD_TEST_DATA" = "true" ]; then
 	su -s /bin/bash www-data -c 'php /var/www/html/bin/console doctrine:fixtures:load -n'
 fi
 
+# run migrations
+if [ "$MAUTIC_RUN_MIGRATIONS" = "true" ]; then
+	su -s /bin/bash www-data -c 'php /var/www/html/bin/console doctrine:migration:migrate -n'
+fi
+
 # execute the provided entrypoint
 "$@"

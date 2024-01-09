@@ -107,7 +107,9 @@ VOLUME /var/www/html/docroot/media
 
 WORKDIR /var/www/html/docroot
 
-ENV MAUTIC_ROLE=mautic_web
+ENV MAUTIC_ROLE=mautic_web \
+    MAUTIC_RUN_MIGRATIONS=false \
+    MAUTIC_LOAD_TEST_DATA=false
 
 ENTRYPOINT ["/entrypoint.sh"]
 
