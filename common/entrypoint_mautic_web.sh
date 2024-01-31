@@ -31,7 +31,7 @@ EOF
 fi
 
 # prepare mautic with test data
-if [ "$MAUTIC_LOAD_TEST_DATA" = "true" ]; then
+if [ "$DOCKER_MAUTIC_LOAD_TEST_DATA" = "true" ]; then
 	su -s /bin/bash www-data -c 'php /var/www/html/bin/console doctrine:migrations:sync-metadata-storage'
 	# mautic installation with dummy password and email, as the next step (doctrine:fixtures:load) will overwrite those
 	su -s /bin/bash www-data -c 'php /var/www/html/bin/console mautic:install --force --admin_email willchange@mautic.org --admin_password willchange http://localhost'
@@ -39,7 +39,7 @@ if [ "$MAUTIC_LOAD_TEST_DATA" = "true" ]; then
 fi
 
 # run migrations
-if [ "$MAUTIC_RUN_MIGRATIONS" = "true" ]; then
+if [ "$DOCKER_MAUTIC_RUN_MIGRATIONS" = "true" ]; then
 	su -s /bin/bash www-data -c 'php /var/www/html/bin/console doctrine:migration:migrate -n'
 fi
 

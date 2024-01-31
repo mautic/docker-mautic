@@ -39,9 +39,8 @@ services:
     volumes: *mautic-volumes
 
     environment:
-      - MAUTIC_LOAD_TEST_DATA=${MAUTIC_LOAD_TEST_DATA}
-      - MAUTIC_RUN_MIGRATIONS=${MAUTIC_RUN_MIGRATIONS}
-      - MAUTIC_LOAD_TEST_DATA=true
+      - DOCKER_MAUTIC_LOAD_TEST_DATA=${DOCKER_MAUTIC_LOAD_TEST_DATA}
+      - DOCKER_MAUTIC_RUN_MIGRATIONS=${DOCKER_MAUTIC_RUN_MIGRATIONS}
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_PORT=${MYSQL_PORT}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -63,7 +62,7 @@ services:
       - db:mysql
     volumes: *mautic-volumes
     environment:
-      - MAUTIC_ROLE=mautic_cron
+      - DOCKER_MAUTIC_ROLE=mautic_cron
     depends_on:
       mautic_web:
         condition: service_healthy
@@ -74,7 +73,7 @@ services:
       - db:mysql
     volumes: *mautic-volumes
     environment:
-      - MAUTIC_ROLE=mautic_worker
+      - DOCKER_MAUTIC_ROLE=mautic_worker
     depends_on:
       mautic_web:
         condition: service_healthy

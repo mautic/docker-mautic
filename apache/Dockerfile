@@ -102,9 +102,9 @@ COPY ./common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
 RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
 
 # Setting worker env vars
-ENV MAUTIC_WORKERS_CONSUME_EMAIL=2 \
-    MAUTIC_WORKERS_CONSUME_HIT=2 \
-    MAUTIC_WORKERS_CONSUME_FAILED=2
+ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
+    DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
+    DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -115,9 +115,9 @@ VOLUME /var/www/html/docroot/media
 
 WORKDIR /var/www/html/docroot
 
-ENV MAUTIC_ROLE=mautic_web \
-    MAUTIC_RUN_MIGRATIONS=false \
-    MAUTIC_LOAD_TEST_DATA=false
+ENV DOCKER_MAUTIC_ROLE=mautic_web \
+    DOCKER_MAUTIC_RUN_MIGRATIONS=false \
+    DOCKER_MAUTIC_LOAD_TEST_DATA=false
 
 ENTRYPOINT ["/entrypoint.sh"]
 
