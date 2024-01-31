@@ -1,0 +1,11 @@
+# use this file for environment variables that can be used.
+# see https://docs.mautic.org/en/5.x/
+
+MAUTIC_DB_HOST="${MYSQL_HOST}"
+MAUTIC_DB_PORT="${MYSQL_PORT}"
+MAUTIC_DB_DATABASE="${MYSQL_DATABASE}"
+MAUTIC_DB_USER="${MYSQL_USER}"
+MAUTIC_DB_PASSWORD="${MYSQL_PASSWORD}"
+
+MAUTIC_MESSENGER_DSN_EMAIL="doctrine://default"
+MAUTIC_MESSENGER_DSN_HIT="doctrine://default"

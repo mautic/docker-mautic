@@ -50,6 +50,8 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    env_file:
+      - .mautic_env
     healthcheck:
       test: cgi-fcgi -bind -connect 127.0.0.1:9000
       start_period: 5s
