@@ -1,5 +1,7 @@
 #!/bin/bash
 
+chown -R www-data:www-data /var/www/html/config /var/www/html/var/logs /var/www/html/docroot/media
+
 # wait untill the db is fully up before proceeding
 while [[ $(mysqladmin --host=$MYSQL_HOST --port=$MYSQL_PORT --user=$MYSQL_USER --password=$MYSQL_PASSWORD ping) != "mysqld is alive" ]]; do
 	sleep 1
