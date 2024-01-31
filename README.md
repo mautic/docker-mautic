@@ -11,23 +11,29 @@ The Docker images exist in 2 variants:
 * `apache`: image based on the official `php:apache` images.
 * `fpm`: image based on the official `php:fpm` images.
 
-See the `examples` explanation or `examples` folder how you could use them.
+Each variant contains:
+
+* the needed dependencies to run Mautic (e.g. PHP modules)
+* the Mautic codebase installed via composer (see mautic/recommended-project)
+* the needed files and configuration to run as a specific role
+
+See the `examples` explanation below how you could use them.
 
 ## Roles
 
 each image can be started in 3 modes:
 
-* `web`: runs the Mautic webinterface
-* `worker`: runs the worker processes to consume the messenger queues 
-* `cron`: runs the defined cronjobs
+* `mautic_web`: runs the Mautic webinterface
+* `mautic_worker`: runs the worker processes to consume the messenger queues 
+* `mautic_cron`: runs the defined cronjobs
 
 This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.  
-The `cron` and `worker` require the codebase anyhow, as they execute console commands.
+The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execute console commands that need to bootstrap the full application.
 
 ## Examples
 
 The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
-     
+
 Please take into account the purpose of those examples:  
 it shows how it **could** be used, not how it **should** be used.  
 Do not use those examples in production without reviewing, understanding and configuring them.
@@ -84,7 +90,7 @@ There are 2 files where those settings can be set:
 #### Mautic behaviour settings
 
  - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
-   Defaults to `web`, other supported values are `worker` and `cron`.
+   Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
  - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
    Defaults to `false`, other supported value is `true`.  
    This variable is only usable when using the `web` role.
@@ -110,8 +116,11 @@ See the general Mautic documentatation for more info.
 
 ### Customization
 
-Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).
-This is an ongoing effort we hope to support in an upcoming 5.x release.
+Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
+This is an ongoing effort we hope to support in an upcoming 5.x release.  
+  
+
+For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
 
 
 ## Issues
