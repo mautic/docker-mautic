@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p /opt/mautic/cron
+
 if [ ! -f /opt/mautic/cron/mautic ]; then
 
 	cat <<EOF > /opt/mautic/cron/mautic
