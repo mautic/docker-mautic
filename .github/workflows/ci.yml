@@ -69,7 +69,8 @@ jobs:
           context: .
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ inputs.mautic_version }}-${{ matrix.image_type }}
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ inputs.mautic_version }}-${{ matrix.image_type }},mode=max,image-manifest=true
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
+      #    platforms: linux/amd64,linux/arm64
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
           push: true
