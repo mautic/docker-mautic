@@ -4,12 +4,30 @@ _This version refers to Docker images and examples for Mautic 5. If you would li
 
 ## Versions
 
+all Mautic 5 Docker images follow the following naming stategy.
+
+`v5<minor.patch>-<variant>`
+
+There are some defaults if parts are omitted:
+
+* `<minor.patch>` is the latest release patch version in the latest minor version.
+* `variant` is apache
+
+some examples:
+
+* `v5`: latest stable version of Mautic 5 of the `apache` variant
+* `v5-apache`: latest stable version of Mautic 5 of the `apache` variant
+* `v5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
+* `v5.0.3-apache`: specific point release of the `apache` variant
+
 ## Variants
 
 The Docker images exist in 2 variants:
 
 * `apache`: image based on the official `php:apache` images.
 * `fpm`: image based on the official `php:fpm` images.
+
+The latest supported Mautic PHP version is used the moment of generating of the image.
 
 Each variant contains:
 
@@ -56,8 +74,8 @@ docker build . -f fpm/Dockerfile -t mautic/mautic:v5-fpm
 The images by default foresee following volumes to persist data (not taking into account e.g. database or queueing data, as that's not part of these images).
 
  * `config`: the local config folder containing `local.php`, `parameters_local.php`, ...
- * `var/logs`: the logs foldes
- * `docroot/media`: the uploaded and generated media files
+ * `var/logs`: the folder with logs
+ * `docroot/media`: the folder with uploaded and generated media files
 
 ## Configuration and customizing
 
@@ -67,9 +85,11 @@ The following environment variables can be used to configure how your setup shou
 There are 2 files where those settings can be set:
 
 * the `.env` file: 
-  Should be used for all general variables 
+  Should be used for all general variables for Mysql, PHP, ...
 * the `.mautic_env` file:
   Should be used for all Mautic specific variables.
+
+Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
 
 #### MySQL settings
  - `MYSQL_HOST`: the MySQL host to connect to
@@ -97,9 +117,6 @@ There are 2 files where those settings can be set:
  - `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.  
    Defaults to `false`, other supported value is `true`.  
    This variable is only usable when using the `web` role.
-
-#### Mautic worker settings
-
  - `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.  
    Defaults to `2`
  - `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.  
