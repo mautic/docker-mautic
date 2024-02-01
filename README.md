@@ -6,19 +6,17 @@ _This version refers to Docker images and examples for Mautic 5. If you would li
 
 all Mautic 5 Docker images follow the following naming stategy.
 
-`v5<minor.patch>-<variant>`
+`<major.minor.patch>-<variant>`
 
 There are some defaults if parts are omitted:
 
 * `<minor.patch>` is the latest release patch version in the latest minor version.
-* `variant` is apache
 
 some examples:
 
-* `v5`: latest stable version of Mautic 5 of the `apache` variant
-* `v5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `v5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
-* `v5.0.3-apache`: specific point release of the `apache` variant
+* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
+* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
+* `5.0.3-apache`: specific point release of the `apache` variant
 
 ## Variants
 

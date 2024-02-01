@@ -31,11 +31,11 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
 
   mautic_web:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     ports:
-      - 8001:80
+      - 8003:80
     volumes: *mautic-volumes
 
     environment:
@@ -54,7 +54,7 @@ services:
         condition: service_healthy
 
   mautic_cron:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -65,7 +65,7 @@ services:
         condition: service_healthy
 
   mautic_worker:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes

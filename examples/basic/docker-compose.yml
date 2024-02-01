@@ -26,7 +26,7 @@ services:
       retries: 10
 
   mautic_web:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     ports:
@@ -49,7 +49,7 @@ services:
         condition: service_healthy
 
   mautic_cron:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -60,7 +60,7 @@ services:
         condition: service_healthy
 
   mautic_worker:
-    image: ghcr.io/mollux/docker-mautic:5.x-dev-apache
+    image: ghcr.io/mollux/docker-mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes
