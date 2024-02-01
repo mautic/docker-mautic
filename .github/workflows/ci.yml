@@ -36,9 +36,9 @@ jobs:
             molluxmollux/test-mautic           
           # generate Docker tags based on the following events/attributes
           tags: |
-          type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
-          type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }}
-          type=semver,pattern={{major}},value=${{ inputs.mautic_version }}
+            type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }}
+            type=semver,pattern={{major}},value=${{ inputs.mautic_version }}
           flavor: |
             latest=false
             prefix=
