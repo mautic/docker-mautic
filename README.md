@@ -1,231 +1,142 @@
-# Docker Mautic Image
+# Mautic Docker image and examples
 
-<img src="Mautic_Logo_RGB_LB.png" style="width:100%;height:auto;" />
+_This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
-# License
+## Versions
 
-Mautic is distributed under the GPL v3 license. Full details of the license can be found in the [Mautic GitHub repository](https://github.com/mautic/mautic/blob/staging/LICENSE.txt).
+all Mautic 5 Docker images follow the following naming stategy.
 
-# How to use Docker-Mautic
+`<major.minor.patch>-<variant>`
 
-Docker-Mautic provides a basic environment for Mautic to run correctly.
+There are some defaults if parts are omitted:
 
-Docker images are always simple and functional by design, if you need to add specific features to your Mautic Setup just create a new image based on this official image. You can access and customize Docker Mautic from [Official Docker Hub image](https://hub.docker.com/r/mautic/mautic/).
+* `<minor.patch>` is the latest release patch version in the latest minor version.
 
-_This repository refers to Mautic 3 Series. If you would like information about Mautic 2, see [README](mautic2.x/README.md) at 'mautic2.x' folder._
+some examples:
 
-# Pulling Mautic images from Docker Hub
+* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
+* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
+* `5.0.3-apache`: specific point release of the `apache` variant
 
-If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
+## Variants
 
-    docker pull mautic/mautic:v4
+The Docker images exist in 2 variants:
 
-**_Note that during the 4.0.x period, the 'mautic/mautic:latest' tag still refers to Mautic 2 for backward compatibility. If you intend to use Mautic 2, use the 'mautic/mautic:v2' tag instead of 'mautic/mautic:latest'._**
+* `apache`: image based on the official `php:apache` images.
+* `fpm`: image based on the official `php:fpm` images.
 
-If you want to pull the latest **stable** image from Mautic 4 Series on DockerHub:
+The latest supported Mautic PHP version is used the moment of generating of the image.
 
-    docker pull mautic/mautic:v4
+Each variant contains:
 
-If you want to pull the latest **stable** image based on Apache2 from Mautic 4 Series on DockerHub:
+* the needed dependencies to run Mautic (e.g. PHP modules)
+* the Mautic codebase installed via composer (see mautic/recommended-project)
+* the needed files and configuration to run as a specific role
 
-    docker pull mautic/mautic:v4-apache
+See the `examples` explanation below how you could use them.
 
-If you want to pull the latest **stable** image based on FPM from Mautic 4 Series on DockerHub:
+## Roles
 
-    docker pull mautic/mautic:v4-fpm
+each image can be started in 3 modes:
 
-If you want to pull the latest **stable** image from Mautic 3 Series on DockerHub:
+* `mautic_web`: runs the Mautic webinterface
+* `mautic_worker`: runs the worker processes to consume the messenger queues 
+* `mautic_cron`: runs the defined cronjobs
 
-    docker pull mautic/mautic:v3
+This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.  
+The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execute console commands that need to bootstrap the full application.
 
-If you want to pull the latest **stable** image based on Apache2 from Mautic 3 Series on DockerHub:
+## Examples
 
-    docker pull mautic/mautic:v3-apache
+The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
 
-If you want to pull the latest **stable** image based on FPM from Mautic 3 Series on DockerHub:
+Please take into account the purpose of those examples:  
+it shows how it **could** be used, not how it **should** be used.  
+Do not use those examples in production without reviewing, understanding and configuring them.
 
-    docker pull mautic/mautic:v3-fpm
+* `basic`: standard example using the `apache` image with `doctrine` as async queue.
+* `fpm-nginx`: standard example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
 
-# Running Basic Container
 
-Setting up a Network to connect Mautic and MySQL:
+## Building your own images
 
-    $ docker network create mauticnet
-
-Setting up MySQL Server 5.7+ (Percona, MariaDB or MySQL):
-
-    $ docker volume create mysql_data
-
-    $ docker run --name database -d \
-        --restart=always \
-        -p 3306:3306 \
-        -e MYSQL_ROOT_PASSWORD=mypassword \
-        -v mysql_data:/var/lib/mysql \
-        --net=mauticnet \
-        percona/percona-server:5.7 \
-         --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
-
-Setting Up Mautic:
-
-    $ docker volume create mautic_data
-
-    $ docker run --name mautic -d \
-        --restart=always \
-        -e MAUTIC_DB_HOST=database \
-        -e MAUTIC_DB_USER=root \
-        -e MAUTIC_DB_PASSWORD=mypassword \
-        -e MAUTIC_DB_NAME=mautic \
-        -e MAUTIC_RUN_CRON_JOBS=true \
-        -p 8080:80 \
-        --net=mauticnet \
-        -v mautic_data:/var/www/html \
-        mautic/mautic:v3
-
-This will run a basic Mautic on http://localhost:8080.
-
-## Building your own containers
-
-You can build your own containers easily using the docker build command in the root of this directory:
+You can build your own images easily using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:v4-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:v4-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:v5-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:v5-fpm
 ```
 
-## Customizing Mautic Container
+## Persistent storage
 
-The following environment variables are also honored for configuring your Mautic instance:
+The images by default foresee following volumes to persist data (not taking into account e.g. database or queueing data, as that's not part of these images).
 
-#### Database Options
+ * `config`: the local config folder containing `local.php`, `parameters_local.php`, ...
+ * `var/logs`: the folder with logs
+ * `docroot/media`: the folder with uploaded and generated media files
 
-- `-e MAUTIC_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
-- `-e MAUTIC_DB_USER=...` (defaults to "root")
-- `-e MAUTIC_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
-- `-e MAUTIC_DB_NAME=...` (defaults to "mautic")
-- `-e MAUTIC_DB_TABLE_PREFIX=...` (defaults to empty) Add prefix do Mautic Tables. Very useful when migrate existing databases from another server to docker.
+## Configuration and customizing
 
-If you'd like to use an external database instead of a linked `mysql` container, specify the hostname and port with `MAUTIC_DB_HOST` along with the password in `MAUTIC_DB_PASSWORD` and the username in `MAUTIC_DB_USER` (if it is something other than `root`).
+### Configuration
 
-If the `MAUTIC_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `mautic` container, provided that the `MAUTIC_DB_USER` specified has the necessary permissions to create it.
+The following environment variables can be used to configure how your setup should behave.
+There are 2 files where those settings can be set:
 
-### Mautic Options
+* the `.env` file: 
+  Should be used for all general variables for Mysql, PHP, ...
+* the `.mautic_env` file:
+  Should be used for all Mautic specific variables.
 
-- `-e MAUTIC_RUN_CRON_JOBS=...` (defaults to true - enabled) If set to true runs mautic cron jobs using included cron daemon
-- `-e MAUTIC_RUN_MIGRATIONS=...` (defaults to false - disabled) If set to true runs database migrations automatically on startup.
-- `-e MAUTIC_TRUSTED_PROXIES=...` (defaults to empty) If Mautic sits behind a reverse proxy, you can set a json array of CIDR network addresses here, and mautic will set those addresses as trusted proxies. You can use `["0.0.0.0/0"]` or See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
-- `-e MAUTIC_CRON_HUBSPOT=...` (defaults to empty) Enables mautic crons for Hubspot CRM integration
-- `-e MAUTIC_CRON_SALESFORCE=...` (defaults to empty) Enables mautic crons for Salesforce integration
-- `-e MAUTIC_CRON_PIPEDRIVE=...` (defaults to empty) Enables mautic crons for Pipedrive CRM integration
-- `-e MAUTIC_CRON_ZOHO=...` (defaults to empty) Enables mautic crons for Zoho CRM integration
-- `-e MAUTIC_CRON_SUGARCRM=...` (defaults to empty) Enables mautic crons for SugarCRM integration
-- `-e MAUTIC_CRON_DYNAMICS=...` (defaults to empty) Enables mautic crons for Dynamics CRM integration
+Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
 
-### PHP options
+#### MySQL settings
+ - `MYSQL_HOST`: the MySQL host to connect to
+ - `MYSQL_PORT`: the MySQL port to use
+ - `MYSQL_DATABASE`: the database name to be used by Mautic
+ - `MYSQL_USER`: the MySQL user that has access to the database
+ - `MYSQL_PASSWORD`: the password for the MySQL user 
+ - `MYSQL_ROOT_PASSWORD`: the password for the MySQL root user that is able to configure the above users and database
 
-- `-e PHP_INI_DATE_TIMEZONE=...` (defaults to `UTC`) Set PHP timezone
-- `-e PHP_MEMORY_LIMIT=...` (defaults to `256M`) Set PHP memory limit
-- `-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
-- `-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
+#### PHP settings
 
-### PHP options
+ - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
+ - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
+ - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
 
-- `-e PHP_INI_DATE_TIMEZONE=...` (defaults to `UTC`) Set PHP timezone
-- `-e PHP_MEMORY_LIMIT=...` (defaults to `256M`) Set PHP memory limit
-- `-e PHP_MAX_UPLOAD=...` (defaults to `20M`) Set PHP upload max file size
-- `-e PHP_MAX_EXECUTION_TIME=...` (defaults to `300`) Set PHP max execution time
+#### Mautic behaviour settings
 
-### Persistent Data Volumes
+ - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
+   Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
+ - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
+   Defaults to `false`, other supported value is `true`.  
+   This variable is only usable when using the `web` role.
+ - `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.  
+   Defaults to `false`, other supported value is `true`.  
+   This variable is only usable when using the `web` role.
+ - `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.  
+   Defaults to `2`
+ - `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.  
+   Defaults to `2`
+ - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
+   Defaults to `2`
 
-On first run Mautic is unpacked at `/var/www/html`. You need to attach a volume on this path to persist data.
+#### Mautic settings
 
-### Mautic Versioning
+Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
 
-Mautic Docker has two ENV that you can specify an version do start your new container:
+e.g. the `messenger_dsn_setting` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.
+See the general Mautic documentatation for more info.
 
-- `-e MAUTIC_VERSION` (Defaults to "3.0.0")
-- `-e MAUTIC_SHA1` (Defalts to "ed4287367b8484aa146a1fa904b261ab30d9c6e7")
+### Customization
 
-### Automated installation
+Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
+This is an ongoing effort we hope to support in an upcoming 5.x release.  
+  
 
-If you wish your mautic instance to automatically run the installer when the container
-is first started, provide the following environment variables:
+For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
 
-- `-e MAUTIC_URL` The URL at which your mautic instance will be accessed
-- `-e MAUTIC_ADMIN_EMAIL` The email address of your initial admin user
-- `-e MAUTIC_ADMIN_PASSWORD` The password of your initial admin user
-
-You can also optionally provide other installation variables:
-
-- `-e MAUTIC_INSTALL_FORCE` If the URL used above is HTTP instead of HTTPS,
-  automated installation will fail.  Set to true to allow this.
-- `-e MAUTIC_ADMIN_USERNAME` The username of your initial admin user
-- `-e MAUTIC_ADMIN_FIRSTNAME` The first name of your initial admin user
-- `-e MAUTIC_ADMIN_LASTNAME` The last name of your initial admin user
-
-### Mautic configuration
-
-Additional configuration variables can be added to mautic's local config by prepending them with `MAUTIC_CONFIG_`.  This will be re-applied every time the container is re-started, so can be used for external config management of mautic instances.
-
-- `-e MAUTIC_CONFIG_DEBUG=1` Set debug=1 in `local.php`
-
-## Accesing the Instance
-
-Access your new Mautic on `http://localhost:8080` or `http://host-ip:8080` in a browser.
-
-## Add SSL to your Mautic
-
-If you change the _Site Address_ of _Mautic General Settings tab_ to HTTPS (behind a reverse proxy), you can use `0.0.0.0/0` as Trusted Proxies to avoid a redirect loop error. See [documentation](http://symfony.com/doc/current/request/load_balancer_reverse_proxy.html)
-
-## ... via [`docker-compose`](https://github.com/docker/compose)
-
-Example `docker-compose.yml` for `mautic`:
-
-```yaml
-version: "2"
-
-services:
-  database:
-    image: powertic/percona-docker
-    container_name: database
-    environment:
-      MYSQL_ROOT_PASSWORD: mypassword
-    ports:
-      - "3306:3306"
-    volumes:
-      - database:/var/lib/mysql
-    restart: always
-    networks:
-      - mauticnet
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --sql-mode=""
-
-  mautic:
-    container_name: mautic
-    image: mautic/mautic:v4-apache
-    volumes:
-      - mautic_data:/var/www/html
-    environment:
-      - MAUTIC_DB_HOST=database
-      - MAUTIC_DB_USER=root
-      - MAUTIC_DB_PASSWORD=mypassword
-      - MAUTIC_DB_NAME=mautic4
-    restart: always
-    networks:
-      - mauticnet
-    ports:
-      - "8880:80"
-```
-
-Run `docker-compose up`, wait for it to initialize completely, and visit `http://localhost:8080` or `http://host-ip:8080`.
-
-> This compose file was tested on compose file version 3.0+ (docker engine 1.13.0+), see the relation of compose file and docker engine [here](https://docs.docker.com/compose/compose-file/compose-versioning/).
-
-# Supported Docker versions
-
-This image is officially supported on Docker version 1.7.1.
-
-Support for older versions (down to 1.0) is provided on a best-effort basis.
-
-# User Feedback
 
 ## Issues
 

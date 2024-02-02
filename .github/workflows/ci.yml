@@ -1,24 +1,82 @@
-name: Build Docker images
+name: Build and publish a Docker image
 
 on:
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      mautic_version:
+        description: 'Mautic version (has to be a valid version from `mautic/recommended-project`)'
+        required: true
+      overwrite_latest_major:
+        type: boolean
+        description: "Overwrite latest major tag (e.g.`5`). This should only be checked if you're releasing the latest release."
+      overwrite_latest_minor:
+        type: boolean
+        description: "Overwrite latest minor tag (e.g.`5.0`). This should only be checked if you're releasing the latest release within the minor release."
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  docker:
+  build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        image: [apache, fpm]
+        image_type: [apache, fpm]
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Build ${{ matrix.image }} image
-        uses: docker/build-push-action@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Docker meta
+        uses: docker/metadata-action@v5
+        id: meta
         with:
-          file: ${{ matrix.image }}/Dockerfile
-          push: false
-          tags: mautic/mautic:v4-${{ matrix.image }}
+          # list of Docker images to use as base name for tags
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            molluxmollux/test-mautic           
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_minor }}
+            type=semver,pattern={{major}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_major }}
+          flavor: |
+            latest=false
+            prefix=
+            suffix=-${{ matrix.image_type }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: molluxmollux
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to the Github Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          file: ${{ matrix.image_type }}/Dockerfile
+          context: .
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }}
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }},mode=max,image-manifest=true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            MAUTIC_VERSION=${{ inputs.mautic_version }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
