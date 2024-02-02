@@ -15,6 +15,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  DOCKERHUB_USERNAME: molluxmollux
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
@@ -38,7 +39,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            molluxmollux/test-mautic           
+            mautic/mautic           
           # generate Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
@@ -58,7 +59,7 @@ jobs:
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
         with:
-          username: molluxmollux
+          username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Log in to the Github Container registry
