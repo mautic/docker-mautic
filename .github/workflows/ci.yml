@@ -4,8 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       mautic_version:
-        description: 'Mautic version (has to be a valid version from mautic/recommended-project)'
+        description: 'Mautic version (has to be a valid version from `mautic/recommended-project`)'
         required: true
+      overwrite_latest_major:
+        type: boolean
+        description: "Overwrite latest major tag (e.g.`5`). This should only be checked if you're releasing the latest release."
+      overwrite_latest_minor:
+        type: boolean
+        description: "Overwrite latest minor tag (e.g.`5.0`). This should only be checked if you're releasing the latest release within the minor release."
 
 env:
   REGISTRY: ghcr.io
@@ -23,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Docker meta
         uses: docker/metadata-action@v5
@@ -36,8 +42,8 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
-            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }}
-            type=semver,pattern={{major}},value=${{ inputs.mautic_version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }},enable=${{ overwrite_latest_minor }}
+            type=semver,pattern={{major}},value=${{ inputs.mautic_version }},enable=${{ overwrite_latest_major }}
           flavor: |
             latest=false
             prefix=
@@ -50,20 +56,20 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to Dockerhub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: molluxmollux
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Log in to the Github Container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           file: ${{ matrix.image_type }}/Dockerfile
           context: .
