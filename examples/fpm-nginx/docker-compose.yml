@@ -37,7 +37,7 @@ services:
       - 8002:80
 
   mautic_web:
-    image: ghcr.io/mollux/docker-mautic:5-fpm
+    image: mautic/mautic:5-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -58,7 +58,7 @@ services:
         condition: service_healthy
 
   mautic_cron:
-    image: ghcr.io/mollux/docker-mautic:5-fpm
+    image: mautic/mautic:5-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -69,7 +69,7 @@ services:
         condition: service_healthy
 
   mautic_worker:
-    image: ghcr.io/mollux/docker-mautic:5-fpm
+    image: mautic/mautic:5-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes
