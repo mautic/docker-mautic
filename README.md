@@ -55,16 +55,16 @@ it shows how it **could** be used, not how it **should** be used.
 Do not use those examples in production without reviewing, understanding and configuring them.
 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
-* `fpm-nginx`: standard example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
-
+* `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
+* `rabbitmq-worker`: example using the `apache` image with `rabbitmq` as async queue.
 
 ## Building your own images
 
 You can build your own images easily using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:v5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:v5-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
 ```
 
 ## Persistent storage
