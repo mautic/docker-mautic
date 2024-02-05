@@ -48,7 +48,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_minor }}
             type=semver,pattern={{major}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_major }}
-            type=raw,value=latest,enable=${{ inputs.tag_as_latest }}
+            type=raw,value=latest,enable=${{ inputs.tag_as_latest }},suffix=
           flavor: |
             latest=false
             prefix=
