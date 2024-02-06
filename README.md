@@ -126,8 +126,8 @@ Those variables can also be set via the `environment` key on services defined in
 
 Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
 
-e.g. the `messenger_dsn_setting` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.
-See the general Mautic documentatation for more info.
+e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
+See the general Mautic documentation for more info.
 
 ### Customization
 
