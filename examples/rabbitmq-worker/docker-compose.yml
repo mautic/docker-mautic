@@ -60,6 +60,8 @@ services:
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_cron
+    env_file:
+      - .mautic_env
     depends_on:
       mautic_web:
         condition: service_healthy
@@ -71,6 +73,8 @@ services:
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_worker
+    env_file:
+      - .mautic_env
     depends_on:
       mautic_web:
         condition: service_healthy
