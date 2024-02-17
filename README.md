@@ -137,6 +137,30 @@ This is an ongoing effort we hope to support in an upcoming 5.x release.
 
 For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
 
+## Day to day tasks
+
+### Running console commands with Docker Compose
+
+if you want to execute commands, you can make use of `docker compose exec`.
+
+A full list of options for the command is available [on the help pages](https://docs.docker.com/engine/reference/commandline/compose_exec/).  
+The most important flags used in the examples below are:
+
+* `-u www-data`: execute as the `www-data` user, which is the same user as the webserver runs. This ensures that e.g. file permissions after clearing the cache are correct.
+* `-w /var/www/html`: set the working directory to the `/var/www/html` folder, which is the project root of Mautic.
+
+**Examples** 
+
+* Open a shell in the running `mautic_web` container:
+
+    ```
+    docker compose exec -u www-data -w /var/www/html mautic_web /bin/bash
+    ```
+
+* execute a command in the running `mautic_web` container and return the output directly
+    ```
+    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console
+    ```
 
 ## Issues
 
