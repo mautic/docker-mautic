@@ -26,5 +26,11 @@ chmod 777 /tmp/stdout
 # ensure the PHP env vars are present during cronjobs
 declare -p | grep 'PHP_INI_VALUE_' > /tmp/cron.env
 
+# wait until Mautic is installed
+until php -r 'file_exists("/var/www/html/config/local.php") ? include("/var/www/html/config/local.php") : exit(1); exit(isset($parameters["site_url"]) ? 0 : 1);'; do
+	echo "Mautic not installed, waiting to start cron"
+	sleep 5
+done
+
 # run cron and print the output
 cron -f | tail -f /tmp/stdout
