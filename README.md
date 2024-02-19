@@ -50,6 +50,10 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 
 The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
 
+> [!WARNING]
+> The examples **require `docker compose` v2**.  
+> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.  
+
 Please take into account the purpose of those examples:  
 it shows how it **could** be used, not how it **should** be used.  
 Do not use those examples in production without reviewing, understanding and configuring them.
