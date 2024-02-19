@@ -1,6 +1,7 @@
 # Mautic Docker image and examples
 
-_This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> [!NOTE]
+> _This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
 ## Versions
 
@@ -54,9 +55,10 @@ The `examples` folder contains examples of `docker-compose` setups that use the 
 > The examples **require `docker compose` v2**.  
 > Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.  
 
-Please take into account the purpose of those examples:  
-it shows how it **could** be used, not how it **should** be used.  
-Do not use those examples in production without reviewing, understanding and configuring them.
+> [!IMPORTANT]
+> Please take into account the purpose of those examples:  
+> it shows how it **could** be used, not how it **should** be used.  
+> Do not use those examples in production without reviewing, understanding and configuring them.
 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
 * `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
