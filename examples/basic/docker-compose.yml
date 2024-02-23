@@ -24,6 +24,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - default
 
   mautic_web:
     image: mautic/mautic:5-apache
@@ -47,6 +49,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    networks:
+      - default
 
   mautic_cron:
     image: mautic/mautic:5-apache
@@ -60,6 +64,8 @@ services:
     depends_on:
       mautic_web:
         condition: service_healthy
+    networks:
+      - default
 
   mautic_worker:
     image: mautic/mautic:5-apache
@@ -73,6 +79,12 @@ services:
     depends_on:
       mautic_web:
         condition: service_healthy
+    networks:
+      - default
 
 volumes:
   mysql-data:
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}-docker
