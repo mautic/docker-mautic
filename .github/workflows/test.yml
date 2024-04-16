@@ -1,0 +1,27 @@
+name: Test build Docker image
+
+on:
+  pull_request:
+  schedule:
+    # Run every day at 10:45 AM UTC to discover potential issues with dependencies like PHP updates etc.
+    - cron: '45 10 * * *'
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image_type: [apache, fpm]
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          file: ${{ matrix.image_type }}/Dockerfile
+          context: .
+          tags: ${{ matrix.image_type }}-test
