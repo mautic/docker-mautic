@@ -1,0 +1,80 @@
+From b96bf5d6bd1bab699291e7a794da3685b20a9064 Mon Sep 17 00:00:00 2001
+From: Ilkka Oksanen <iao@iki.fi>
+Date: Fri, 23 Aug 2024 22:04:28 +0300
+Subject: [PATCH] Use Be My Eyes unsubscribe URL
+
+---
+ .../EventListener/BuilderSubscriber.php       |  8 +++--
+ app/bundles/EmailBundle/Helper/MailHelper.php | 30 +++++++++++++++++++
+ 2 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/app/bundles/EmailBundle/EventListener/BuilderSubscriber.php b/app/bundles/EmailBundle/EventListener/BuilderSubscriber.php
+index 8301379cc1..e1e48a128a 100644
+--- a/app/bundles/EmailBundle/EventListener/BuilderSubscriber.php
++++ b/app/bundles/EmailBundle/EventListener/BuilderSubscriber.php
+@@ -276,8 +276,12 @@ class BuilderSubscriber implements EventSubscriberInterface
+         // We will replace tokens in unsubscribe text too
+         $unsubscribeText = \Mautic\LeadBundle\Helper\TokenHelper::findLeadTokens($unsubscribeText, $lead, true);
+         $unsubscribeText = str_replace('|URL|', $this->emailModel->buildUrl('mautic_email_unsubscribe', ['idHash' => $idHash, 'urlEmail' => $toEmail, 'secretHash' => $unsubscribeHash]), $unsubscribeText);
+-        $event->addToken('{unsubscribe_text}', EmojiHelper::toHtml($unsubscribeText));
+-        $event->addToken('{unsubscribe_url}', $this->emailModel->buildUrl('mautic_email_unsubscribe', ['idHash' => $idHash, 'urlEmail' => $toEmail, 'secretHash' => $unsubscribeHash]));
++        $event->addToken('{unsubscribe_text}', '');
++
++        $lead_id = $lead instanceof Lead ? $lead->getId() : null;
++        $toEmailParam = rawurlencode($toEmail);
++        $url = "https://api.bemyeyes.com/mail/en/subscribe?email=$toEmailParam&nonce=$lead_id&action=unsubscribe&category=marketing";
++        $event->addToken('{unsubscribe_url}', $url);
+ 
+         $webviewText = $this->coreParametersHelper->get('webview_text');
+         if (!$webviewText) {
+diff --git a/app/bundles/EmailBundle/Helper/MailHelper.php b/app/bundles/EmailBundle/Helper/MailHelper.php
+index fe35c0fd86..b6c782aaf0 100644
+--- a/app/bundles/EmailBundle/Helper/MailHelper.php
++++ b/app/bundles/EmailBundle/Helper/MailHelper.php
+@@ -376,6 +376,12 @@ class MailHelper
+                 }
+             }
+ 
++            $headers = $this->message->getHeaders();
++            $headers->has('List-Unsubscribe') && $headers->remove('List-Unsubscribe');
++            $headers->has('List-Unsubscribe-Post') && $headers->remove('List-Unsubscribe-Post');
++            $headers->addTextHeader('List-Unsubscribe', $this->getBMEUnsubscribeHeader());
++            $headers->addTextHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
++
+             try {
+                 if (!$this->skip) {
+                     $this->mailer->send($this->message);
+@@ -1378,6 +1384,30 @@ class MailHelper
+         return false;
+     }
+ 
++    /**
++     * @return bool|string
++     */
++    private function getBMEUnsubscribeHeader()
++    {
++        $lead    = $this->getLead();
++        $toEmail = null;
++
++        if (is_array($lead) && array_key_exists('email', $lead) && is_string($lead['email'])) {
++            $toEmail = $lead['email'];
++        } elseif ($lead instanceof Lead && is_string($lead->getEmail())) {
++            $toEmail = $lead->getEmail();
++        }
++
++        if ($toEmail) {
++            $toEmailParam = rawurlencode($toEmail);
++            $lead_id = $lead instanceof Lead ? $lead->getId() : null;
++            $url = "https://api.bemyeyes.com/mail/en/subscribe?email=$toEmailParam&nonce=$lead_id&action=unsubscribe&category=marketing";
++            return "<$url>";
++        }
++
++        return false;
++    }
++
+     /**
+      * Append tokens.
+      */
+-- 
+2.46.0
+
