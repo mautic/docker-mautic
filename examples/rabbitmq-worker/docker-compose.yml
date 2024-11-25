@@ -1,100 +1,197 @@
-version: '3'
-
-x-mautic-volumes:
-  &mautic-volumes
-  - ./mautic/config:/var/www/html/config:z
-  - ./mautic/logs:/var/www/html/var/logs:z
-  - ./mautic/media/files:/var/www/html/docroot/media/files:z
-  - ./mautic/media/images:/var/www/html/docroot/media/images:z
-  - ./cron:/opt/mautic/cron:z
+# Define common volumes for Mautic services
+x-mautic-volumes: &mautic-volumes
+  - ./volumes/mautic/config:/var/www/html/config:z
+  - ./volumes/mautic/logs:/var/www/html/var/logs:z
+  - ./volumes/mautic/media/files:/var/www/html/docroot/media/files:z
+  - ./volumes/mautic/media/images:/var/www/html/docroot/media/images:z
+  - ./volumes/mautic/cron:/opt/mautic/cron:z
+  - ./mautic_web-entrypoint_custom.sh:/entrypoint_custom.sh  # Add this line
 
 services:
+  # MySQL Database Service
   db:
     image: mysql:8.0
+    hostname: ${MYSQL_HOST}
+    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    volumes: 
-      - mysql-data:/var/lib/mysql
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
     healthcheck:
       test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
-      start_period: 5s
-      interval: 5s
+      start_period: 360s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
     networks:
-      - default
+      - mautic_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
+  # RabbitMQ Message Broker
   rabbitmq:
-    image: rabbitmq:3
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    restart: unless-stopped
     environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
-    volumes: 
-      - rabbitmq-data:/var/lib/rabbitmq
+    ports:
+      - "${RABBITMQ_NODE_PORT:-5672}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT:-15672}:15672"
+    volumes:
+      - ./volumes/rabbitmq:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      start_period: 360s
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
-      - default
+      - mautic_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
+  # Mautic Web Application
   mautic_web:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:5.1.1-apache
+    restart: unless-stopped
     links:
       - db:mysql
     ports:
-      - 8003:80
+      - "8003:80"
     volumes: *mautic-volumes
-
     environment:
-      - DOCKER_MAUTIC_LOAD_TEST_DATA=${DOCKER_MAUTIC_LOAD_TEST_DATA}
-      - DOCKER_MAUTIC_RUN_MIGRATIONS=${DOCKER_MAUTIC_RUN_MIGRATIONS}
+      - PHP_INI_VALUE_MEMORY_LIMIT=1536M
+      - PHP_INI_VALUE_MAX_EXECUTION_TIME=300
     env_file:
       - .mautic_env
+    command: ["/entrypoint_custom.sh"]
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 3G
+        reservations:
+          cpus: '1'
+          memory: 1.5G
     healthcheck:
-      test: curl http://localhost
-      start_period: 5s
-      interval: 5s
-      timeout: 5s
-      retries: 100
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      start_period: 360s
+      interval: 30s
+      timeout: 10s
+      retries: 3
     depends_on:
       db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
-      - default
+      - mautic_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
+  # Mautic Cron Service
   mautic_cron:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:5.1.1-apache
+    restart: unless-stopped
     links:
       - db:mysql
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_cron
+      - PHP_INI_VALUE_MEMORY_LIMIT=1536M
+      - PHP_INI_VALUE_MAX_EXECUTION_TIME=300
     env_file:
       - .mautic_env
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 512M
     depends_on:
       mautic_web:
         condition: service_healthy
     networks:
-      - default
+      - mautic_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
+  # Mautic Worker Service
   mautic_worker:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:5.1.1-apache
+    restart: unless-stopped
     links:
       - db:mysql
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_worker
+      - DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2
+      - DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2
+      - DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
     env_file:
       - .mautic_env
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
     depends_on:
       mautic_web:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
-      - default
+      - mautic_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-volumes:
-  mysql-data:
-  rabbitmq-data:
-
+# Network configuration
 networks:
-  default:
-    name: ${COMPOSE_PROJECT_NAME}-docker
+  mautic_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
