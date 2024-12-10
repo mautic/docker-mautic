@@ -3,6 +3,9 @@
 > [!NOTE]
 > _This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
+> [!NOTE]
+> This fork was made to make possible use xdebug
+
 ## Versions
 
 all Mautic 5 Docker images follow the following naming stategy.
@@ -33,6 +36,7 @@ Each variant contains:
 * the needed dependencies to run Mautic (e.g. PHP modules)
 * the Mautic codebase installed via composer (see mautic/recommended-project)
 * the needed files and configuration to run as a specific role
+* xdebug, npm and composer
 
 See the `examples` explanation below how you could use them.
 
@@ -52,12 +56,12 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
 
 > [!WARNING]
-> The examples **require `docker compose` v2**.  
-> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.  
+> The examples **require `docker compose` v2**.
+> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.
 
 > [!IMPORTANT]
-> Please take into account the purpose of those examples:  
-> it shows how it **could** be used, not how it **should** be used.  
+> Please take into account the purpose of those examples:
+> it shows how it **could** be used, not how it **should** be used.
 > Do not use those examples in production without reviewing, understanding and configuring them.
 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
@@ -69,13 +73,19 @@ The `examples` folder contains examples of `docker-compose` setups that use the 
 You can build your own images easily using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
+docker build . -f Dockerfile.apache -t librecodecoop/mautic:5-apache
+docker build . -f Dockerfile.fpm -t librecodecoop/mautic:5-fpm
 ```
 
 ## Persistent storage
 
 The images by default foresee following volumes to persist data (not taking into account e.g. database or queueing data, as that's not part of these images).
+
+* `/var/www/html`: The root folder of Mautic. This is necessary to xdebug work fine.
+
+## Backup
+
+The mutable data are:
 
  * `config`: the local config folder containing `local.php`, `parameters_local.php`, ...
  * `var/logs`: the folder with logs
@@ -86,14 +96,7 @@ The images by default foresee following volumes to persist data (not taking into
 ### Configuration
 
 The following environment variables can be used to configure how your setup should behave.
-There are 2 files where those settings can be set:
-
-* the `.env` file: 
-  Should be used for all general variables for Mysql, PHP, ...
-* the `.mautic_env` file:
-  Should be used for all Mautic specific variables.
-
-Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
+You can get all available environments looking at a docker-compose.yml file that have the default values to be possible only run a `docker compose up` (but don't do this in production, please).
 
 #### MySQL settings
  - `MYSQL_HOST`: the MySQL host to connect to
@@ -110,6 +113,7 @@ Those variables can also be set via the `environment` key on services defined in
  - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
  - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
  - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
+ - `XDEBUG_CONFIG`: client_host=172.17.0.1 client_port=9003 start_with_request=yes
 
 #### Mautic behaviour settings
 
@@ -127,6 +131,8 @@ Those variables can also be set via the `environment` key on services defined in
    Defaults to `2`
  - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
    Defaults to `2`
+ - `MAUTIC_MESSENGER_DSN_EMAIL`: DSN to email.
+ - `MAUTIC_MESSENGER_DSN_HIT`: DSN to hit.
 
 #### Mautic settings
 
@@ -170,7 +176,7 @@ The most important flags used in the examples below are:
 
 ## Issues
 
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/mautic/docker-mautic/issues).
+If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/librecodecoop/mautic-docker/issues).
 
 You can also reach the Mautic community through its [online forums](https://www.mautic.org/community/) or the [Mautic Slack channel](https://www.mautic.org/slack/).
 
@@ -178,4 +184,4 @@ You can also reach the Mautic community through its [online forums](https://www.
 
 You are invited to contribute new features, fixes, or updates, large or small; we are always thrilled to receive pull requests, and do our best to process them as fast as we can.
 
-Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/mautic/docker-mautic/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.
+Before you start to code, we recommend discussing your plans through a [GitHub issue](https://github.com/librecodecoop/mautic-docker/issues), especially for more ambitious contributions. This gives other contributors a chance to point you in the right direction, give you feedback on your design, and help you find out if someone else is working on the same thing.

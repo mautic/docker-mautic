@@ -1,102 +1,100 @@
-version: '3'
+x-mautic-volumes: &mautic-volumes
+  - ./volumes/mautic:/var/www/html:z
+  - ./volumes/cron:/opt/mautic/cron:z
 
-x-mautic-volumes:
-  &mautic-volumes
-  - ./mautic/config:/var/www/html/config:z
-  - ./mautic/logs:/var/www/html/var/logs:z
-  - ./mautic/media/files:/var/www/html/docroot/media/files:z
-  - ./mautic/media/images:/var/www/html/docroot/media/images:z
-  - ./cron:/opt/mautic/cron:z
-  - mautic-docroot:/var/www/html/docroot:z
+x-mautic-environments: &mautic-environments
+  MAUTIC_VERSION: 5.x-dev
+  TZ: ${TZ:-CET}
+  HOST_UID: ${HOST_UID:-1000}
+  HOST_GID: ${HOST_GID:-1000}
+  MAUTIC_DB_HOST: ${MAUTIC_DB_HOST:-mysql}
+  MAUTIC_DB_PORT: ${MAUTIC_DB_PORT:-3306}
+  MAUTIC_DB_USER: ${MAUTIC_DB_USER:-mautic}
+  MAUTIC_DB_PASSWORD: ${MAUTIC_DB_PASSWORD:-mautic}
+  MAUTIC_DB_NAME: ${MAUTIC_DB_NAME:-mautic}
+  MAUTIC_RUN_CRON_JOBS: true
+  XDEBUG_CONFIG: ${XDEBUG_CONFIG:-}
+  MAUTIC_MESSENGER_DSN_EMAIL: ${MAUTIC_MESSENGER_DSN_EMAIL:-doctrine://default}
+  MAUTIC_MESSENGER_DSN_HIT: ${MAUTIC_MESSENGER_DSN_HIT:-doctrine://default}
 
 services:
-  db:
-    image: mysql:8.0
+  mysql:
+    image: mysql
+    volumes:
+      - ./volumes/mysql/init:/docker-entrypoint-initdb.d
+      - ./volumes/mysql/data:/var/lib/mysql
+    ports:
+      - 127.0.0.1:3306:3306
+    restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    volumes: 
-      - mysql-data:/var/lib/mysql
+      - TZ=${TZ:-CET}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-mautic}
+      - MYSQL_USER=${MYSQL_USER:-mautic}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-mautic}
     healthcheck:
       test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
       start_period: 5s
       interval: 5s
       timeout: 5s
       retries: 10
-    networks:
-      - default
-
-  nginx:
-    image: nginx
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - mautic-docroot:/var/www/html/docroot:z
-    depends_on:
-      - mautic_web
-    ports:
-      - 8002:80
-    networks:
-      - default
 
   mautic_web:
-    image: mautic/mautic:5-fpm
-    links:
-      - db:mysql
+    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-fpm}
+    # build:
+    #   context: .docker/
+    #   dockerfile: Dockerfile.${IMAGE_TYPE:-fpm}
     volumes: *mautic-volumes
-
     environment:
-      - DOCKER_MAUTIC_LOAD_TEST_DATA=${DOCKER_MAUTIC_LOAD_TEST_DATA}
-      - DOCKER_MAUTIC_RUN_MIGRATIONS=${DOCKER_MAUTIC_RUN_MIGRATIONS}
-    env_file:
-      - .mautic_env
+      <<: *mautic-environments
+      DOCKER_MAUTIC_LOAD_TEST_DATA: ${DOCKER_MAUTIC_LOAD_TEST_DATA:-false}
+      DOCKER_MAUTIC_RUN_MIGRATIONS: ${DOCKER_MAUTIC_RUN_MIGRATIONS:-false}
     healthcheck:
-      test: cgi-fcgi -bind -connect 127.0.0.1:9000
+      test: curl http://localhost
       start_period: 5s
       interval: 5s
       timeout: 5s
       retries: 100
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
-    networks:
-      - default
+    ports:
+      - 127.0.0.1:80:80
 
   mautic_cron:
-    image: mautic/mautic:5-fpm
-    links:
-      - db:mysql
+    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-fpm}
+    # build:
+    #   context: .docker/
+    #   dockerfile: Dockerfile.${IMAGE_TYPE:-fpm}
     volumes: *mautic-volumes
     environment:
-      - DOCKER_MAUTIC_ROLE=mautic_cron
-    env_file:
-      - .mautic_env
+      <<: *mautic-environments
+      DOCKER_MAUTIC_ROLE: mautic_cron
     depends_on:
       mautic_web:
         condition: service_healthy
-    networks:
-      - default
 
   mautic_worker:
-    image: mautic/mautic:5-fpm
-    links:
-      - db:mysql
+    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-fpm}
+    # build:
+    #   context: .docker/
+    #   dockerfile: Dockerfile.${IMAGE_TYPE:-fpm}
     volumes: *mautic-volumes
     environment:
-      - DOCKER_MAUTIC_ROLE=mautic_worker
-    env_file:
-      - .mautic_env
+      <<: *mautic-environments
+      DOCKER_MAUTIC_ROLE: mautic_worker
     depends_on:
       mautic_web:
         condition: service_healthy
+
+  nginx:
+    image: nginx
+    volumes:
+      - .docker/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./volumes/mautic:/var/www/html:z
+    depends_on:
+      - mautic_web
+    ports:
+      - 127.0.0.1:80:80
     networks:
       - default
-
-volumes:
-  mysql-data:
-  mautic-docroot:
-
-networks:
-  default:
-    name: ${COMPOSE_PROJECT_NAME}-docker

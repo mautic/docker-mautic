@@ -1,0 +1,79 @@
+FROM php:8.1-fpm
+
+LABEL vendor="Mautic"
+LABEL maintainer="LibreCode coop"
+
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    git \
+    mariadb-client supervisor cron
+
+# Install PHP extensions
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
+    && install-php-extensions \
+    @composer \
+    amqp \
+    bcmath \
+    curl \
+    exif \
+    gd \
+    imap \
+    intl \
+    mbstring \
+    mysqli \
+    opcache \
+    pdo_mysql \
+    sockets \
+    zip \
+    xdebug
+
+RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
+
+RUN rm /etc/cron.daily/*
+
+# Setting PHP properties
+ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
+    PHP_INI_VALUE_MEMORY_LIMIT=512M \
+    PHP_INI_VALUE_UPLOAD_MAX_FILESIZE=512M \
+    PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
+    PHP_INI_VALUE_MAX_EXECUTION_TIME=300
+
+COPY ./scripts/php.ini /usr/local/etc/php/php.ini
+COPY ./scripts/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+
+COPY ./scripts/docker-entrypoint.sh /entrypoint.sh
+COPY ./scripts/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
+COPY ./scripts/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
+COPY ./scripts/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
+
+# Apply necessary permissions
+RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
+
+# Setting worker env vars
+ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
+    DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
+    DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2 \
+    DOCKER_MAUTIC_ROLE=mautic_web \
+    DOCKER_MAUTIC_RUN_MIGRATIONS=false \
+    DOCKER_MAUTIC_LOAD_TEST_DATA=false
+
+# Install NVM
+ENV NVM_DIR=/usr/local/nvm \
+    NODE_VERSION=20.18.1
+RUN mkdir -p /usr/local/nvm \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash \
+    && . "$NVM_DIR/nvm.sh" \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default
+
+COPY ./scripts/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Define Mautic volumes to persist data
+VOLUME /var/www/html
+
+WORKDIR /var/www/html
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["php-fpm"]

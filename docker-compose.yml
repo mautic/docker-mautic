@@ -1,6 +1,6 @@
 x-mautic-volumes: &mautic-volumes
-  - ./volumes/mautic:/var/www/html
-  - ./volumes/cron:/opt/mautic/cron
+  - ./volumes/mautic:/var/www/html:z
+  - ./volumes/cron:/opt/mautic/cron:z
 
 x-mautic-environments: &mautic-environments
   MAUTIC_VERSION: 5.x-dev
@@ -18,27 +18,6 @@ x-mautic-environments: &mautic-environments
   MAUTIC_MESSENGER_DSN_HIT: ${MAUTIC_MESSENGER_DSN_HIT:-doctrine://default}
 
 services:
-  mysql:
-    image: mysql
-    volumes:
-      - ./volumes/mysql/init:/docker-entrypoint-initdb.d
-      - ./volumes/mysql/data:/var/lib/mysql
-    ports:
-      - 127.0.0.1:3306:3306
-    restart: unless-stopped
-    environment:
-      - TZ=${TZ:-CET}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-mautic}
-      - MYSQL_USER=${MYSQL_USER:-mautic}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-mautic}
-    healthcheck:
-      test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
-      start_period: 5s
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
   mautic_web:
     image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
     # build:
@@ -55,11 +34,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 100
-    depends_on:
-      mysql:
-        condition: service_healthy
-    ports:
-      - 127.0.0.1:80:80
 
   mautic_cron:
     image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
