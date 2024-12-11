@@ -42,7 +42,7 @@ services:
   mautic_web:
     image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
     # build:
-    #   context: .docker/
+    #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
     volumes: *mautic-volumes
     environment:
@@ -64,7 +64,7 @@ services:
   mautic_cron:
     image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
     # build:
-    #   context: .docker/
+    #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
     volumes: *mautic-volumes
     environment:
@@ -77,7 +77,7 @@ services:
   mautic_worker:
     image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
     # build:
-    #   context: .docker/
+    #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
     volumes: *mautic-volumes
     environment:
