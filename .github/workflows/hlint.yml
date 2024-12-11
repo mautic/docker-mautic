@@ -1,4 +1,4 @@
-name: Haskell Lint
+name: Dockerfile Lint
 
 on: pull_request
 

@@ -1,4 +1,4 @@
-name: 'Shellcheck'
+name: Shellcheck
 
 on: pull_request
 
