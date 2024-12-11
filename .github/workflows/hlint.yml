@@ -1,0 +1,43 @@
+name: Dockerfile Lint
+
+on: pull_request
+
+jobs:
+  hlint:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HLINT_ACTION_LOG_LEVEL: debug
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Lint Apache Dockerfille
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: .docker/Dockerfile.apache
+          format: sarif
+          output-file: hadolint-apache-results.sarif
+          no-fail: true
+
+      - name: Lint FPM Dockerfille
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: .docker/Dockerfile.fpm
+          format: sarif
+          output-file: hadolint-fpm-results.sarif
+          no-fail: true
+
+      - name: Upload Apache analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-apache-results.sarif
+          wait-for-processing: true
+          category: hadolint-apache
+
+      - name: Upload FPM analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: hadolint-fpm-results.sarif
+          wait-for-processing: true
+          category: hadolint-fpm

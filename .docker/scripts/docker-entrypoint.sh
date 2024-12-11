@@ -10,17 +10,18 @@ elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_cron" ]; then
 	/entrypoint_mautic_cron.sh
 elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
 	if [ ! -f /var/www/html/composer.json ]; then
+		# shellcheck disable=SC1091
 		. "$NVM_DIR/nvm.sh"
-		nvm install $NODE_VERSION
-		nvm alias default $NODE_VERSION
+		nvm install "$NODE_VERSION"
+		nvm alias default "$NODE_VERSION"
 		nvm use default
 
-		cd /var/www
-		COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} html --no-interaction
+		cd /var/www || { echo "Directory not found /var/www"; exit 1; }
+		COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:"${MAUTIC_VERSION}" html --no-interaction
 		chown -R www-data: html
-		cd html
+		cd html || { echo "Directory not found /var/www/html"; exit 1; }
 		rm -rf var/cache/js
-		find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
+		find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) -print0 | xargs -0 rm -rf
 		mkdir -p html/config html/var/logs html/docroot/media
 	fi
 	/entrypoint_mautic_web.sh "$@"
