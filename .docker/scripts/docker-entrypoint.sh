@@ -16,10 +16,10 @@ elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
 		nvm alias default "$NODE_VERSION"
 		nvm use default
 
-		cd /var/www
+		cd /var/www || { echo "Directory not found /var/www"; exit 1; }
 		COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} html --no-interaction
 		chown -R www-data: html
-		cd html
+		cd html || { echo "Directory not found /var/www/html"; exit 1; }
 		rm -rf var/cache/js
 		find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 		mkdir -p html/config html/var/logs html/docroot/media
