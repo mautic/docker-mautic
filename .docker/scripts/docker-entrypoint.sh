@@ -17,7 +17,7 @@ elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
 		nvm use default
 
 		cd /var/www || { echo "Directory not found /var/www"; exit 1; }
-		COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:"${MAUTIC_VERSION}" html --no-interaction
+		COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:"${MAUTIC_VERSION:-5.x-dev}" html --no-interaction
 		chown -R www-data: html
 		cd html || { echo "Directory not found /var/www/html"; exit 1; }
 		rm -rf var/cache/js
