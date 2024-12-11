@@ -21,7 +21,7 @@ elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
 		chown -R www-data: html
 		cd html || { echo "Directory not found /var/www/html"; exit 1; }
 		rm -rf var/cache/js
-		find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
+		find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) -print0 | xargs -0 rm -rf
 		mkdir -p html/config html/var/logs html/docroot/media
 	fi
 	/entrypoint_mautic_web.sh "$@"
