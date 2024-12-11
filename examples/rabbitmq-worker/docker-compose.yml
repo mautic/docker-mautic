@@ -20,12 +20,12 @@ x-mautic-environments: &mautic-environments
 services:
   mysql:
     image: mysql
+    restart: unless-stopped
     volumes:
       - ./volumes/mysql/init:/docker-entrypoint-initdb.d
       - ./volumes/mysql/data:/var/lib/mysql
     ports:
       - 127.0.0.1:3306:3306
-    restart: unless-stopped
     environment:
       - TZ=${TZ:-CET}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
@@ -44,6 +44,7 @@ services:
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
@@ -66,6 +67,7 @@ services:
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
@@ -79,6 +81,7 @@ services:
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
@@ -89,6 +92,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:4
+    restart: unless-stopped
     environment:
       - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST:-rabbitmq}
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
