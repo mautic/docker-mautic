@@ -40,7 +40,6 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             ghcr.io/librecodecoop/mautic
           # generate Docker tags based on the following events/attributes
           tags: |
