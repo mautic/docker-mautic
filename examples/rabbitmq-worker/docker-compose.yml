@@ -3,7 +3,7 @@ x-mautic-volumes: &mautic-volumes
   - ./volumes/cron:/opt/mautic/cron
 
 x-mautic-environments: &mautic-environments
-  MAUTIC_VERSION: 5.x-dev
+  MAUTIC_VERSION: ${MAUTIC_VERSION:-5.x-dev}
   TZ: ${TZ:-CET}
   HOST_UID: ${HOST_UID:-1000}
   HOST_GID: ${HOST_GID:-1000}
@@ -40,7 +40,7 @@ services:
       retries: 10
 
   mautic_web:
-    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
+    image: ghcr.io/librecodecoop/mautic:${MAUTIC_VERSION:-5.x-dev}-${IMAGE_TYPE:-apache}
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
@@ -63,7 +63,7 @@ services:
       - 127.0.0.1:80:80
 
   mautic_cron:
-    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
+    image: ghcr.io/librecodecoop/mautic:${MAUTIC_VERSION:-5.x-dev}-${IMAGE_TYPE:-apache}
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
@@ -77,7 +77,7 @@ services:
         condition: service_healthy
 
   mautic_worker:
-    image: ghcr.io/librecodecoop/mautic:${IMAGE_TYPE:-apache}
+    image: ghcr.io/librecodecoop/mautic:${MAUTIC_VERSION:-5.x-dev}-${IMAGE_TYPE:-apache}
     # build:
     #   context: ../../.docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
