@@ -1,0 +1,24 @@
+name: Haskell Lint
+
+on:
+  pull_request:
+  push:
+jobs:
+  hlint:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HLINT_ACTION_LOG_LEVEL: debug
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Lint Apache Dockerfille
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: .docker/Dockerfile.apache
+
+      - name: Lint FPM Dockerfille
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: .docker/Dockerfile.fpm
