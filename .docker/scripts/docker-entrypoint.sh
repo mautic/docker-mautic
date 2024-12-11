@@ -12,8 +12,8 @@ elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
 	if [ ! -f /var/www/html/composer.json ]; then
 		# shellcheck disable=SC1091
 		. "$NVM_DIR/nvm.sh"
-		nvm install $NODE_VERSION
-		nvm alias default $NODE_VERSION
+		nvm install "$NODE_VERSION"
+		nvm alias default "$NODE_VERSION"
 		nvm use default
 
 		cd /var/www
