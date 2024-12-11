@@ -15,6 +15,9 @@ on:
       tag_as_latest:
         type: boolean
         description: "Tag this release as latest"
+      publish:
+        type: boolean
+        description: Publish this build as a new package.
 
 concurrency:
   group: push-to-registry-${{ github.head_ref || github.run_id }}
@@ -82,7 +85,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new
       - name: Push container image
         uses: docker/build-push-action@v6
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || inputs.publish
         with:
           push: true
           context: .docker
