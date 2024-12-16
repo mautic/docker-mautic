@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         git \
         mariadb-client supervisor cron && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    rm /etc/cron.daily/*
 
 # Install PHP extensions
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -30,8 +31,6 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync \
     zip \
     xdebug
 
-RUN rm /etc/cron.daily/*
-
 # Setting PHP properties
 ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_MEMORY_LIMIT=512M \
@@ -39,22 +38,19 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
-COPY ./scripts/php.ini /usr/local/etc/php/php.ini
-COPY ./scripts/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
 RUN sed -ri -e "s!/var/www/html!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/sites-available/*.conf && \
     sed -ri -e "s!/var/www/!${APACHE_DOCUMENT_ROOT}!g" /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
     a2enmod rewrite
 
-COPY ./scripts/docker-entrypoint.sh /entrypoint.sh
-COPY ./scripts/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
-COPY ./scripts/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
-COPY ./scripts/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
+COPY ./config/php.ini /usr/local/etc/php/php.ini
+COPY ./config/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
+COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./scripts/*.sh /
 
 # Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
+RUN ["chmod", "+x", "/entrypoint*.sh"]
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
@@ -75,8 +71,6 @@ RUN mkdir -p /usr/local/nvm && \
     nvm install $NODE_VERSION && \
     nvm alias default $NODE_VERSION && \
     nvm use default
-
-COPY ./scripts/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html
