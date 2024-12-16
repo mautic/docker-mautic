@@ -59,7 +59,7 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - 127.0.0.1:80:80
+      - 127.0.0.1:${MAUTIC_HTTP_PORT:-80}:80
 
   mautic_cron:
     image: ghcr.io/librecodecoop/mautic:${MAUTIC_VERSION:-5.x-dev}-${IMAGE_TYPE:-apache}
