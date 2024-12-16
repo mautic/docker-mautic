@@ -24,7 +24,7 @@ services:
       - ./volumes/mysql/init:/docker-entrypoint-initdb.d
       - ./volumes/mysql/data:/var/lib/mysql
     ports:
-      - 127.0.0.1:3306:3306
+      - 127.0.0.1:${MAUTIC_EXPOSED_DB_PORT:-3306}:3306
     restart: unless-stopped
     environment:
       - TZ=${TZ:-CET}
