@@ -23,6 +23,7 @@ services:
     # build:
     #   context: .docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
@@ -40,6 +41,7 @@ services:
     # build:
     #   context: .docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
@@ -53,6 +55,7 @@ services:
     # build:
     #   context: .docker/
     #   dockerfile: Dockerfile.${IMAGE_TYPE:-apache}
+    restart: unless-stopped
     volumes: *mautic-volumes
     environment:
       <<: *mautic-environments
