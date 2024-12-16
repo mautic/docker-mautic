@@ -1,3 +1,7 @@
+x-mautic-environments: &mautic-environments
+  MAUTIC_MESSENGER_DSN_EMAIL: ${MAUTIC_MESSENGER_DSN_EMAIL:-amqp://${RABBITMQ_DEFAULT_USER:-guest}:${RABBITMQ_DEFAULT_PASS:-guest}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST:-mautic}}
+  MAUTIC_MESSENGER_DSN_HIT: ${MAUTIC_MESSENGER_DSN_HIT:-amqp://${RABBITMQ_DEFAULT_USER:-guest}:${RABBITMQ_DEFAULT_PASS:-guest}@rabbitmq:5672/${RABBITMQ_DEFAULT_VHOST:-mautic}}
+
 services:
   mysql:
     image: mysql
@@ -44,7 +48,7 @@ services:
     image: rabbitmq:4
     restart: unless-stopped
     environment:
-      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST:-rabbitmq}
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST:-mautic}
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-guest}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-guest}
     volumes:
