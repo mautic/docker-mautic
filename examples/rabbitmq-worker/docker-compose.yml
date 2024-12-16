@@ -24,7 +24,6 @@ services:
     extends:
       file: ../../docker-compose.yml
       service: mautic_web
-    restart: unless-stopped
     depends_on:
       mysql:
         condition: service_healthy
@@ -35,13 +34,11 @@ services:
     extends:
       file: ../../docker-compose.yml
       service: mautic_cron
-    restart: unless-stopped
 
   mautic_worker:
     extends:
       file: ../../docker-compose.yml
       service: mautic_worker
-    restart: unless-stopped
 
   rabbitmq:
     image: rabbitmq:4

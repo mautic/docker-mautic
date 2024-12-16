@@ -40,6 +40,7 @@ services:
 
   nginx:
     image: nginx
+    restart: unless-stopped
     volumes:
       - .docker/nginx.conf:/etc/nginx/conf.d/default.conf
       - ./volumes/mautic:/var/www/html:z
