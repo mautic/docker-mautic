@@ -44,7 +44,7 @@ COPY ./config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./scripts/*.sh /
 
 # Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint*.sh"]
+RUN chmod +x /entrypoint*.sh
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
