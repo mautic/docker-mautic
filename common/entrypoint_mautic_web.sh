@@ -1,6 +1,74 @@
 #!/bin/bash
 
-chown -R www-data:www-data /var/www/html/config /var/www/html/var/logs /var/www/html/docroot/media
+MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
+MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
+MAUTIC_VOLUME_MEDIA="${MAUTIC_VOLUME_MEDIA:-/var/www/html/docroot/media}"
+
+MAUTIC_WWW_USER="${MAUTIC_WWW_USER:-www-data}"
+MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
+
+function check_volume {
+	if [[ ! -d  $1 ]]; then
+		echo "error: volume $1 does not exist or is not a directory."
+		exit 1
+	fi
+}
+
+############################
+# check for required volumes
+check_volume $MAUTIC_VOLUME_CONFIG
+check_volume $MAUTIC_VOLUME_LOGS
+check_volume $MAUTIC_VOLUME_MEDIA
+
+############################
+# check for permissions
+
+RESULT=$(chown -R $MAUTIC_WWW_USER:$MAUTIC_WWW_GROUP $MAUTIC_VOLUME_CONFIG $MAUTIC_VOLUME_LOGS $MAUTIC_VOLUME_MEDIA)
+if [[ $? -ne 0 ]]; then
+	echo "error: permissions for $MAUTIC_WWW_USER:$MAUTIC_WWW_GROUP could not be set."
+	exit 2
+fi
+
+################################################
+# check for special MAUTIC_DB_*_FILE environment
+
+# check if environment variable MAUTIC_DB_PASSWORD_FILE is set
+if [[ ! -z $MAUTIC_DB_PASSWORD_FILE ]]; then
+	echo "Trying to get db password from $MAUTIC_DB_PASSWORD_FILE"
+
+	# check if password file exists
+	if [[ -f "$MAUTIC_DB_PASSWORD_FILE" ]]; then
+    	# try to read password from file
+		PASSWORD_FROM_FILE=$(cat $MAUTIC_DB_PASSWORD_FILE)
+		PASSWORD_FROM_FILE_STATUS=$?
+
+		# check result
+		if [[ $PASSWORD_FROM_FILE_STATUS -eq 0 ]]; then
+			MAUTIC_DB_PASSWORD=$PASSWORD_FROM_FILE
+			echo "Successfully read password from $MAUTIC_DB_PASSWORD_FILE"
+		else
+			echo "Warning: failed to read password from $MAUTIC_DB_PASSWORD_FILE, error code was ($PASSWORD_FROM_FILE_STATUS)"
+		fi
+	else
+		echo "Warning: failed to read password. $MAUTIC_DB_PASSWORD_FILE is not a regular file"
+	fi
+fi
+
+################################################
+# check if all required environment variables exist
+
+function check_environment_variables {
+	local environment_variables=('MAUTIC_DB_HOST' 'MAUTIC_DB_PORT' 'MAUTIC_DB_USER' 'MAUTIC_DB_PASSWORD')
+
+	for var in "${environment_variables[@]}"; do
+		if [ -z "${!var}" ]; then
+			echo "error: $var is not set."
+			exit 3
+		fi
+	done
+}
+
+check_environment_variables
 
 # wait untill the db is fully up before proceeding
 while [[ $(mysqladmin --host=$MAUTIC_DB_HOST --port=$MAUTIC_DB_PORT --user=$MAUTIC_DB_USER --password=$MAUTIC_DB_PASSWORD ping) != "mysqld is alive" ]]; do
@@ -9,11 +77,11 @@ done
 
 # generate a local config file if it doesn't exist.
 # This is needed to ensure the db credentials can be prefilled in the UI, as env vars aren't taken into account.
-if [ ! -f /var/www/html/config/local.php ]; then
+if [ ! -f $MAUTIC_VOLUME_CONFIG/local.php ]; then
 
-	su -s /bin/bash www-data -c 'touch /var/www/html/config/local.php'
+	su -s /bin/bash www-data -c 'touch $MAUTIC_VOLUME_CONFIG/local.php'
 
-	cat <<'EOF' > /var/www/html/config/local.php
+	cat <<'EOF' > $MAUTIC_VOLUME_CONFIG/local.php
 <?php
 $parameters = array(
 	'db_driver' => 'pdo_mysql',
