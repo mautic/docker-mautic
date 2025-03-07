@@ -1,11 +1,11 @@
 # Mautic Docker image and examples
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 6. If you would like information about older versions, see [Mautic 4](https://github.com/mautic/docker-mautic/tree/mautic4) and [Mautic 5](https://github.com/mautic/docker-mautic/tree/mautic5)._
 
 ## Versions
 
-all Mautic 5 Docker images follow the following naming stategy.
+All Mautic 6 Docker images follow the following naming stategy.
 
 `<major.minor.patch>-<variant>`
 
@@ -15,9 +15,9 @@ There are some defaults if parts are omitted:
 
 some examples:
 
-* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
-* `5.0.3-apache`: specific point release of the `apache` variant
+* `6-apache`: latest stable version of Mautic 6 of the `apache` variant
+* `6.0-fpm`: latest version in the 6.0 minor release in the `fpm` variant 
+* `6.0.3-apache`: specific point release of the `apache` variant
 
 ## Variants
 
@@ -66,11 +66,11 @@ The `examples` folder contains examples of `docker-compose` setups that use the 
 
 ## Building your own images
 
-You can build your own images easily using the `docker build` command in the root of this directory:
+You can build your own images using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:6-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:6-fpm
 ```
 
 ## Persistent storage
@@ -137,8 +137,8 @@ See the general Mautic documentation for more info.
 
 ### Customization
 
-Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
-This is an ongoing effort we hope to support in an upcoming 5.x release.  
+Currently this image has no way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
+This is an ongoing effort we hope to support in an upcoming 7.x release.  
   
 
 For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
