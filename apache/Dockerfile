@@ -93,6 +93,17 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
 
+# Node is required for rebuilding web assets
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt-get install -y nodejs
+RUN npm install -g npm
+
+# Rebuilt web assets
+RUN cd /var/www/html
+RUN npm install
+RUN php /var/www/html/bin/console mautic:assets:generate
+RUN php /var/www/html/bin/console cache:clear
+
 COPY ./common/docker-entrypoint.sh /entrypoint.sh
 COPY ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
 COPY ./common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
