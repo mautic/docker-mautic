@@ -1,5 +1,10 @@
 name: Build and Push Docker Images (v4)
 
+env:
+  REGISTRY: ghcr.io
+  DOCKERHUB_USERNAME: molluxmollux
+  IMAGE_NAME: ${{ github.repository }}
+
 on:
   pull_request:
 
