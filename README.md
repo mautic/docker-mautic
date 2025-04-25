@@ -6,6 +6,8 @@
 ## Known Issues
 You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
 
+**You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!**
+
 ## Versions
 
 All Mautic 5 Docker images follow the following naming stategy.
