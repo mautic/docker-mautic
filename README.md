@@ -1,11 +1,14 @@
 # Mautic Docker image and examples
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively suppoerted anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+
+## Known Issues
+You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
 
 ## Versions
 
-all Mautic 5 Docker images follow the following naming stategy.
+All Mautic 5 Docker images follow the following naming stategy.
 
 `<major.minor.patch>-<variant>`
 
@@ -13,7 +16,7 @@ There are some defaults if parts are omitted:
 
 * `<minor.patch>` is the latest release patch version in the latest minor version.
 
-some examples:
+Some examples:
 
 * `5-apache`: latest stable version of Mautic 5 of the `apache` variant
 * `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
