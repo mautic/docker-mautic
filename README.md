@@ -1,12 +1,11 @@
 # Mautic Docker image and examples
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively suppoerted anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
-## Known Issues
-You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
-
-**You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!**
+> [!IMPORTANT]
+>You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
+>Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
 
 ## Versions
 
