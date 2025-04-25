@@ -1,5 +1,5 @@
 # Docker Mautic Image
-
+ 
 <img src="Mautic_Logo_RGB_LB.png" style="width:100%;height:auto;" />
 
 # License
