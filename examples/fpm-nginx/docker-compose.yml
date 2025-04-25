@@ -1,5 +1,3 @@
-version: '3'
-
 x-mautic-volumes:
   &mautic-volumes
   - ./mautic/config:/var/www/html/config:z
