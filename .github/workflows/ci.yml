@@ -1,9 +1,7 @@
 name: Build and Push Docker Images (v4)
 
 env:
-  REGISTRY: ghcr.io
   DOCKERHUB_USERNAME: molluxmollux
-  IMAGE_NAME: ${{ github.repository }}
 
 on:
   pull_request:
@@ -22,7 +20,7 @@ jobs:
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
         with:
-          username: ${{ env.DOCKERHUB_USERNAME }}
+          username: molluxmollux
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up QEMU
