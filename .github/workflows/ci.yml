@@ -4,7 +4,7 @@ env:
   DOCKERHUB_USERNAME: molluxmollux
 
 on:
-  pull_request:
+  push:
 
 jobs:
   docker:
