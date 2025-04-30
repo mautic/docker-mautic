@@ -10,22 +10,14 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 BASH_ENV=/tmp/cron.env
 
 # Segments Update - every 15 min
-0 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
-15 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
-30 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
-45 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
+*/15 * * * * php /var/www/html/bin/console mautic:segments:update 2>&1 | tee /tmp/stdout
 
-# Campaigns Update - every 15 min
-5 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
-20 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
-35 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
-50 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
 
-# Trigger Update - every 15 min
-10 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
-25 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
-40 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
-55 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
+# Campaigns Update - every 15 min starting at 5 past the hour
+5-59/15 * * * * php /var/www/html/bin/console mautic:campaigns:update 2>&1 | tee /tmp/stdout
+
+# Trigger Update - every 15 min starting at 10 past the hour
+10-59/15 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
 
 # E-mail Queue - every 1 min - fix 310
 * * * * * php /var/www/html/bin/console messenger:consume email 2>&1 | tee /tmp/stdout
