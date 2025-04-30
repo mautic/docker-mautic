@@ -27,9 +27,6 @@ BASH_ENV=/tmp/cron.env
 40 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
 55 * * * * php /var/www/html/bin/console mautic:campaigns:trigger 2>&1 | tee /tmp/stdout
 
-# E-mail Queue - every 1 min - fix 310
-* * * * * php /var/www/html/bin/console messenger:consume email 2>&1 | tee /tmp/stdout
-
 # Monitored E-mail - every 1 min
 #* * * * * php /var/www/html/bin/console mautic:email:fetch 2>&1 | tee /tmp/stdout
 
