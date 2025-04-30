@@ -32,8 +32,8 @@ jobs:
       - name: Build and push ${{ matrix.image }} image
         uses: docker/build-push-action@v6
         with:
-          context: ./${{ matrix.image }}
-          file: ./${{ matrix.image }}/Dockerfile
+          context: .
+          file: ${{ matrix.image }}/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: mautic/mautic:v4-${{ matrix.image }}
