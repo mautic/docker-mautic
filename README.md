@@ -56,7 +56,7 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 
 ## Examples
 
-The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.  
+The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.
 
 > [!WARNING]
 > The examples **require `docker compose` v2**.  
@@ -70,6 +70,13 @@ The [examples](examples/) folder contains examples of `docker-compose` setups th
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
 * `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
 * `rabbitmq-worker`: example using the `apache` image with `rabbitmq` as async queue.
+
+For each example, there are 2 files where settings can be set:
+
+* the `.env` file: 
+  Should be used for all general variables for Mysql, PHP, ...
+* the `.mautic_env` file:
+  Should be used for all Mautic specific variables.
 
 ## Building your own images
 
@@ -93,16 +100,11 @@ The images by default foresee following volumes to persist data (not taking into
 ### Configuration
 
 The following environment variables can be used to configure how your setup should behave.
-There are 2 files where those settings can be set:
 
-* the `.env` file: 
-  Should be used for all general variables for Mysql, PHP, ...
-* the `.mautic_env` file:
-  Should be used for all Mautic specific variables.
 
 Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
 
-#### Mautic behaviour env variables
+#### Mautic environment variables
 
  - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
  - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
@@ -131,7 +133,7 @@ Technically, every setting of Mautic you can set via the UI or via the `local.ph
 e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
 See the general Mautic documentation for more info.
 
-#### PHP settings
+#### PHP environment variables
 
  - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
  - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
