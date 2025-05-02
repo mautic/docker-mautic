@@ -56,7 +56,7 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 
 ## Examples
 
-The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
+The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.  
 
 > [!WARNING]
 > The examples **require `docker compose` v2**.  
@@ -102,24 +102,13 @@ There are 2 files where those settings can be set:
 
 Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
 
-#### MySQL settings
- - `MYSQL_HOST`: the MySQL host to connect to
- - `MYSQL_PORT`: the MySQL port to use
- - `MYSQL_DATABASE`: the database name to be used by Mautic
- - `MYSQL_USER`: the MySQL user that has access to the database
- - `MYSQL_PASSWORD`: the password for the MySQL user 
- - `MYSQL_ROOT_PASSWORD`: the password for the MySQL root user that is able to configure the above users and database
+#### Mautic behaviour env variables
 
-#### PHP settings
-
- - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
- - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
- - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
-
-#### Mautic behaviour settings
-
+ - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
+ - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
+ - `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
+ - `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
+ - `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
  - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
    Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
  - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
@@ -141,6 +130,14 @@ Technically, every setting of Mautic you can set via the UI or via the `local.ph
 
 e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
 See the general Mautic documentation for more info.
+
+#### PHP settings
+
+ - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
+ - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
+ - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
 
 ### Customization
 
