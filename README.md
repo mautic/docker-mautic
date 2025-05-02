@@ -98,13 +98,10 @@ The images by default foresee following volumes to persist data (not taking into
 ## Configuration and customizing
 
 ### Configuration
-
+#### Environment Variables
 The following environment variables can be used to configure how your setup should behave.
 
-
-Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
-
-#### Mautic environment variables
+##### Mautic Behaviour
 
  - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
  - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
@@ -126,20 +123,20 @@ Those variables can also be set via the `environment` key on services defined in
  - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
    Defaults to `2`
 
-#### Mautic settings
-
-Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
-
-e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
-See the general Mautic documentation for more info.
-
-#### PHP environment variables
+##### PHP Settings
 
  - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
  - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
  - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
  - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
  - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
+
+#### Mautic settings
+
+Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
+
+e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
+See the general Mautic documentation for more info.
 
 ### Customization
 
