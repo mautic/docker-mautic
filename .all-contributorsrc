@@ -26,6 +26,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "O-Mutt",
+      "name": "Matt O'Keefe",
+      "avatar_url": "https://avatars.githubusercontent.com/u/872224?v=4",
+      "profile": "https://okeefe.dev/",
+      "contributions": [
+        "code",
+        "doc",
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
