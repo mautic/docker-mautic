@@ -55,6 +55,9 @@ fi
 crontab -u www-data /opt/mautic/cron/mautic
 
 # create the fifo file to be able to redirect cron output for non-root users
+if [ ! -p /tmp/stdout ]; then
+	rm -f /tmp/stdout
+fi
 mkfifo /tmp/stdout
 chmod 777 /tmp/stdout
 
