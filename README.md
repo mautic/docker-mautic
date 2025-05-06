@@ -148,28 +148,31 @@ For now, please build your own images based on the official ones to add the need
 
 ## Day to day tasks
 
-### Running console commands with Docker Compose
+You can execute commands directly against the [Mautic CLI](https://docs.mautic.org/en/5.x/configuration/command_line_interface.html#mautic-commands). To do so you have two options:
 
-if you want to execute commands, you can make use of `docker compose exec`.
+1. Connect to the running container and run the commands.
+1. Run the commands as `exec` via docker (compose).
 
-A full list of options for the command is available [on the help pages](https://docs.docker.com/engine/reference/commandline/compose_exec/).  
-The most important flags used in the examples below are:
+Both cases will use `docker compose exec`/`docker exec`. Using `docker compose` uses the `docker-compose.yaml` and the container names listed for ease. More info can be learned about `exec` commands [here](https://docs.docker.com/engine/reference/commandline/compose_exec/).
 
-* `-u www-data`: execute as the `www-data` user, which is the same user as the webserver runs. This ensures that e.g. file permissions after clearing the cache are correct.
-* `-w /var/www/html`: set the working directory to the `/var/www/html` folder, which is the project root of Mautic.
+Note - Two flags that are used commonly in docker Mautic:
 
-**Examples** 
+1. `--user www-data`
+   * execute as the `www-data` user, which is the same user as the webserver runs. Running commands as the correct user ensures things function as expected. e.g. file permissions after clearing the cache are correct.
+1. `--workdir /var/www/html`
+   * set the working directory to the `/var/www/html` folder, which is the project root of Mautic.
 
-* Open a shell in the running `mautic_web` container:
+### Connect to the Container
 
-    ```
-    docker compose exec -u www-data -w /var/www/html mautic_web /bin/bash
-    ```
+```bash
+docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
+```
 
-* execute a command in the running `mautic_web` container and return the output directly
-    ```
-    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console
-    ```
+### Running a Mautic CLI command
+
+```bash
+docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
+```
 
 ## Issues
 
