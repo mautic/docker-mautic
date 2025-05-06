@@ -1,10 +1,10 @@
 FROM php:8.3-apache AS builder
 
-LABEL vendor="Mautic"
-LABEL maintainer="Mautic core team <>"
+COPY ./common/ /common/
 
 # Install PHP extensions
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
     ca-certificates \
     build-essential  \
     git \
@@ -35,7 +35,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     librabbitmq-dev \
     unzip \
     nodejs \
-    npm
+    npm \
+    curl
 
 RUN curl -L -o /tmp/amqp.tar.gz "https://github.com/php-amqp/php-amqp/archive/refs/tags/v2.1.2.tar.gz" \
     && mkdir -p /usr/src/php/ext/amqp \
@@ -56,6 +57,8 @@ RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
 # Define Mautic version by package tag
 ARG MAUTIC_VERSION=5.x-dev
 
+RUN echo "HELLO WORLD!!!"
+
 RUN cd /opt && \
     COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
     rm -rf /opt/mautic/var/cache/js && \
@@ -68,10 +71,27 @@ COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
+COPY --from=builder ./common/local.php /local.php
+COPY --from=builder --chmod=755 ./common/docker-entrypoint.sh /entrypoint.sh
+COPY --from=builder --chmod=755 ./common/pre-run-checks.sh /pre-run-checks.sh
+COPY --from=builder --chmod=755 ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
+COPY --from=builder --chmod=755 ./common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
+COPY --from=builder --chmod=755 ./common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
+
 # Install PHP extensions requirements and other dependencies
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    unzip libwebp-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libc-client-dev librabbitmq4 \
-    mariadb-client supervisor cron \
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    unzip \
+    libwebp-dev \
+    libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libc-client-dev \
+    librabbitmq4 \
+    mariadb-client \
+    supervisor \
+    cron \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
@@ -83,7 +103,7 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
-COPY ./common/php.ini /usr/local/etc/php/php.ini
+COPY --from=builder ./common/php.ini /usr/local/etc/php/php.ini
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
@@ -93,20 +113,12 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
 
-COPY ./common/docker-entrypoint.sh /entrypoint.sh
-COPY ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
-COPY ./common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
-COPY ./common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
-
-# Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
-
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
-COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=builder ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
@@ -118,6 +130,9 @@ WORKDIR /var/www/html/docroot
 ENV DOCKER_MAUTIC_ROLE=mautic_web \
     DOCKER_MAUTIC_RUN_MIGRATIONS=false \
     DOCKER_MAUTIC_LOAD_TEST_DATA=false
+
+LABEL vendor="Mautic"
+LABEL maintainer="Mautic core team <>"
 
 ENTRYPOINT ["/entrypoint.sh"]
 

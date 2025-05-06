@@ -86,12 +86,14 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
 COPY ./common/php.ini /usr/local/etc/php/php.ini
 
 COPY ./common/docker-entrypoint.sh /entrypoint.sh
+COPY ./common/pre-run-checks.sh /pre-run-checks.sh
+COPY ./common/template_local_php /template_local_php
 COPY ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
 COPY ./common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
 COPY ./common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
 
 # Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
+RUN ["chmod", "+x", "/entrypoint.sh", "pre-run-checks.sh", "template_local_php", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
