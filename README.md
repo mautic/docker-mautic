@@ -56,7 +56,7 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 
 ## Examples
 
-The `examples` folder contains examples of `docker-compose` setups that use the Docker images.  
+The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.
 
 > [!WARNING]
 > The examples **require `docker compose` v2**.  
@@ -70,6 +70,13 @@ The `examples` folder contains examples of `docker-compose` setups that use the 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
 * `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
 * `rabbitmq-worker`: example using the `apache` image with `rabbitmq` as async queue.
+
+For each example, there are 2 files where settings can be set:
+
+* the `.env` file: 
+  Should be used for all general variables for Mysql, PHP, ...
+* the `.mautic_env` file:
+  Should be used for all Mautic specific variables.
 
 ## Building your own images
 
@@ -91,35 +98,16 @@ The images by default foresee following volumes to persist data (not taking into
 ## Configuration and customizing
 
 ### Configuration
-
+#### Environment Variables
 The following environment variables can be used to configure how your setup should behave.
-There are 2 files where those settings can be set:
 
-* the `.env` file: 
-  Should be used for all general variables for Mysql, PHP, ...
-* the `.mautic_env` file:
-  Should be used for all Mautic specific variables.
+##### Mautic Behaviour
 
-Those variables can also be set via the `environment` key on services defined in the `docker-compose.yml` file.
-
-#### MySQL settings
- - `MYSQL_HOST`: the MySQL host to connect to
- - `MYSQL_PORT`: the MySQL port to use
- - `MYSQL_DATABASE`: the database name to be used by Mautic
- - `MYSQL_USER`: the MySQL user that has access to the database
- - `MYSQL_PASSWORD`: the password for the MySQL user 
- - `MYSQL_ROOT_PASSWORD`: the password for the MySQL root user that is able to configure the above users and database
-
-#### PHP settings
-
- - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
- - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
- - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
-
-#### Mautic behaviour settings
-
+ - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
+ - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
+ - `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
+ - `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
+ - `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
  - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
    Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
  - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
@@ -134,6 +122,14 @@ Those variables can also be set via the `environment` key on services defined in
    Defaults to `2`
  - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
    Defaults to `2`
+
+##### PHP Settings
+
+ - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
+ - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
+ - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
+ - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
 
 #### Mautic settings
 
