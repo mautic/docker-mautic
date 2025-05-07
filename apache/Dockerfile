@@ -35,8 +35,7 @@ RUN apt-get update && \
     librabbitmq-dev \
     unzip \
     nodejs \
-    npm \
-    curl
+    npm
 
 RUN curl -L -o /tmp/amqp.tar.gz "https://github.com/php-amqp/php-amqp/archive/refs/tags/v2.1.2.tar.gz" \
     && mkdir -p /usr/src/php/ext/amqp \
@@ -56,8 +55,6 @@ RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
 
 # Define Mautic version by package tag
 ARG MAUTIC_VERSION=5.x-dev
-
-RUN echo "HELLO WORLD!!!"
 
 RUN cd /opt && \
     COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
