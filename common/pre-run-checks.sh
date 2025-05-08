@@ -81,7 +81,7 @@ if [ ! -f $MAUTIC_VOLUME_CONFIG/local.php ]; then
 
 	su -s /bin/bash www-data -c 'touch $MAUTIC_VOLUME_CONFIG/local.php'
 
-	cat /template_local_php > $MAUTIC_VOLUME_CONFIG/local.php
+	cat /local.php > $MAUTIC_VOLUME_CONFIG/local.php
 
 EOF
 fi
