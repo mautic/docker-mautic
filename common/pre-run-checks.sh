@@ -71,17 +71,29 @@ function check_environment_variables {
 check_environment_variables
 
 # wait until the db is fully up before proceeding
-while [[ $(mysqladmin --host=$MAUTIC_DB_HOST --port=$MAUTIC_DB_PORT --user=$MAUTIC_DB_USER --password=$MAUTIC_DB_PASSWORD ping) != "mysqld is alive" ]]; do
+FAILURE_COUNT=0
+MAX_FAILURE_COUNT=60
+IS_ALIVE_COMMAND="mysqladmin --host=$MAUTIC_DB_HOST --port=$MAUTIC_DB_PORT --user=$MAUTIC_DB_USER --password=$MAUTIC_DB_PASSWORD ping"
+IS_MYSQL_ALIVE=$($(echo $IS_ALIVE_COMMAND) 2>&1)
+while [[ ${IS_MYSQL_ALIVE} != "mysqld is alive" ]]; do
+	FAILURE_COUNT=$((FAILURE_COUNT + 1))
+	if [[ $FAILURE_COUNT -gt $MAX_FAILURE_COUNT ]]; then
+		echo "error: MySQL is not responding after $MAX_FAILURE_COUNT attempts. Exiting."
+		exit 1
+	fi
+
+	if [[ $IS_MYSQL_ALIVE =~ "error" ]]; then
+		echo "MySQL response contained error: $IS_MYSQL_ALIVE"
+	else
+		echo "MySQL is not ready yet, waiting..."
+	fi
 	sleep 1
+	IS_MYSQL_ALIVE=$($(echo $IS_ALIVE_COMMAND) 2>&1)
 done
 
 # generate a local config file if it doesn't exist.
 # This is needed to ensure the db credentials can be prefilled in the UI, as env vars aren't taken into account.
 if [ ! -f $MAUTIC_VOLUME_CONFIG/local.php ]; then
-
-	su -s /bin/bash www-data -c 'touch $MAUTIC_VOLUME_CONFIG/local.php'
-
-	cat /local.php > $MAUTIC_VOLUME_CONFIG/local.php
-
+	cp -p /local.php > $MAUTIC_VOLUME_CONFIG/
 EOF
 fi
