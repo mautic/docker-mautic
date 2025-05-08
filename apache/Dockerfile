@@ -108,6 +108,20 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
 
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php composer-setup.php && \
+    php -r "unlink('composer-setup.php');" && \
+    mv composer.phar /usr/local/bin/composer
+
+RUN mkdir "/.config" && mkdir "/.config/composer"  && mkdir "/.config/psysh"
+RUN mkdir "/.cache" && mkdir "/.cache/composer"
+
+# Install node22 (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
 VOLUME /var/www/html/var/logs
