@@ -109,13 +109,7 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    php composer-setup.php && \
-    php -r "unlink('composer-setup.php');" && \
-    mv composer.phar /usr/local/bin/composer
-
-RUN mkdir "/.config" && mkdir "/.config/composer"  && mkdir "/.config/psysh"
-RUN mkdir "/.cache" && mkdir "/.cache/composer"
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Install node22 (LTS)
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
