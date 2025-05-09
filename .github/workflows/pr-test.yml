@@ -28,6 +28,8 @@ jobs:
           tags: mautic-${{ matrix.image_type }}
           load: true
           platforms: linux/amd64
+          build-args: |
+            MAUTIC_VERSION=5.2.5
 
       - name: Save image to tar file
         run: docker save mautic-${{ matrix.image_type }} -o image.tar
