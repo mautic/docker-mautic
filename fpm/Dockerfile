@@ -101,7 +101,6 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
-# Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # Install node22 (LTS)
