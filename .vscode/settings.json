@@ -1,0 +1,10 @@
+{
+  "cSpell.words": ["Mautic", "supervisord"],
+  "markdown.validate.enabled": true,
+  "[*.md]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "[*.sh]": {
+    "prettier.useTabs": false
+  }
+}
