@@ -1,7 +1,7 @@
 name: Test build Docker image
 
 on:
-  pull_request:
+#  pull_request:
   schedule:
     # Run every day at 10:45 AM UTC to discover potential issues with dependencies like PHP updates etc.
     - cron: '45 10 * * *'
