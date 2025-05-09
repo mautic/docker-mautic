@@ -57,7 +57,7 @@ jobs:
       - name: Run Trivy
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: 'mautic-test-${{ matrix.image_type }}'
+          image-ref: 'mautic-${{ matrix.image_type }}'
           format: 'table'
           severity: 'CRITICAL,HIGH,MEDIUM'
           exit-code: '1'
