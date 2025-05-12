@@ -1,7 +1,6 @@
 FROM php:8.3-apache AS builder
 
 COPY ./common/ /common/
-COPY ./common/php.ini /common/php.ini
 
 # Install PHP extensions
 RUN apt-get update && \
@@ -69,7 +68,7 @@ COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
-COPY --from=builder ./common/local.php /local.php
+COPY --from=builder /common/local.php /local.php
 COPY --from=builder --chmod=755 /common/docker-entrypoint.sh /entrypoint.sh
 COPY --from=builder --chmod=755 /common/pre-run-checks.sh /pre-run-checks.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
