@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eu
 
 MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
 MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
@@ -32,26 +33,36 @@ fi
 ################################################
 # check for special MAUTIC_DB_*_FILE environment
 
-# check if environment variable MAUTIC_DB_PASSWORD_FILE is set
-if [[ ! -z $MAUTIC_DB_PASSWORD_FILE ]]; then
-	echo "Trying to get db password from $MAUTIC_DB_PASSWORD_FILE"
+set -eu
 
-	# check if password file exists
-	if [[ -f "$MAUTIC_DB_PASSWORD_FILE" ]]; then
-    	# try to read password from file
-		PASSWORD_FROM_FILE=$(cat $MAUTIC_DB_PASSWORD_FILE)
-		PASSWORD_FROM_FILE_STATUS=$?
-
-		# check result
-		if [[ $PASSWORD_FROM_FILE_STATUS -eq 0 ]]; then
-			MAUTIC_DB_PASSWORD=$PASSWORD_FROM_FILE
-			echo "Successfully read password from $MAUTIC_DB_PASSWORD_FILE"
-		else
-			echo "Warning: failed to read password from $MAUTIC_DB_PASSWORD_FILE, error code was ($PASSWORD_FROM_FILE_STATUS)"
-		fi
-	else
-		echo "Warning: failed to read password. $MAUTIC_DB_PASSWORD_FILE is not a regular file"
+# usage: file_env VAR [DEFAULT]
+#    ie: file_env 'XYZ_DB_PASSWORD' 'example'
+# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+#  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
+file_env() {
+	local var="$1"
+	local fileVar="${var}_FILE"
+	local def="${2:-}"
+	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
+		echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
+		exit 1
 	fi
+	local val="$def"
+	if [ "${!var:-}" ]; then
+		val="${!var}"
+	elif [ "${!fileVar:-}" ]; then
+		val="$(< "${!fileVar}")"
+	fi
+	export "$var"="$val"
+	unset "$fileVar"
+}
+
+
+# check if environment variable DOCKER_MAUTIC_DB_PASSWORD_FILE is set
+if [[ ! -z $DOCKER_MAUTIC_DB_PASSWORD_FILE ]]; then
+	echo "Trying to get db password from $DOCKER_MAUTIC_DB_PASSWORD_FILE"
+
+	file_env 'MAUTIC_DB_PASSWORD' "$DOCKER_MAUTIC_DB_PASSWORD_FILE"
 fi
 
 ################################################

@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see <https://github.com/mautic/docker-mautic/tree/mautic4>._
 
 > [!IMPORTANT]
 >You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
@@ -23,7 +23,7 @@ There are some defaults if parts are omitted:
 Some examples:
 
 * `5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
+* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant
 * `5.0.3-apache`: specific point release of the `apache` variant
 
 ## Variants
@@ -48,10 +48,10 @@ See the `examples` explanation below how you could use them.
 each image can be started in 3 modes:
 
 * `mautic_web`: runs the Mautic webinterface
-* `mautic_worker`: runs the worker processes to consume the messenger queues 
+* `mautic_worker`: runs the worker processes to consume the messenger queues
 * `mautic_cron`: runs the defined cronjobs
 
-This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.  
+This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.
 The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execute console commands that need to bootstrap the full application.
 
 ## Examples
@@ -59,12 +59,12 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.
 
 > [!WARNING]
-> The examples **require `docker compose` v2**.  
-> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.  
+> The examples **require `docker compose` v2**.
+> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.
 
 > [!IMPORTANT]
-> Please take into account the purpose of those examples:  
-> it shows how it **could** be used, not how it **should** be used.  
+> Please take into account the purpose of those examples:
+> it shows how it **could** be used, not how it **should** be used.
 > Do not use those examples in production without reviewing, understanding and configuring them.
 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
@@ -73,7 +73,7 @@ The [examples](examples/) folder contains examples of `docker-compose` setups th
 
 For each example, there are 2 files where settings can be set:
 
-* the `.env` file: 
+* the `.env` file:
   Should be used for all general variables for Mysql, PHP, ...
 * the `.mautic_env` file:
   Should be used for all Mautic specific variables.
@@ -82,7 +82,7 @@ For each example, there are 2 files where settings can be set:
 
 You can build your own images easily using the `docker build` command in the root of this directory:
 
-```
+```bash
 docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
 docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
 ```
@@ -91,58 +91,64 @@ docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
 
 The images by default foresee following volumes to persist data (not taking into account e.g. database or queueing data, as that's not part of these images).
 
- * `config`: the local config folder containing `local.php`, `parameters_local.php`, ...
- * `var/logs`: the folder with logs
- * `docroot/media`: the folder with uploaded and generated media files
+* `config`: the local config folder containing `local.php`, `parameters_local.php`, ...
+* `var/logs`: the folder with logs
+* `docroot/media`: the folder with uploaded and generated media files
 
 ## Configuration and customizing
 
 ### Configuration
+
 #### Environment Variables
+
 The following environment variables can be used to configure how your setup should behave.
 
 ##### Mautic Behaviour
 
- - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
- - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
- - `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
- - `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
- - `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
- - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
+* `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
+* `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
+* `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
+* `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
+* `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
+* `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
    Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
- - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
-   Defaults to `false`, other supported value is `true`.  
+* `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.
+   Defaults to `false`, other supported value is `true`.
    This variable is only usable when using the `web` role.
- - `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.  
-   Defaults to `false`, other supported value is `true`.  
+* `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.
+   Defaults to `false`, other supported value is `true`.
    This variable is only usable when using the `web` role.
- - `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.  
+* `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.
    Defaults to `2`
- - `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.  
+* `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.
    Defaults to `2`
- - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
+* `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.
    Defaults to `2`
+* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: Used by [docker secrets](#docker-secrets-support) to load the `MAUTIC_DB_PASSWORD` into the container but keeping it out of the env for security purposes.
 
 ##### PHP Settings
 
- - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
- - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
- - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
+* `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
+* `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
+* `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
+* `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
+* `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
 
 #### Mautic settings
 
 Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
 
-e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.  
+e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.
 See the general Mautic documentation for more info.
+
+### Docker Secrets Support
+
+There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `MAUTIC_DB_PASSWORD` via `DOCKER_MAUTIC_DB_PASSWORD_FILE`.
 
 ### Customization
 
-Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
-This is an ongoing effort we hope to support in an upcoming 5.x release.  
-  
+Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).
+This is an ongoing effort we hope to support in an upcoming 5.x release.
 
 For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
 
@@ -153,7 +159,8 @@ You can execute commands directly against the [Mautic CLI](https://docs.mautic.o
 1. Connect to the running container and run the commands.
 1. Run the commands as `exec` via docker (compose).
 
-Both cases will use `docker compose exec`/`docker exec`. Using `docker compose` uses the `docker-compose.yaml` and the container names listed for ease. More info can be learned about `exec` commands [here](https://docs.docker.com/engine/reference/commandline/compose_exec/).
+A full list of options for the command is available [on the help pages](https://docs.docker.com/engine/reference/commandline/compose_exec/).
+The most important flags used in the examples below are:
 
 Note - Two flags that are used commonly in docker Mautic:
 
@@ -168,11 +175,11 @@ Note - Two flags that are used commonly in docker Mautic:
 docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 ```
 
-### Running a Mautic CLI command
+* execute a command in the running `mautic_web` container and return the output directly
 
-```bash
-docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
-```
+    ```
+    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console
+    ```
 
 ## Issues
 
