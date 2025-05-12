@@ -8,3 +8,5 @@ examples/*/*
 !examples/*/.env
 !examples/*/.mautic_env
 !examples/*/docker-compose.yml
+!examples/docker-secrets/db_password.txt
+!examples/docker-secrets/db_root_password.txt
