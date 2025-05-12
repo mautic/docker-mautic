@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     nodejs \
     npm
 
-RUN curl -L -o /tmp/amqp.tar.gz "https://github.com/php-amqp/php-amqp/archive/refs/tags/v2.1.1.tar.gz" \
+RUN curl -L -o /tmp/amqp.tar.gz "https://github.com/php-amqp/php-amqp/archive/refs/tags/v2.1.2.tar.gz" \
     && mkdir -p /usr/src/php/ext/amqp \
     && tar -C /usr/src/php/ext/amqp -zxvf /tmp/amqp.tar.gz --strip 1 \
     && rm /tmp/amqp.tar.gz
