@@ -76,6 +76,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
+# Install node22 (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
 # Setting PHP properties
 ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_MEMORY_LIMIT=512M \
@@ -101,13 +106,7 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
-# Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
-
-# Install node22 (LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest
+COPY --from=builder /usr/bin/composer /usr/bin/composer
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
