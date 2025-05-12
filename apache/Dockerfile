@@ -3,8 +3,7 @@ FROM php:8.3-apache AS builder
 COPY ./common/ /common/
 
 # Install PHP extensions
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     ca-certificates \
     build-essential  \
     git \
@@ -76,8 +75,7 @@ COPY --from=builder --chmod=755 /common/entrypoint_mautic_cron.sh /entrypoint_ma
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
 
 # Install PHP extensions requirements and other dependencies
-RUN apt-get update && \
-    apt-get install --no-install-recommends -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
     unzip \
     libwebp-dev \
     libzip-dev \
