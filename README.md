@@ -113,18 +113,19 @@ The following environment variables can be used to configure how your setup shou
 * `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
    Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
 * `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.
-   Defaults to `false`, other supported value is `true`.
-   This variable is only usable when using the `web` role.
+  * Defaults to `false`, other supported value is `true`.
+  * This variable is only usable when using the `web` role.
 * `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.
-   Defaults to `false`, other supported value is `true`.
-   This variable is only usable when using the `web` role.
+  * Defaults to `false`, other supported value is `true`.
+  * This variable is only usable when using the `web` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.
-   Defaults to `2`
+  * Defaults to `2`
 * `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.
-   Defaults to `2`
+  * Defaults to `2`
 * `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.
-   Defaults to `2`
-* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: Used by [docker secrets](#docker-secrets-support) to load the `MAUTIC_DB_PASSWORD` into the container but keeping it out of the env for security purposes.
+  * Defaults to `2`
+* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db.
+  * Used by [docker secrets](#docker-secrets-support) to load the `MAUTIC_DB_PASSWORD` into the container but keeping it out of the env for security purposes.
 
 ##### PHP Settings
 
