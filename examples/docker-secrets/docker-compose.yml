@@ -1,4 +1,4 @@
-version: '3'
+name: docker-secrets
 
 x-mautic-volumes: &mautic-volumes
   - ./mautic/config:/var/www/html/config:z
