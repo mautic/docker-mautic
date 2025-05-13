@@ -1,0 +1,93 @@
+version: '3'
+
+x-mautic-volumes:
+  &mautic-volumes
+  - ./mautic/config:/var/www/html/config:z
+  - ./mautic/logs:/var/www/html/var/logs:z
+  - ./mautic/media/files:/var/www/html/docroot/media/files:z
+  - ./mautic/media/images:/var/www/html/docroot/media/images:z
+  - ./cron:/opt/mautic/cron:z
+
+services:
+  db:
+    image: mysql:lts
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes: 
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD ping
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - default
+
+  mautic_web:
+    build:
+      dockerfile: Dockerfile
+    links:
+      - db:mysql
+    ports:
+      - 8001:80
+    volumes: *mautic-volumes
+
+    environment:
+      - DOCKER_MAUTIC_LOAD_TEST_DATA=${DOCKER_MAUTIC_LOAD_TEST_DATA}
+      - DOCKER_MAUTIC_RUN_MIGRATIONS=${DOCKER_MAUTIC_RUN_MIGRATIONS}
+    env_file:
+      - .mautic_env
+    healthcheck:
+      test: curl http://localhost
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
+
+  mautic_cron:
+    build:
+      dockerfile: Dockerfile
+    links:
+      - db:mysql
+    volumes: *mautic-volumes
+    environment:
+      - DOCKER_MAUTIC_ROLE=mautic_cron
+    env_file:
+      - .mautic_env
+    depends_on:
+      mautic_web:
+        condition: service_healthy
+    networks:
+      - default
+
+  mautic_worker:
+    build:
+      dockerfile: Dockerfile
+    links:
+      - db:mysql
+    volumes: *mautic-volumes
+    environment:
+      - DOCKER_MAUTIC_ROLE=mautic_worker
+    env_file:
+      - .mautic_env
+    depends_on:
+      mautic_web:
+        condition: service_healthy
+    networks:
+      - default
+
+volumes:
+  mysql-data:
+
+networks:
+  default:
+    name: ${COMPOSE_PROJECT_NAME}-docker
