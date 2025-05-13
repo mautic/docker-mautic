@@ -1,6 +1,3 @@
-#!/bin/bash
-set -eu
-
 MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
 MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
 MAUTIC_VOLUME_MEDIA="${MAUTIC_VOLUME_MEDIA:-/var/www/html/docroot/media}"
@@ -30,18 +27,13 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-################################################
-# check for special MAUTIC_DB_*_FILE environment
-
-set -eu
-
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
+# (will allow for "$DOCKER_XYZ_DB_PASSWORD_FILE" to fill in the value of
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
-file_env() {
+function file_env {
 	local var="$1"
-	local fileVar="${var}_FILE"
+	local fileVar="DOCKER_${var}_FILE"
 	local def="${2:-}"
 	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
 		echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
@@ -58,16 +50,12 @@ file_env() {
 }
 
 
-# check if environment variable DOCKER_MAUTIC_DB_PASSWORD_FILE is set
-if [[ ! -z $DOCKER_MAUTIC_DB_PASSWORD_FILE ]]; then
-	echo "Trying to get db password from $DOCKER_MAUTIC_DB_PASSWORD_FILE"
-
-	file_env 'MAUTIC_DB_PASSWORD' "$DOCKER_MAUTIC_DB_PASSWORD_FILE"
-fi
-
 ################################################
 # check if all required environment variables exist
 
+file_env 'MAUTIC_DB_HOST'
+file_env 'MAUTIC_DB_USER'
+file_env 'MAUTIC_DB_PASSWORD'
 function check_environment_variables {
 	local environment_variables=('MAUTIC_DB_HOST' 'MAUTIC_DB_PORT' 'MAUTIC_DB_USER' 'MAUTIC_DB_PASSWORD')
 
@@ -83,7 +71,7 @@ check_environment_variables
 
 # wait until the db is fully up before proceeding
 FAILURE_COUNT=0
-MAX_FAILURE_COUNT=60
+MAX_FAILURE_COUNT=30
 IS_ALIVE_COMMAND="mysqladmin --host=$MAUTIC_DB_HOST --port=$MAUTIC_DB_PORT --user=$MAUTIC_DB_USER --password=$MAUTIC_DB_PASSWORD ping"
 IS_MYSQL_ALIVE=$($(echo $IS_ALIVE_COMMAND) 2>&1)
 while [[ ${IS_MYSQL_ALIVE} != "mysqld is alive" ]]; do

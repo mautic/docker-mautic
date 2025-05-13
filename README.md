@@ -124,8 +124,6 @@ The following environment variables can be used to configure how your setup shou
   * Defaults to `2`
 * `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.
   * Defaults to `2`
-* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db.
-  * Used by [docker secrets](#docker-secrets-support) to load the `MAUTIC_DB_PASSWORD` into the container but keeping it out of the env for security purposes.
 
 ##### PHP Settings
 
@@ -144,7 +142,13 @@ See the general Mautic documentation for more info.
 
 ### Docker Secrets Support
 
-There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `MAUTIC_DB_PASSWORD` via `DOCKER_MAUTIC_DB_PASSWORD_FILE`.
+There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `MAUTIC_DB_PASSWORD` via `DOCKER_MAUTIC_DB_PASSWORD_FILE`. In order to use `docker secrets` you must be part of a docker swarm. You can initialize a swarm by simply using `docker swarm init`.
+
+There are 3 values we currently support for docker secrets:
+
+* `DOCKER_MAUTIC_DB_HOST_FILE`: The file that contains the text host for the db.
+* `DOCKER_MAUTIC_DB_USER_FILE`: The file that contains the text user for the db.
+* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db.
 
 ### Customization
 
