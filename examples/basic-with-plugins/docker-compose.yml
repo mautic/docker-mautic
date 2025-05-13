@@ -10,7 +10,7 @@ x-mautic-volumes:
 
 services:
   db:
-    image: mysql:8.0
+    image: mysql:lts
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -46,7 +46,7 @@ services:
       start_period: 5s
       interval: 5s
       timeout: 5s
-      retries: 100
+      retries: 10
     depends_on:
       db:
         condition: service_healthy
