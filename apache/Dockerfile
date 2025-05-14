@@ -113,7 +113,7 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
-COPY --from=builder ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=builder /common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config

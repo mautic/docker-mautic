@@ -1,3 +1,6 @@
+#!/bin/bash
+set -eu
+
 /pre-run-checks.sh
 # check output of pre-run-checks.sh for exit 0 or other
 
