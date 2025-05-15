@@ -1,4 +1,4 @@
-FROM php:8.1-fpm as builder
+FROM php:8.1-fpm AS builder
 
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
