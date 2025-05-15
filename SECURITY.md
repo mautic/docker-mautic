@@ -27,36 +27,36 @@ Mautic's Docker image is automatically rebuilt every Monday at 00:00 UTC to inco
 
 ## Which Docker image releases get security advisories?
 
-- Security updates will be provided for the most recent minor version of each supported major Mautic version
-- Development, alpha, beta, or release candidate Docker images will not receive security advisories
-- Docker images for unsupported Mautic versions will not receive security updates
+- Security updates are provided for the most recent minor version of each supported major Mautic version
+- Development, alpha, beta, or release candidate Docker images won't receive security advisories
+- Docker images for unsupported Mautic versions won't receive security updates
 
 ## How to report a Docker security issue
 
 If you discover a potential security vulnerability specific to the Mautic Docker image:
 
-1. Keep it confidential - Do not discuss it publicly in issues, pull requests, forums, or Slack
+1. Keep it confidential - Don't discuss it publicly in issues, pull requests, forums, or Slack
 2. Submit your concern as a private disclosure via GitHub's Security Advisory feature at https://github.com/mautic/docker/security
 3. Provide detailed information about the vulnerability, including steps to reproduce and potential impact
-4. If possible, you may create a private fork to propose a fix
+4. You may collaborate with the Docker Security Team a private fork to propose a fix
 
 ## How Docker security issues are resolved
 
 Mautic's Docker Security Team follow the [same process as the Mautic Security Team](https://mautic.org/security/how-security-issues-are-resolved/) when resolving issues.
 
-1. The Security Team will triage incoming reports to determine validity and severity
-2. Valid issues will be acknowledged within 24 hours and triaged within 7 business days
-3. The team will develop and test fixes for confirmed vulnerabilities within 21 business days
+1. The Security Team triages incoming reports to determine validity and severity
+2. The team aims to acknowledge valid issues within 24 hours and triage them within 7 business days
+3. The team aims to develop and test fixes for confirmed vulnerabilities within 21 business days
 4. Security patches are integrated into new Docker image builds on the 2nd and 4th Wednesdays of each month, if applicable
 5. Where an urgent fix is required, an out-of-cycle release is made in collaboration with the Mautic Security Team
-6. Coordination with the Mautic Security Team will occur when issues overlap with core application security
+6. Coordination with the Mautic Security Team occurs when issues overlap with core application security
 
 ## Security fix announcements and releases
 
 - Security fixes are announced alongside new Docker image builds
 - Critical vulnerabilities may prompt immediate out-of-sequence releases
 - Announcements include the severity, affected builds, and remediation steps
-- Users will be encouraged to update to the latest secure image version
+- Users are encouraged to update to the latest secure image version
 
 ## Disclosure policy
 
