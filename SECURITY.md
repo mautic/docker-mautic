@@ -10,7 +10,7 @@
 The Mautic Docker Security Team's scope is limited to security issues specific to the official Mautic Docker image, including:
 
 - Docker image configuration
-- Base image vulnerabilities
+- PHP secure configuration best practices
 - Dockerfile security best practices
 - Container runtime security concerns
 - Docker-specific deployment guidance
@@ -50,9 +50,9 @@ Mautic's Docker Security Team follow the [same process as the Mautic Security Te
 
 ## Security fix announcements and releases
 
-- Security fixes will be announced alongside new Docker image releases
+- Security fixes are announced alongside new Docker image builds
 - Critical vulnerabilities may prompt immediate out-of-sequence releases
-- Announcements will include the severity, affected versions, and remediation steps
+- Announcements include the severity, affected builds, and remediation steps
 - Users will be encouraged to update to the latest secure image version
 
 ## Disclosure policy
