@@ -22,6 +22,9 @@ The team does not directly handle:
 - Custom Docker deployments modified from the official image
 - Individual user deployment configurations
 
+## How are vulnerabilities in the underlying base image handled?
+Mautic's Docker image is automatically rebuilt every Monday at 00:00 UTC to incorporate the latest security updates from the base image and any updated Debian packages, ensuring that known vulnerabilities are addressed regularly.
+
 ## Which Docker image releases get security advisories?
 
 - Security updates will be provided for the most recent minor version of each supported major Mautic version
