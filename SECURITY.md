@@ -47,7 +47,7 @@ Mautic's Docker Security Team follow the [same process as the Mautic Security Te
 1. The Security Team will triage incoming reports to determine validity and severity
 2. Valid issues will be acknowledged within 24 hours and triaged within 7 business days
 3. The team will develop and test fixes for confirmed vulnerabilities within 21 business days
-4. Security fixes will be integrated into new Docker image releases on a quarterly basis, with the middle month in the quarter being security releases
+4. Security patches are integrated into new Docker image builds on the 2nd and 4th Wednesdays of each month, if applicable
 5. Where an urgent fix is required, an out-of-cycle release is made in collaboration with the Mautic Security Team
 6. Coordination with the Mautic Security Team will occur when issues overlap with core application security
 
