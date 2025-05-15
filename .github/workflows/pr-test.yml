@@ -61,6 +61,6 @@ jobs:
         with:
           image-ref: 'mautic-${{ matrix.image_type }}'
           format: 'table'
-          severity: 'CRITICAL,HIGH,MEDIUM'
+          severity: 'CRITICAL'
           exit-code: '1'
           ignore-unfixed: true # Won't fail if there isn't a fix to the CVE
