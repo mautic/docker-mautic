@@ -1,4 +1,4 @@
-FROM php:8.1-apache AS builder
+FROM php:8.3-apache AS builder
 
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
@@ -61,7 +61,7 @@ RUN cd /opt && \
     rm -rf /opt/mautic/var/cache/js && \
     find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
-FROM php:8.1-apache
+FROM php:8.3-apache
 
 COPY --from=builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
