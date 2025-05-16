@@ -35,6 +35,33 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "renanwilliam",
+      "name": "Renan William",
+      "avatar_url": "https://avatars.githubusercontent.com/u/19995615?v=4",
+      "profile": "https://www.4success.com.br",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "RCheesley",
+      "name": "Ruth Cheesley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2930593?v=4",
+      "profile": "https://www.ruthcheesley.co.uk",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "escopecz",
+      "name": "John Linhart",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1235442?v=4",
+      "profile": "http://johnlinhart.com",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
