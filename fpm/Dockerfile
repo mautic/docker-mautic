@@ -67,7 +67,7 @@ COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
-COPY --from=builder ./common/local.php /local.php
+COPY --from=builder /common/local.php /local.php
 COPY --from=builder --chmod=755 ./common/docker-entrypoint.sh /entrypoint.sh
 COPY --from=builder --chmod=755 ./common/pre-run-checks.sh /pre-run-checks.sh
 COPY --from=builder --chmod=755 ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
@@ -99,14 +99,14 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
-COPY --from=builder ./common/php.ini /usr/local/etc/php/php.ini
+COPY --from=builder /common/php.ini /usr/local/etc/php/php.ini
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
-COPY --from=builder ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=builder /common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
