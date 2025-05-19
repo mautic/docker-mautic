@@ -70,8 +70,19 @@ COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    unzip libwebp-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libc-client-dev librabbitmq4 \
-    mariadb-client supervisor cron libfcgi-bin \
+    unzip \
+    libwebp-dev \
+    libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libc-client-dev \
+    librabbitmq4 \
+    mariadb-client \
+    supervisor \
+    cron \
+    libfcgi-bin \
+    git \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
