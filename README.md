@@ -152,7 +152,7 @@ See the [Mautic documentation](https://docs.mautic.org/en/5.2/) for more info.
 
 ### Docker Secrets Support
 
-There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `MAUTIC_DB_PASSWORD` via `DOCKER_MAUTIC_DB_PASSWORD_FILE`. In order to use `docker secrets` you must be part of a docker swarm. You can initialize a swarm by simply using `docker swarm init`.
+There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `HOST`, `PORT`, `USER`, and `PASSWORD`, via `MAUTIC_DB_*_FILE`. In order to use `docker secrets` you must be part of a docker swarm. You can initialize a swarm by simply using `docker swarm init`.
 
 There are 4 values we currently support for docker secrets:
 
