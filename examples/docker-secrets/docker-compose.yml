@@ -26,7 +26,7 @@ services:
       - db_password
 
   mautic_web:
-    image: mautic-test-local
+    image: mautic/mautic:5-apache
     links:
       - db:mysql
     ports:
@@ -45,12 +45,13 @@ services:
       timeout: 5s
       retries: 100
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     secrets:
       - db_password
 
   mautic_cron:
-    image: mautic-test-local
+    image: mautic/mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -62,10 +63,11 @@ services:
     env_file:
       - .mautic_env
     depends_on:
-      - mautic_web
+      mautic_web:
+        condition: service_healthy
 
   mautic_worker:
-    image: mautic-test-local
+    image: mautic/mautic:5-apache
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -77,7 +79,8 @@ services:
     env_file:
       - .mautic_env
     depends_on:
-      - mautic_web
+      mautic_web:
+        condition: service_healthy
 
 secrets:
   db_password:
