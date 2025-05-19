@@ -23,7 +23,6 @@ check_volume $MAUTIC_VOLUME_MEDIA
 
 ############################
 # check for permissions
-
 RESULT=$(chown -R $MAUTIC_WWW_USER:$MAUTIC_WWW_GROUP $MAUTIC_VOLUME_CONFIG $MAUTIC_VOLUME_LOGS $MAUTIC_VOLUME_MEDIA)
 if [[ $? -ne 0 ]]; then
 	echo "error: permissions for $MAUTIC_WWW_USER:$MAUTIC_WWW_GROUP could not be set."
@@ -32,11 +31,11 @@ fi
 
 # usage: file_env VAR [DEFAULT]
 #    ie: file_env 'XYZ_DB_PASSWORD' 'example'
-# (will allow for "$DOCKER_XYZ_DB_PASSWORD_FILE" to fill in the value of
+# (will allow for "$XYZ_DB_PASSWORD_FILE" to fill in the value of
 #  "$XYZ_DB_PASSWORD" from a file, especially for Docker's secrets feature)
 function file_env {
 	local var="$1"
-	local fileVar="DOCKER_${var}_FILE"
+	local fileVar="${var}_FILE"
 	local def="${2:-}"
 	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
 		echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
@@ -91,7 +90,7 @@ while [[ ${IS_MYSQL_ALIVE} != "mysqld is alive" ]]; do
 		echo "MySQL is not ready yet, waiting..."
 	fi
 	sleep 1
-	IS_MYSQL_ALIVE=$($(echo $IS_ALIVE_COMMAND) 2>&1)
+	IS_MYSQL_ALIVE=$(eval $IS_ALIVE_COMMAND 2>&1)
 done
 
 # generate a local config file if it doesn't exist.

@@ -51,7 +51,7 @@ each image can be started in 3 modes:
 * `mautic_worker`: runs the worker processes to consume the messenger queues
 * `mautic_cron`: runs the defined cronjobs
 
-This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.
+This allows you to use different scaling strategies to run the workers or crons, without having to maintain separate images.  
 The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execute console commands that need to bootstrap the full application.
 
 ## Examples
@@ -59,15 +59,16 @@ The `mautic_cron` and `mautic_worker` require the codebase anyhow, as they execu
 The [examples](examples/) folder contains examples of `docker-compose` setups that use the Docker images.
 
 > [!WARNING]
-> The examples **require `docker compose` v2**.
-> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.
+> The examples **require `docker compose` v2**.  
+> Running the examples with the unsupported `docker-compose` v1 will result in a non-starting web container.  
 
 > [!IMPORTANT]
-> Please take into account the purpose of those examples:
-> it shows how it **could** be used, not how it **should** be used.
+> Please take into account the purpose of those examples:  
+> It shows how it **could** be used, not how it **should** be used.  
 > Do not use those examples in production without reviewing, understanding and configuring them.
 
 * `basic`: standard example using the `apache` image with `doctrine` as async queue.
+* `docker-secrets`: example using `_FILE` secrets to show loading secrets from files into the containers.
 * `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
 * `rabbitmq-worker`: example using the `apache` image with `rabbitmq` as async queue.
 
@@ -113,17 +114,25 @@ The following environment variables can be used to configure how your setup shou
 * `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
    Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
 * `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.
-  * Defaults to `false`, other supported value is `true`.
-  * This variable is only usable when using the `web` role.
+  * Default: `false`.
+  * Supported values: `false`, `true`.
+  * _Note:_ This variable is only usable when using the `mautic_web` role.
 * `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.
-  * Defaults to `false`, other supported value is `true`.
-  * This variable is only usable when using the `web` role.
+  * Defaults to `false`.
+  * Supported values: `false`, `true`.
+  * _Note:_ This variable is only usable when using the `mautic_web` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.
   * Defaults to `2`
+  * Supported values: any positive number
+  * _Note:_ This variable is only usable when using the `mautic_worker` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.
   * Defaults to `2`
+  * Supported values: any positive number
+  * _Note:_ This variable is only usable when using the `mautic_worker` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.
   * Defaults to `2`
+  * Supported values: any positive number
+  * _Note:_ This variable is only usable when using the `mautic_worker` role.
 
 ##### PHP Settings
 
@@ -138,7 +147,8 @@ The following environment variables can be used to configure how your setup shou
 Technically, every setting of Mautic you can set via the UI or via the `local.php` file can be set as environment variable.
 
 e.g. the `messenger_dsn_hit` can be set via the `MAUTIC_MESSENGER_DSN_HIT` environment variable.
-See the general Mautic documentation for more info.
+
+See the [Mautic documentation](https://docs.mautic.org/en/5.2/) for more info.
 
 ### Docker Secrets Support
 
@@ -146,12 +156,12 @@ There is allowance for use of [docker secrets](https://docs.docker.com/engine/sw
 
 There are 4 values we currently support for docker secrets:
 
-* `DOCKER_MAUTIC_DB_HOST_FILE`: The file that contains the text host for the db. This maps to `MAUTIC_DB_HOST`. Only 1 of these values can be configured (mutually exclusive).
-* `DOCKER_MAUTIC_DB_PORT_FILE`: The file that contains the text port for the db. This maps to `MAUTIC_DB_PORT`. Only 1 of these values can be configured (mutually exclusive).
-* `DOCKER_MAUTIC_DB_USER_FILE`: The file that contains the text user for the db. This maps to `MAUTIC_DB_USER`. Only 1 of these values can be configured (mutually exclusive).
-* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db. This maps to `MAUTIC_DB_PASSWORD`. Only 1 of these values can be configured (mutually exclusive).
+* `MAUTIC_DB_HOST_FILE`: The file that contains the text host for the db. This maps to `MAUTIC_DB_HOST`. Only 1 of these values can be configured (mutually exclusive).
+* `MAUTIC_DB_PORT_FILE`: The file that contains the text port for the db. This maps to `MAUTIC_DB_PORT`. Only 1 of these values can be configured (mutually exclusive).
+* `MAUTIC_DB_USER_FILE`: The file that contains the text user for the db. This maps to `MAUTIC_DB_USER`. Only 1 of these values can be configured (mutually exclusive).
+* `MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db. This maps to `MAUTIC_DB_PASSWORD`. Only 1 of these values can be configured (mutually exclusive).
 
-See [example compose](./examples/docker-secrets/) for an example.
+See [example compose](./examples/docker-secrets/docker-compose.yml) for an example.
 
 ### Customization
 
@@ -168,6 +178,7 @@ You can execute commands directly against the [Mautic CLI](https://docs.mautic.o
 1. Run the commands as `exec` via docker (compose).
 
 A full list of options for the command is available [on the help pages](https://docs.docker.com/engine/reference/commandline/compose_exec/).
+
 The most important flags used in the examples below are:
 
 Note - Two flags that are used commonly in docker Mautic:
@@ -185,8 +196,8 @@ docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 
 * execute a command in the running `mautic_web` container and return the output directly
 
-    ```
-    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console
+    ```bash
+    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console my:command:for_mautic
     ```
 
 ## Issues

@@ -35,7 +35,7 @@ services:
     environment:
       - DOCKER_MAUTIC_LOAD_TEST_DATA=${DOCKER_MAUTIC_LOAD_TEST_DATA}
       - DOCKER_MAUTIC_RUN_MIGRATIONS=${DOCKER_MAUTIC_RUN_MIGRATIONS}
-      - DOCKER_MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
+      - MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
     env_file:
       - .mautic_env
     healthcheck:
@@ -56,7 +56,7 @@ services:
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_cron
-      - DOCKER_MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
+      - MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
     secrets:
       - db_password
     env_file:
@@ -71,7 +71,7 @@ services:
     volumes: *mautic-volumes
     environment:
       - DOCKER_MAUTIC_ROLE=mautic_worker
-      - DOCKER_MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
+      - MAUTIC_DB_PASSWORD_FILE=/run/secrets/db_password
     secrets:
       - db_password
     env_file:
