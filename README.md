@@ -144,11 +144,14 @@ See the general Mautic documentation for more info.
 
 There is allowance for use of [docker secrets](https://docs.docker.com/engine/swarm/secrets/#build-support-for-docker-secrets-into-your-images) for `MAUTIC_DB_PASSWORD` via `DOCKER_MAUTIC_DB_PASSWORD_FILE`. In order to use `docker secrets` you must be part of a docker swarm. You can initialize a swarm by simply using `docker swarm init`.
 
-There are 3 values we currently support for docker secrets:
+There are 4 values we currently support for docker secrets:
 
-* `DOCKER_MAUTIC_DB_HOST_FILE`: The file that contains the text host for the db.
-* `DOCKER_MAUTIC_DB_USER_FILE`: The file that contains the text user for the db.
-* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db.
+* `DOCKER_MAUTIC_DB_HOST_FILE`: The file that contains the text host for the db. This maps to `MAUTIC_DB_HOST`. Only 1 of these values can be configured (mutually exclusive).
+* `DOCKER_MAUTIC_DB_PORT_FILE`: The file that contains the text port for the db. This maps to `MAUTIC_DB_PORT`. Only 1 of these values can be configured (mutually exclusive).
+* `DOCKER_MAUTIC_DB_USER_FILE`: The file that contains the text user for the db. This maps to `MAUTIC_DB_USER`. Only 1 of these values can be configured (mutually exclusive).
+* `DOCKER_MAUTIC_DB_PASSWORD_FILE`: The file that contains the text password for the db. This maps to `MAUTIC_DB_PASSWORD`. Only 1 of these values can be configured (mutually exclusive).
+
+See [example compose](./examples/docker-secrets/) for an example.
 
 ### Customization
 

@@ -57,6 +57,7 @@ function file_env {
 # check if all required environment variables exist
 
 file_env 'MAUTIC_DB_HOST'
+file_env 'MAUTIC_DB_PORT'
 file_env 'MAUTIC_DB_USER'
 file_env 'MAUTIC_DB_PASSWORD'
 function check_environment_variables {
