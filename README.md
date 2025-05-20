@@ -114,7 +114,7 @@ The following environment variables can be used to configure how your setup shou
 * `MAUTIC_DB_PASSWORD`: Password of the MySQL user which should be used by Mautic. (Also see [docker secrets](#docker-secrets-support))
 * `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
   * Default: `mautic_web`
-  * other supported values are `mautic_worker` and `mautic_cron`.
+  * Supported values: `mautic_web`, `mautic_worker`, `mautic_cron`.
 * `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.
   * Default: `false`.
   * Supported values: `false`, `true`.
