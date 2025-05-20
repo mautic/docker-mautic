@@ -88,7 +88,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm /etc/cron.daily/*
 
 # Install Node.JS (LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
