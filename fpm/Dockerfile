@@ -1,6 +1,5 @@
 FROM php:8.3-fpm AS builder
 
-
 # Copy everything from common for building
 COPY ./common/ /common/
 
@@ -71,8 +70,8 @@ COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
 # Copy all files needed for startup
 COPY --from=builder --chmod=755 /common/startup/ /startup/
+COPY --from=builder --chmod=755 /common/templates/ /templates/
 COPY --from=builder --chmod=755 /common/docker-entrypoint.sh /entrypoint.sh
-COPY --from=builder --chmod=755 /common/pre-run-checks.sh /pre-run-checks.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
