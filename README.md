@@ -106,31 +106,33 @@ The following environment variables can be used to configure how your setup shou
 
 ##### Mautic Behaviour
 
-* `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
-* `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
+* `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server. (Also see [docker secrets](#docker-secrets-support))
+* `MAUTIC_DB_PORT`: port which the MySQL server is listening on. (Also see [docker secrets](#docker-secrets-support))
+  * Default: `3306`.
 * `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
-* `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
-* `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
+* `MAUTIC_DB_USER`: MySQL user which should be used by Mautic. (Also see [docker secrets](#docker-secrets-support))
+* `MAUTIC_DB_PASSWORD`: Password of the MySQL user which should be used by Mautic. (Also see [docker secrets](#docker-secrets-support))
 * `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
-   Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
+  * Default: `mautic_web`
+  * other supported values are `mautic_worker` and `mautic_cron`.
 * `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.
   * Default: `false`.
   * Supported values: `false`, `true`.
   * _Note:_ This variable is only usable when using the `mautic_web` role.
 * `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.
-  * Defaults to `false`.
+  * Default: `false`.
   * Supported values: `false`, `true`.
   * _Note:_ This variable is only usable when using the `mautic_web` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.
-  * Defaults to `2`
+  * Default: `2`
   * Supported values: any positive number
   * _Note:_ This variable is only usable when using the `mautic_worker` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.
-  * Defaults to `2`
+  * Default: `2`
   * Supported values: any positive number
   * _Note:_ This variable is only usable when using the `mautic_worker` role.
 * `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.
-  * Defaults to `2`
+  * Default: `2`
   * Supported values: any positive number
   * _Note:_ This variable is only usable when using the `mautic_worker` role.
 
@@ -177,9 +179,7 @@ You can execute commands directly against the [Mautic CLI](https://docs.mautic.o
 1. Connect to the running container and run the commands.
 1. Run the commands as `exec` via docker (compose).
 
-A full list of options for the command is available [on the help pages](https://docs.docker.com/engine/reference/commandline/compose_exec/).
-
-The most important flags used in the examples below are:
+Both cases will use `docker compose exec`/`docker exec`. Using `docker compose` uses the `docker-compose.yaml` and the container names listed for ease. More info can be learned about `exec` commands [here](https://docs.docker.com/engine/reference/commandline/compose_exec/).
 
 Note - Two flags that are used commonly in docker Mautic:
 
@@ -194,11 +194,11 @@ Note - Two flags that are used commonly in docker Mautic:
 docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 ```
 
-* execute a command in the running `mautic_web` container and return the output directly
+### Running a Mautic CLI command
 
-    ```bash
-    docker compose exec -u www-data -w /var/www/html mautic_web php ./bin/console my:command:for_mautic
-    ```
+```bash
+docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
+```
 
 ## Issues
 
