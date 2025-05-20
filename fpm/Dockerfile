@@ -1,7 +1,8 @@
 FROM php:8.3-fpm AS builder
 
-LABEL vendor="Mautic"
-LABEL maintainer="Mautic core team <>"
+
+# Copy everything from common for building
+COPY ./common/ /common/
 
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
@@ -68,6 +69,14 @@ COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 
 COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
+# Copy all files needed for startup
+COPY --from=builder --chmod=755 /common/startup/ /startup/
+COPY --from=builder --chmod=755 /common/docker-entrypoint.sh /entrypoint.sh
+COPY --from=builder --chmod=755 /common/pre-run-checks.sh /pre-run-checks.sh
+COPY --from=builder --chmod=755 /common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
+COPY --from=builder --chmod=755 /common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
+COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
+
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
     unzip \
@@ -99,28 +108,20 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
-COPY ./common/php.ini /usr/local/etc/php/php.ini
+COPY --from=builder /common/startup/templates/php.ini /usr/local/etc/php/php.ini
 
 # Rebuild web assets
 RUN cd /var/www/html && \
-          npm install && \
-          php bin/console mautic:assets:generate && \
-          php /var/www/html/bin/console cache:clear
-
-COPY ./common/docker-entrypoint.sh /entrypoint.sh
-COPY ./common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
-COPY ./common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
-COPY ./common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
-
-# Apply necessary permissions
-RUN ["chmod", "+x", "/entrypoint.sh", "/entrypoint_mautic_web.sh", "/entrypoint_mautic_cron.sh", "/entrypoint_mautic_worker.sh"]
+    npm install && \
+    php bin/console mautic:assets:generate && \
+    php /var/www/html/bin/console cache:clear
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
-COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=builder /common/startup/templates/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
 COPY --from=builder /usr/bin/composer /usr/bin/composer
@@ -138,6 +139,9 @@ WORKDIR /var/www/html/docroot
 ENV DOCKER_MAUTIC_ROLE=mautic_web \
     DOCKER_MAUTIC_RUN_MIGRATIONS=false \
     DOCKER_MAUTIC_LOAD_TEST_DATA=false
+
+LABEL vendor="Mautic"
+LABEL maintainer="Mautic core team <>"
 
 ENTRYPOINT ["/entrypoint.sh"]
 
