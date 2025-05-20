@@ -103,7 +103,7 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_POST_MAX_FILESIZE=512M \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
-COPY --from=builder /common/startup/templates/php.ini /usr/local/etc/php/php.ini
+COPY --from=builder /common/templates/php.ini /usr/local/etc/php/php.ini
 
 # Rebuild web assets
 RUN cd /var/www/html && \
@@ -125,7 +125,7 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_HIT=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
-COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Install composer
 COPY --from=builder /usr/bin/composer /usr/bin/composer
