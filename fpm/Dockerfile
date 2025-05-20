@@ -92,6 +92,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
+# Rebuild web assets
+RUN cd /var/www/html && \
+          npm install && \
+          php bin/console mautic:assets:generate && \
+          php bin/console cache:clear
 # Setting PHP properties
 ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_MEMORY_LIMIT=512M \
