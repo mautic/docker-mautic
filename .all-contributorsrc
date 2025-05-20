@@ -62,6 +62,15 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "ChiragMoradiya",
+      "name": "Chirag Moradiya",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2399621?v=4",
+      "profile": "https://github.com/ChiragMoradiya",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
