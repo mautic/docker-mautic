@@ -1,0 +1,60 @@
+name: Report a Bug
+description: Report a bug related to the Docker Image
+title: "[Bug] (enter your title here) "
+labels: ["needs triage"]
+
+
+body:
+  - type: markdown
+    attributes:
+      content: |
+        Thanks for taking the time to fill out this bug report!
+        Please fill out the details below as accurately as possible.
+     
+  - type: input
+    id: dockertag
+    attributes:
+      label: Docker Tag
+      description: The docker tag you're currently using
+      placeholder: mautic/mautic:latest
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Architecture
+      description: What's the architecture of your server?
+      options:
+        - AMD64 (Intel or AMD)
+        - ARM64 (RPI, AWS Graviton, etc)
+    validations:
+      required: true 
+      
+  - type: input
+    id: digest
+    attributes:
+      label: Image Digest
+      description: What image digest are you using?
+      placeholder: sha256:dea6f32436dfaa2d5ebb42b51682f50dc6f26854e2c724c0973af6e48791c4b7
+      
+  - type: textarea
+    id: dockerfile
+    attributes:
+      label: Dockerfile
+      description: If you're using a custom Dockerfile, please paste it bellow. (REMINDER: Ommit your secrets!)
+
+  - type: textarea
+    id: dockercompose
+    attributes:
+      label: Docker Compose
+      description: If you're using Docker Compose, please paste it the docker-compose.yml bellow. (REMINDER: Ommit your secrets!)
+
+  - type: textarea
+    id: issue_description
+    attributes:
+      label: Description
+      description: Describe your issue bellow. Remember to provide as many information as possible, even adding screenshots if necessary.
+    validations:
+      required: true 
+      
