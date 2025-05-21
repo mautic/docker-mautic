@@ -8,14 +8,58 @@ body:
   - type: markdown
     attributes:
       content: |
-        Thanks for taking the time to fill out this bug report!
-        Please fill out the details below as accurately as possible.
-     
+        ### Thank you for your bug report!
+        Please provide the following details to help us quickly diagnose and resolve the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: Tell us what you see!
+      rows: 6
+    validations:
+      required: true
+  
+  - type: textarea
+    id: reproduction-_teps
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Please provide clear steps to reproduce the issue.
+        e.g.
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. See error
+      placeholder: What did you do to encounter the bug?
+      rows: 6
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+      rows: 4
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: Actual behavior
+      description: A clear and concise description of what actually happened.
+      rows: 4
+    validations:
+      required: true
+
   - type: input
     id: dockertag
     attributes:
-      label: Docker Tag
-      description: The docker tag you're currently using
+      label: Docker Image Tag
+      description: What specific Docker image tag are you currently using? (e.g., `mautic/mautic:latest`, `mautic/mautic:6.2.6`, `mautic/mautic:5-apache`)
       placeholder: mautic/mautic:latest
     validations:
       required: true
@@ -23,38 +67,72 @@ body:
   - type: dropdown
     id: platform
     attributes:
-      label: Architecture
-      description: What's the architecture of your server?
+      label: Server Architecture
+      description: What's the processor architecture of your server? This helps us understand potential platform-specific issues.
       options:
-        - AMD64 (Intel or AMD)
-        - ARM64 (RPI, AWS Graviton, etc)
+        - AMD64 (Intel or AMD processors)
+        - ARM64 (e.g., Raspberry Pi, AWS Graviton, Apple M-series)
     validations:
-      required: true 
-      
+      required: true
+
   - type: input
     id: digest
     attributes:
-      label: Image Digest
-      description: What image digest are you using?
+      label: Docker Image Digest (Optional but helpful)
+      description: |
+        If you know it, please provide the exact image digest (SHA256 checksum).
+        You can often find this using `docker images --digests` or from your deployment logs.
       placeholder: sha256:dea6f32436dfaa2d5ebb42b51682f50dc6f26854e2c724c0973af6e48791c4b7
-      
+    validations:
+      required: false
+
   - type: textarea
     id: dockerfile
     attributes:
-      label: Dockerfile
-      description: If you're using a custom Dockerfile, please paste it bellow. (REMINDER: Ommit your secrets!)
+      label: Dockerfile (if applicable)
+      description: |
+        If you are using a **custom Dockerfile** to build your image, please paste its contents below.
+        **Important:** Omit any sensitive information like secrets, passwords, or API keys.
+      placeholder: |
+        FROM mautic/mautic:latest
+        # Your custom layers here...
+      rows: 10
+    validations:
+      required: false
 
   - type: textarea
     id: dockercompose
     attributes:
-      label: Docker Compose
-      description: If you're using Docker Compose, please paste it the docker-compose.yml bellow. (REMINDER: Ommit your secrets!)
+      label: Docker Compose (if applicable)
+      description: |
+        If you are using **Docker Compose** for your setup, please paste the relevant `docker-compose.yml` content below.
+        **Important:** Omit any sensitive information like secrets, passwords, or API keys.
+      placeholder: |
+        services:
+          mautic:
+            image: mautic/mautic:latest
+            # Your service configuration here...
+      rows: 10
+    validations:
+      required: false
 
   - type: textarea
-    id: issue_description
+    id: additional-context
     attributes:
-      label: Description
-      description: Describe your issue bellow. Remember to provide as many information as possible, even adding screenshots if necessary.
+      label: Additional context
+      description: Add any other context about the problem here. Screenshots, videos, or logs are welcome!
+      placeholder: Anything else that might be helpful?
+      rows: 4
     validations:
-      required: true 
-      
+      required: false
+
+  - type: checkboxes
+    id: acknowledgements
+    attributes:
+      label: Acknowledgements
+      description: Please confirm the following before submitting your issue.
+      options:
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/mautic/docker-mautic/blob/mautic5/CODE_OF_CONDUCT.md)
+          required: true
+        - label: This issue is **NOT** a security vulnerability. (Security vulnerabilities should be reported via the [Security](https://github.com/mautic/docker-mautic/security) tab.)
+          required: true
