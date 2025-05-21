@@ -22,7 +22,7 @@ body:
       required: true
   
   - type: textarea
-    id: reproduction-_teps
+    id: reproduction_steps
     attributes:
       label: Steps to reproduce
       description: |
@@ -117,7 +117,7 @@ body:
       required: false
 
   - type: textarea
-    id: additional-context
+    id: additional_context
     attributes:
       label: Additional context
       description: Add any other context about the problem here. Screenshots, videos, or logs are welcome!
