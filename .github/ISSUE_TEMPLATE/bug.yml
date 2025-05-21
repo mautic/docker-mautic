@@ -119,7 +119,7 @@ body:
   - type: textarea
     id: additional_context
     attributes:
-      label: Additional context
+      label: Additional context (Optional)
       description: Add any other context about the problem here. Screenshots, videos, or logs are welcome!
       placeholder: Anything else that might be helpful?
       rows: 4
