@@ -1,0 +1,13 @@
+# .trivyignore
+#
+# This .trivyignore file was added due to PR #361
+# (https://github.com/mautic/docker-mautic/pull/361) for traceability.
+# The ignores below are temporary and should be revisited as upstream dependencies are updated.
+
+# Temporary ignore for package flat vulnerability until it can be properly fixed
+# Issue: Prototype Pollution vulnerability in flat 4.1.1
+CVE-2020-36632
+
+# Temporary ignore for esbuild's golang stdlib vulnerability
+# Issue: Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses
+CVE-2024-24790
