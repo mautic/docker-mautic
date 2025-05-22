@@ -62,4 +62,5 @@ jobs:
           severity: 'CRITICAL'
           exit-code: '1'
           ignore-unfixed: true # Won't fail if there isn't a fix to the CVE
-          trivyignores: '.trivyignore'
+        env:
+          TRIVY_IGNORE: .trivyignore
