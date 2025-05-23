@@ -1,6 +1,6 @@
 # Mautic Docker Image
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
@@ -203,6 +203,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://www.ruthcheesley.co.uk"><img src="https://avatars.githubusercontent.com/u/2930593?v=4?s=100" width="100px;" alt="Ruth Cheesley"/><br /><sub><b>Ruth Cheesley</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=RCheesley" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://johnlinhart.com"><img src="https://avatars.githubusercontent.com/u/1235442?v=4?s=100" width="100px;" alt="John Linhart"/><br /><sub><b>John Linhart</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Aescopecz" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ChiragMoradiya"><img src="https://avatars.githubusercontent.com/u/2399621?v=4?s=100" width="100px;" alt="Chirag Moradiya"/><br /><sub><b>Chirag Moradiya</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=ChiragMoradiya" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/matbcvo"><img src="https://avatars.githubusercontent.com/u/1006437?v=4?s=100" width="100px;" alt="Martin Vooremäe"/><br /><sub><b>Martin Vooremäe</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=matbcvo" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
