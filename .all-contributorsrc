@@ -81,6 +81,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "henmohr",
+      "name": "henmohr",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21038820?v=4",
+      "profile": "https://github.com/henmohr",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,
