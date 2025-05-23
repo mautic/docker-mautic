@@ -1,4 +1,4 @@
-# Mautic Docker image and examples
+# Mautic Docker Image
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -9,6 +9,12 @@
 > [!IMPORTANT]
 >You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
 >Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
+
+## Issues
+
+For general questions about this Docker image, please visit [our forum](https://forum.mautic.org/c/support/docker-support/112). We ask that you only open [GitHub issues](https://github.com/mautic/docker-mautic/issues) for bug reports or feature requests. This helps ensure you get wider community support and allows others with similar questions to find answers more easily.
+
+To reach the developers directly, you can find us in the #docker channel on [Mautic's Slack](https://www.mautic.org/slack/).
 
 ## Versions
 
@@ -173,12 +179,6 @@ docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 ```bash
 docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
 ```
-
-## Issues
-
-If you have any problems with or questions about this image, please contact us through a [GitHub issue](https://github.com/mautic/docker-mautic/issues).
-
-You can also reach the Mautic community through its [online forums](https://www.mautic.org/community/) or the [Mautic Slack channel](https://www.mautic.org/slack/).
 
 ## Contributing
 
