@@ -70,11 +70,26 @@ COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    unzip libwebp-dev libzip-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev libc-client-dev librabbitmq4 \
-    mariadb-client supervisor cron \
+    unzip \
+    libwebp-dev \
+    libzip-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libc-client-dev \
+    librabbitmq4 \
+    mariadb-client \
+    supervisor \
+    cron \
+    git \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
+
+# Install Node.JS (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
 
 # Setting PHP properties
 ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
@@ -84,6 +99,12 @@ ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_MAX_EXECUTION_TIME=300
 
 COPY ./common/php.ini /usr/local/etc/php/php.ini
+
+# Rebuild web assets
+RUN cd /var/www/html && \
+          npm install && \
+          php bin/console mautic:assets:generate && \
+          php bin/console cache:clear
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
@@ -107,6 +128,9 @@ ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
     DOCKER_MAUTIC_WORKERS_CONSUME_FAILED=2
 
 COPY ./common/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Install composer
+COPY --from=builder /usr/bin/composer /usr/bin/composer
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
