@@ -46,6 +46,9 @@ jobs:
         image_type: [apache, fpm]
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download Docker image artifact
         uses: actions/download-artifact@v4
         with:
@@ -62,5 +65,4 @@ jobs:
           severity: 'CRITICAL'
           exit-code: '1'
           ignore-unfixed: true # Won't fail if there isn't a fix to the CVE
-        env:
-          TRIVY_IGNORE: .trivyignore
+          trivyignores: .trivyignore
