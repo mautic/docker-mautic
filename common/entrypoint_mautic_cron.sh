@@ -25,7 +25,7 @@ BASH_ENV=/tmp/cron.env
 #*/6 * * * * php /var/www/html/bin/console mautic:social:monitoring 2>&1 | tee /tmp/stdout
 
 # Import Contacts - every 3 min - fix 269
-#*/3 * * * * php /var/www/html/bin/console mautic:import 2>&1 | tee /tmp/stdout
+*/3 * * * * php /var/www/html/bin/console mautic:import 2>&1 | tee /tmp/stdout
 
 # Export Contacts - every 3 min
 #*/3 * * * * php /var/www/html/bin/console mautic:contacts:scheduled_export 2>&1 | tee /tmp/stdout
