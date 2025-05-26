@@ -116,7 +116,6 @@ body:
       label: Additional context (Optional)
       description: Add any other context about the problem here. Screenshots, videos, or logs are welcome!
       placeholder: Anything else that might be helpful?
-      rows: 4
     validations:
       required: false
 
