@@ -1,4 +1,4 @@
-name: Report a Bug
+name: Report a Docker Image Bug
 description: Report a bug related to the Docker Image
 title: "[Bug] (enter your title here) "
 labels: ["needs triage"]
