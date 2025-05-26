@@ -1,7 +1,7 @@
 name: Feature Request
 description: Suggest an idea or enhancement for Mautic's Docker Image
 title: "[Feature] (enter your title here)"
-labels: ["triage"]
+labels: ["needs triage"]
 
 body:
   - type: markdown
