@@ -1,8 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Mautic Forum
-    url: https://forum.mautic.org/c/support/docker-support/112)
+    url: https://forum.mautic.org/c/support/docker-support/112
     about: Is your issue type not listed here? Checkout our forum!
-  - name: Docker Image Security
-    url: https://github.com/mautic/docker-mautic/security
-    about: Please report security vulnerabilities here.
