@@ -5,37 +5,37 @@ COPY ./common/ /common/
 
 # Install PHP extensions
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    ca-certificates \
     build-essential  \
-    git \
+    ca-certificates \
     curl \
-    libcurl4-gnutls-dev \
-    libc-client-dev \
-    libkrb5-dev \
-    libmcrypt-dev \
-    libssl-dev \
-    libxml2-dev \
-    libzip-dev \
-    libjpeg-dev \
-    libmagickwand-dev \
-    libpng-dev \
-    libgif-dev \
-    libtiff-dev \
-    libz-dev \
-    libpq-dev \
-    imagemagick \
+    git \
     graphicsmagick \
-    libwebp-dev \
-    libjpeg62-turbo-dev \
-    libxpm-dev \
+    imagemagick \
     libaprutil1-dev \
-    libicu-dev \
+    libc-client-dev \
+    libcurl4-gnutls-dev \
     libfreetype6-dev \
+    libgif-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libjpeg62-turbo-dev \
+    libkrb5-dev \
+    libmagickwand-dev \
+    libmcrypt-dev \
     libonig-dev \
+    libpng-dev \
+    libpq-dev \
     librabbitmq-dev \
-    unzip \
+    libssl-dev \
+    libtiff-dev \
+    libwebp-dev \
+    libxml2-dev \
+    libxpm-dev \
+    libz-dev \
+    libzip-dev \
     nodejs \
-    npm
+    npm \
+    unzip
 
 RUN curl -L -o /tmp/amqp.tar.gz "https://github.com/php-amqp/php-amqp/archive/refs/tags/v2.1.2.tar.gz" \
     && mkdir -p /usr/src/php/ext/amqp \
@@ -78,19 +78,19 @@ COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_
 
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    unzip \
-    libwebp-dev \
-    libzip-dev \
+    cron \
+    git \
+    libc-client-dev \
+    libfcgi-bin \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    libc-client-dev \
     librabbitmq4 \
+    libwebp-dev \
+    libzip-dev \
     mariadb-client \
     supervisor \
-    cron \
-    libfcgi-bin \
-    git \
+    unzip \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
