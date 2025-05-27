@@ -83,12 +83,12 @@ jobs:
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
           push: false
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: test-${{ matrix.image_type }}
 
       - name: Run Trivy
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: 'mautic/mautic:${{ inputs.mautic_version }}-${{ matrix.image_type }}'
+          image-ref: test-${{ matrix.image_type }}
           format: 'sarif'
           ignore-unfixed: true # Won't flag on unpatchable CVEs
           output: 'trivy-results-${{ matrix.image_type }}.sarif'
