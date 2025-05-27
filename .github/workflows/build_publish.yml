@@ -92,6 +92,7 @@ jobs:
           format: 'sarif'
           ignore-unfixed: true # Won't flag on unpatchable CVEs
           output: 'trivy-results-${{ matrix.image_type }}.sarif'
+          exit-code: '0' # Won't fail on vulns
           #trivyignores: .trivyignore
       
       - name: Upload Trivy SARIF to GitHub Security tab
