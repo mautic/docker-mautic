@@ -30,6 +30,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
 
     steps:
       - name: Checkout repository
@@ -73,7 +74,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build testing Docker image
+        uses: docker/build-push-action@v5
+        with:
+          file: ${{ matrix.image_type }}/Dockerfile
+          context: .
+          platforms: linux/amd64
+          build-args: |
+            MAUTIC_VERSION=${{ inputs.mautic_version }}
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: 'mautic/mautic:${{ inputs.mautic_version }}-${{ matrix.image_type }}'
+          format: 'sarif'
+          ignore-unfixed: true # Won't flag on unpatchable CVEs
+          output: 'trivy-results-${{ matrix.image_type }}.sarif'
+          #trivyignores: .trivyignore
+      
+      - name: Upload Trivy SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
+
+      - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
           file: ${{ matrix.image_type }}/Dockerfile
