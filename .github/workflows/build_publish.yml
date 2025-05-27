@@ -74,16 +74,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build testing Docker image
-        uses: docker/build-push-action@v5
-        with:
-          file: ${{ matrix.image_type }}/Dockerfile
-          context: .
-          platforms: linux/amd64
-          build-args: |
-            MAUTIC_VERSION=${{ inputs.mautic_version }}
-          push: false
-          tags: test-${{ matrix.image_type }}
+      # - name: Build testing Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     file: ${{ matrix.image_type }}/Dockerfile
+      #     context: .
+      #     platforms: linux/amd64
+      #     build-args: |
+      #       MAUTIC_VERSION=${{ inputs.mautic_version }}
+      #     push: false
+      #     tags: test-${{ matrix.image_type }}
 
       # - name: Run Trivy
       #   uses: aquasecurity/trivy-action@0.30.0
