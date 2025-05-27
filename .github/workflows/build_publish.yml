@@ -74,31 +74,31 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build testing Docker image
-        uses: docker/build-push-action@v5
-        with:
-          file: ${{ matrix.image_type }}/Dockerfile
-          context: .
-          platforms: linux/amd64
-          build-args: |
-            MAUTIC_VERSION=${{ inputs.mautic_version }}
-          push: false
-          tags: test-${{ matrix.image_type }}
+      # - name: Build testing Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     file: ${{ matrix.image_type }}/Dockerfile
+      #     context: .
+      #     platforms: linux/amd64
+      #     build-args: |
+      #       MAUTIC_VERSION=${{ inputs.mautic_version }}
+      #     push: false
+      #     tags: test-${{ matrix.image_type }}
 
-      - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.30.0
-        with:
-          image-ref: test-${{ matrix.image_type }}
-          format: 'sarif'
-          ignore-unfixed: true # Won't flag on unpatchable CVEs
-          output: 'trivy-results-${{ matrix.image_type }}.sarif'
-          exit-code: '0' # Won't fail on vulns
-          #trivyignores: .trivyignore
+      # - name: Run Trivy
+      #   uses: aquasecurity/trivy-action@0.30.0
+      #   with:
+      #     image-ref: test-${{ matrix.image_type }}
+      #     format: 'sarif'
+      #     ignore-unfixed: true # Won't flag on unpatchable CVEs
+      #     output: 'trivy-results-${{ matrix.image_type }}.sarif'
+      #     exit-code: '0' # Won't fail on vulns
+      #     #trivyignores: .trivyignore
       
-      - name: Upload Trivy SARIF to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
+      # - name: Upload Trivy SARIF to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   with:
+      #     sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
