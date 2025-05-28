@@ -111,6 +111,15 @@
       "contributions": [
         "review"
       ]
+    },
+    {
+      "login": "back-2-95",
+      "name": "Marko Korhonen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1140272?v=4",
+      "profile": "https://druid.fi",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
