@@ -58,7 +58,7 @@ jobs:
 
   sast:
     runs-on: ubuntu-latest
-    needs: docker-build
+    needs: test-build
     strategy:
       matrix:
         image_type: [apache, fpm]
