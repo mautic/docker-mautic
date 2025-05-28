@@ -1,6 +1,6 @@
 # Mautic Docker Image
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
@@ -209,6 +209,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/henmohr"><img src="https://avatars.githubusercontent.com/u/21038820?v=4?s=100" width="100px;" alt="henmohr"/><br /><sub><b>henmohr</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Ahenmohr" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/maxitromer"><img src="https://avatars.githubusercontent.com/u/6311835?v=4?s=100" width="100px;" alt="maxitromer"/><br /><sub><b>maxitromer</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=maxitromer" title="Code">💻</a> <a href="https://github.com/mautic/docker-mautic/commits?author=maxitromer" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nick-vanpraet"><img src="https://avatars.githubusercontent.com/u/7923739?v=4?s=100" width="100px;" alt="Nick Vanpraet"/><br /><sub><b>Nick Vanpraet</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Anick-vanpraet" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://druid.fi"><img src="https://avatars.githubusercontent.com/u/1140272?v=4?s=100" width="100px;" alt="Marko Korhonen"/><br /><sub><b>Marko Korhonen</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=back-2-95" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
