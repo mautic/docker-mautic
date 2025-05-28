@@ -125,8 +125,8 @@ COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/su
 # Install composer
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
-# Set correct ownership for Mautic cache
-RUN chown -R www-data:www-data /var/www/html/var/cache/
+# Set correct ownership for Mautic var folder
+RUN chown -R www-data:www-data /var/www/html/var/
 
 # Define Mautic volumes to persist data
 VOLUME /var/www/html/config
