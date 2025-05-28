@@ -9,7 +9,7 @@ until php -r "include('$MAUTIC_VOLUME_CONFIG/local.php'); exit(isset(\$parameter
 done
 
 if [ ! -f /opt/mautic/cron/mautic  ]; then
-	cp -p /startup/templates/mautic_cron /opt/mautic/cron/mautic
+	cp -p /templates/mautic_cron /opt/mautic/cron/mautic
 fi
 
 # register the crontab file for the www-data user
