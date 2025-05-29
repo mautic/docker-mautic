@@ -27,7 +27,7 @@ jobs:
           file: Dockerfile
           build-args: |
             SERVER_TYPE=${{ matrix.image_type }}
-          tags: mautic_base:${{ github.job }}-${{ matrix.image_type }}
+          tags: mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
           load: true
           platforms: linux/amd64
 
@@ -36,7 +36,7 @@ jobs:
         with:
           file: Dockerfiles/Dockerfile.${{ matrix.image_type }}
           build-contexts: |
-            mautic_base=docker-image://mautic_base:${{ github.job }}-${{ matrix.image_type }}
+            mautic_base=docker-image://mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
           tags: mautic-${{ matrix.image_type }}
           load: true
           platforms: linux/amd64
