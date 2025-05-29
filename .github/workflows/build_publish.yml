@@ -24,11 +24,6 @@ env:
 jobs:
   test-build:
     runs-on: ubuntu-latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
     strategy:
       matrix:
         image_type: [apache, fpm]
@@ -42,7 +37,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver-opts: network=host
+          driver: docker
 
       - name: Build base image
         uses: docker/build-push-action@v5
@@ -53,7 +48,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             SERVER_TYPE=${{ matrix.image_type }}
-          tags: localhost:5000/mautic/base:${{ github.run_id }}-${{ matrix.image_type }}
+          tags: mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
 
       - name: Build image and export locally (for SAST scan)
         uses: docker/build-push-action@v6
@@ -65,7 +60,7 @@ jobs:
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
           build-contexts: |
-            mautic_base=localhost:5000/mautic/base:${{ github.run_id }}-${{ matrix.image_type }}
+            mautic_base=docker-image://mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
 
       - name: Save image to tar file
         run: docker save mautic-${{ matrix.image_type }} -o image.tar
@@ -114,11 +109,6 @@ jobs:
 
   build-and-push-image:
     runs-on: ubuntu-latest
-    services:
-      registry:
-        image: registry:2
-        ports:
-          - 5000:5000
     strategy:
       matrix:
         image_type: [apache, fpm]
@@ -155,7 +145,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
-          driver-opts: network=host
+          driver: docker
 
       - name: Log in to Dockerhub
         uses: docker/login-action@v3
@@ -175,11 +165,11 @@ jobs:
         with:
           file: Dockerfile
           context: .
-          push: true
+          load: true
           platforms: linux/amd64,linux/arm64
           build-args: |
             SERVER_TYPE=${{ matrix.image_type }}
-          tags: localhost:5000/mautic/base:${{ github.run_id }}-${{ matrix.image_type }}
+          tags: mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
@@ -192,6 +182,6 @@ jobs:
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
           build-contexts: |
-            mautic_base=localhost:5000/mautic/base:${{ github.run_id }}-${{ matrix.image_type }}
+            mautic_base=docker-image://mautic_base:${{ github.run_id }}-${{ matrix.image_type }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
