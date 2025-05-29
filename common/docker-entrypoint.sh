@@ -11,7 +11,12 @@ export MAUTIC_WWW_USER="${MAUTIC_WWW_USER:-www-data}"
 export MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
 
 
+/startup/check_volumes_exist.sh
+/startup/check_volume_permissions.sh
+/startup/check_environment_variables.sh
+/startup/check_database_connection.sh
 /startup/check_local_php_exists.sh
+
 
 if [ "$DOCKER_MAUTIC_ROLE" = "mautic_worker" ]; then
   /entrypoint_mautic_worker.sh
