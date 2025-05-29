@@ -81,13 +81,19 @@ COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_
 
 # Install PHP extensions requirements and other dependencies
 # create array of packages to install based on server type
-RUN set -e; \
-    APT_PACKAGES="cron git libc-client-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev librabbitmq4 libwebp-dev libzip-dev mariadb-client supervisor unzip"; \
-    if [ "${SERVER_TYPE}" = "fpm" ]; then \
-        APT_PACKAGES="${APT_PACKAGES} libfcgi-bin"; \
-    fi; \
-    # convert array to string and install packages
-    apt-get update && apt-get install --no-install-recommends -y $APT_PACKAGES && \
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    cron \
+    git \
+    libc-client-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    librabbitmq4 \
+    libwebp-dev \
+    libzip-dev \
+    mariadb-client \
+    supervisor \
+    unzip && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
     rm -rf /var/lib/apt/lists/* && \
     rm /etc/cron.daily/*

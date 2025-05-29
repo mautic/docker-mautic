@@ -1,3 +1,8 @@
 FROM mautic_base AS mautic_fpm
 
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    libfcgi-bin \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
+
 CMD ["php-fpm"]
