@@ -1,4 +1,7 @@
-FROM php:8.3-apache AS builder
+ARG PHP_VERSION=8.3
+ARG SERVER_TYPE=apache
+FROM php:${PHP_VERSION}-${SERVER_TYPE} AS builder
+
 
 # Copy everything from common for building
 COPY ./common/ /common/
@@ -61,7 +64,7 @@ RUN cd /opt && \
     rm -rf /opt/mautic/var/cache/js && \
     find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
-FROM php:8.3-apache
+FROM php:${PHP_VERSION}-${SERVER_TYPE} AS mautic_base
 
 COPY --from=builder /usr/local/lib/php/extensions /usr/local/lib/php/extensions
 COPY --from=builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
@@ -77,22 +80,17 @@ COPY --from=builder --chmod=755 /common/entrypoint_mautic_cron.sh /entrypoint_ma
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_worker.sh /entrypoint_mautic_worker.sh
 
 # Install PHP extensions requirements and other dependencies
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    cron \
-    git \
-    libc-client-dev \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    librabbitmq4 \
-    libwebp-dev \
-    libzip-dev \
-    mariadb-client \
-    supervisor \
-    unzip \
-    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/cron.daily/*
+# create array of packages to install based on server type
+RUN set -e; \
+    APT_PACKAGES="cron git libc-client-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev librabbitmq4 libwebp-dev libzip-dev mariadb-client supervisor unzip"; \
+    if [ "${SERVER_TYPE}" = "fpm" ]; then \
+        APT_PACKAGES="${APT_PACKAGES} libfcgi-bin"; \
+    fi; \
+    # convert array to string and install packages
+    apt-get update && apt-get install --no-install-recommends -y $APT_PACKAGES && \
+    apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm /etc/cron.daily/*
 
 # Install Node.JS (LTS)
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
@@ -112,16 +110,7 @@ COPY --from=builder /common/templates/php.ini /usr/local/etc/php/php.ini
 RUN cd /var/www/html && \
     npm install && \
     php bin/console mautic:assets:generate && \
-    php bin/console cache:clear
-
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
-
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
-
+    php /var/www/html/bin/console cache:clear
 
 # Setting worker env vars
 ENV DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL=2 \
@@ -150,6 +139,11 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
 
-ENTRYPOINT ["/entrypoint.sh"]
+COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-CMD ["apache2-foreground"]
+# Install composer
+COPY --from=builder /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html/docroot
+
+ENTRYPOINT ["/entrypoint.sh"]

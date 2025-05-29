@@ -1,0 +1,3 @@
+FROM mautic_base AS mautic_fpm
+
+CMD ["php-fpm"]

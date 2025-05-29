@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       mautic_version:
-        description: 'Mautic version (has to be a valid version from `mautic/recommended-project`)'
+        description: "Mautic version (has to be a valid version from `mautic/recommended-project`)"
         required: true
       overwrite_latest_major:
         type: boolean
@@ -37,10 +37,22 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Build base docker image locally
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile
+          context: .
+          load: true
+          push: false
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVER_TYPE=${{ matrix.image_type }}
+          tags: base-mautic-${{ matrix.image_type }}
+
       - name: Build image and export locally (for SAST scan)
         uses: docker/build-push-action@v6
         with:
-          file: ${{ matrix.image_type }}/Dockerfile
+          file: Dockerfiles/Dockerfile.${{ matrix.image_type }}
           tags: mautic-${{ matrix.image_type }}
           load: true
           platforms: linux/amd64
@@ -81,16 +93,16 @@ jobs:
       - name: Run Trivy
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: 'mautic-${{ matrix.image_type }}'
-          format: 'sarif'
-          exit-code: '0' # Won't fail on vulns found
+          image-ref: "mautic-${{ matrix.image_type }}"
+          format: "sarif"
+          exit-code: "0" # Won't fail on vulns found
           ignore-unfixed: true # Won't flag if there isn't a fix to the CVE
-          output: 'trivy-results-${{ matrix.image_type }}.sarif'
+          output: "trivy-results-${{ matrix.image_type }}.sarif"
 
       - name: Upload Trivy SARIF to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
+          sarif_file: "trivy-results-${{ matrix.image_type }}.sarif"
 
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -112,7 +124,7 @@ jobs:
           # list of Docker images to use as base name for tags
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            mautic/mautic           
+            mautic/mautic
           # generate Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
@@ -143,10 +155,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build base docker image locally
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile
+          context: .
+          load: true
+          push: false
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            SERVER_TYPE=${{ matrix.image_type }}
+          tags: base-mautic-${{ matrix.image_type }}
+
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
-          file: ${{ matrix.image_type }}/Dockerfile
+          file: Dockerfiles/Dockerfile.${{ matrix.image_type }}
           context: .
           cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }}
           cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }},mode=max,image-manifest=true
