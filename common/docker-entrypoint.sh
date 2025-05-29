@@ -5,6 +5,7 @@ set -eu
 export MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
 export MAUTIC_VOLUME_CONSOLE="${MAUTIC_VOLUME_CONFIG:-/var/www/html/bin/console}"
 export MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
+export MAUTIC_VAR_DIR="${MAUTIC_VAR_DIR:-/var/www/html/var}"
 export MAUTIC_VOLUME_MEDIA="${MAUTIC_VOLUME_MEDIA:-/var/www/html/docroot/media}"
 
 export MAUTIC_WWW_USER="${MAUTIC_WWW_USER:-www-data}"

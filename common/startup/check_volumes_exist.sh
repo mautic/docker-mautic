@@ -8,5 +8,6 @@ function check_volume {
 ############################
 # check for required volumes
 check_volume $MAUTIC_VOLUME_CONFIG
+check_volume $MAUTIC_VAR_DIR
 check_volume $MAUTIC_VOLUME_LOGS
 check_volume $MAUTIC_VOLUME_MEDIA
