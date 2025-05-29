@@ -20,8 +20,10 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
 
-      - name: Build base image and export locally (for SAST scan)
+      - name: Build base image
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile
