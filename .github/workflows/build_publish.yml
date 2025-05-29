@@ -47,7 +47,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             SERVER_TYPE=${{ matrix.image_type }}
-          tags: base-mautic-${{ matrix.image_type }}
+          tags: mautic_base:${{ github.job }}-${{ matrix.image_type }}
 
       - name: Build image and export locally (for SAST scan)
         uses: docker/build-push-action@v6
@@ -58,6 +58,8 @@ jobs:
           platforms: linux/amd64
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
+          build-contexts: |
+            mautic_base=docker-image://mautic_base:${{ github.job }}-${{ matrix.image_type }}
 
       - name: Save image to tar file
         run: docker save mautic-${{ matrix.image_type }} -o image.tar
@@ -165,7 +167,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             SERVER_TYPE=${{ matrix.image_type }}
-          tags: base-mautic-${{ matrix.image_type }}
+          tags: mautic_base:${{ github.job }}-${{ matrix.image_type }}
 
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
@@ -177,5 +179,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
+          build-contexts: |
+            mautic_base=docker-image://mautic_base:${{ github.job }}-${{ matrix.image_type }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
