@@ -26,7 +26,7 @@ services:
       - default
 
   mautic_web:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:latest
     links:
       - db:mysql
     ports:
@@ -51,7 +51,7 @@ services:
       - default
 
   mautic_cron:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:latest
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -66,7 +66,7 @@ services:
       - default
 
   mautic_worker:
-    image: mautic/mautic:5-apache
+    image: mautic/mautic:latest
     links:
       - db:mysql
     volumes: *mautic-volumes
