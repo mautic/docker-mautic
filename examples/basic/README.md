@@ -2,7 +2,8 @@
 
 This directory provides a basic setup to run [Mautic](https://www.mautic.org/) using Docker Compose. It uses the official Apache-based Mautic Docker image and includes a MySQL container.
 
-> [!IMPORTANT] **Security Notice:**
+> [!IMPORTANT]
+> **Security Notice:**
 > Be sure to change the `MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD` environment variables under [.env](.env) before deploying to production.
 
 ## Installation
