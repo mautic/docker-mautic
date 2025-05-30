@@ -1,7 +1,11 @@
-FAILURE_COUNT=0
-MAX_FAILURE_COUNT=30
-IS_ALIVE_COMMAND="mysqladmin --host=$MAUTIC_DB_HOST --port=$MAUTIC_DB_PORT --user=$MAUTIC_DB_USER --password=$MAUTIC_DB_PASSWORD ping"
-IS_MYSQL_ALIVE=$(eval $IS_ALIVE_COMMAND 2>&1)
+local FAILURE_COUNT=0
+local MAX_FAILURE_COUNT=30
+local IS_MYSQL_ALIVE
+function check_mysql_connection() {
+	IS_MYSQL_ALIVE=$(mysqladmin --host=\"$MAUTIC_DB_HOST\" --port=\"$MAUTIC_DB_PORT\" --user=\"$MAUTIC_DB_USER\" --password=\"$MAUTIC_DB_PASSWORD\" ping 2>&1)
+}
+
+check_mysql_connection
 while [[ ${IS_MYSQL_ALIVE} != "mysqld is alive" ]]; do
 	FAILURE_COUNT=$((FAILURE_COUNT + 1))
 	if [[ $FAILURE_COUNT -gt $MAX_FAILURE_COUNT ]]; then
@@ -15,5 +19,7 @@ while [[ ${IS_MYSQL_ALIVE} != "mysqld is alive" ]]; do
 		echo "MySQL is not ready yet, waiting..."
 	fi
 	sleep 1
-	IS_MYSQL_ALIVE=$(eval $IS_ALIVE_COMMAND 2>&1)
+
+	# retry the connection
+	check_mysql_connection
 done
