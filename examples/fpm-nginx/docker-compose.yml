@@ -4,12 +4,12 @@ x-mautic-volumes:
   - ./mautic/logs:/var/www/html/var/logs:z
   - ./mautic/media/files:/var/www/html/docroot/media/files:z
   - ./mautic/media/images:/var/www/html/docroot/media/images:z
-  - ./cron:/opt/mautic/cron:z
+#  - ./cron:/opt/mautic/cron:z # Uncomment this line to customize your cron configuration
   - mautic-docroot:/var/www/html/docroot:z
 
 services:
   db:
-    image: mysql:8.0
+    image: mysql:lts
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}

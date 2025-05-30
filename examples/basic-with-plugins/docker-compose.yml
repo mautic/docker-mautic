@@ -1,12 +1,10 @@
-version: '3'
-
 x-mautic-volumes:
   &mautic-volumes
   - ./mautic/config:/var/www/html/config:z
   - ./mautic/logs:/var/www/html/var/logs:z
   - ./mautic/media/files:/var/www/html/docroot/media/files:z
   - ./mautic/media/images:/var/www/html/docroot/media/images:z
-  - ./cron:/opt/mautic/cron:z
+#  - ./cron:/opt/mautic/cron:z # Uncomment this line to customize your cron configuration
 
 services:
   db:
