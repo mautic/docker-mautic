@@ -1,4 +1,4 @@
-function check_volume_permissions() {
+function check_volumes_exist_ownership() {
 	for volume in "${MAUTIC_VOLUMES[@]}"; do
 		if [[ ! -d $volume ]]; then
 			echo "error: $volume does not exist or is not a directory."
@@ -16,4 +16,4 @@ function check_volume_permissions() {
 
 }
 
-check_volume_permissions
+check_volumes_exist_ownership

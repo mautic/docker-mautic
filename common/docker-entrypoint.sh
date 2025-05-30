@@ -14,14 +14,14 @@ export MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
 
 export MAUTIC_VOLUMES=(
   "$MAUTIC_VOLUME_CONFIG"
-  # "$MAUTIC_CONSOLE" intentionally omitted as it is a file, not a directory
   "$MAUTIC_VOLUME_LOGS"
-  "$MAUTIC_VAR"
   "$MAUTIC_VOLUME_MEDIA"
+  "$MAUTIC_VAR"
+  # "$MAUTIC_CONSOLE" intentionally omitted as it is a file, not a directory
 )
 
 
-/startup/check_volumes.sh
+/startup/check_volumes_exist_ownership.sh
 /startup/check_environment_variables.sh
 /startup/check_database_connection.sh
 /startup/check_local_php_exists.sh
