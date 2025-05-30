@@ -1,6 +1,6 @@
-# Mautic Basic Docker Template
+# Mautic RabbitMQ Docker Template
 
-This directory provides a basic setup to run [Mautic](https://www.mautic.org/) using Docker Compose. It uses the official Apache-based Mautic Docker image and includes a MySQL container.
+This directory provides a setup to run [Mautic](https://www.mautic.org/) using Docker Compose. It uses the official Apache-based Mautic Docker image and includes MySQL for storage and RabbitMQ for queuing.
 
 > [!IMPORTANT] **Security Notice:**
 > Be sure to change the `MYSQL_PASSWORD` and `MYSQL_ROOT_PASSWORD` environment variables under [.env](.env) before deploying to production.
@@ -11,7 +11,7 @@ This directory provides a basic setup to run [Mautic](https://www.mautic.org/) u
 
    ```bash
    git clone https://github.com/mautic/docker-mautic.git
-   cd docker-mautic/examples/basic
+   cd docker-mautic/examples/rabbitmq-worker
    ```
 
 2. Start the environment:
