@@ -36,7 +36,7 @@ services:
     depends_on:
       - mautic_web
     ports:
-      - 8002:80
+      - 8080:80
     networks:
       - default
 
