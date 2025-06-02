@@ -177,7 +177,7 @@ docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 ### Running a Mautic CLI command
 
 ```bash
-docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
+docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks\!"
 ```
 
 ## Contributing
