@@ -105,7 +105,7 @@ COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/su
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
 # Install PHP extensions requirements and other dependencies
-RUN aapt-get update \
+RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install --no-install-recommends -y \
     cron \
