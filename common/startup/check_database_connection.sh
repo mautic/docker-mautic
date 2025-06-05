@@ -2,7 +2,7 @@ local FAILURE_COUNT=0
 local MAX_FAILURE_COUNT=30
 local IS_MYSQL_ALIVE
 function check_mysql_connection() {
-	IS_MYSQL_ALIVE=$(mysqladmin --host=\"$MAUTIC_DB_HOST\" --port=\"$MAUTIC_DB_PORT\" --user=\"$MAUTIC_DB_USER\" --password=\"$MAUTIC_DB_PASSWORD\" ping 2>&1)
+	IS_MYSQL_ALIVE=$(mysqladmin --host="$MAUTIC_DB_HOST" --port="$MAUTIC_DB_PORT" --user="$MAUTIC_DB_USER" --password="$MAUTIC_DB_PASSWORD" ping 2>&1)
 }
 
 check_mysql_connection
