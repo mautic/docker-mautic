@@ -1,4 +1,6 @@
-function check_volumes_exist_ownership() {
+#!/bin/bash
+
+function check_volumes_exist_ownership {
 	for volume in "${MAUTIC_VOLUMES[@]}"; do
 		if [[ ! -d $volume ]]; then
 			echo "error: $volume does not exist or is not a directory."

@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function check_environment_variables {
 	local environment_variables=('MAUTIC_DB_HOST' 'MAUTIC_DB_PORT' 'MAUTIC_DB_USER' 'MAUTIC_DB_PASSWORD' 'DOCKER_MAUTIC_ROLE')
 
