@@ -4,7 +4,9 @@ FROM php:8.3-fpm AS builder
 COPY ./common/ /common/
 
 # Install PHP extensions
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install --no-install-recommends -y \
     build-essential  \
     ca-certificates \
     curl \
@@ -103,7 +105,9 @@ COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/su
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
 # Install PHP extensions requirements and other dependencies
-RUN apt-get update && apt-get install --no-install-recommends -y \
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install --no-install-recommends -y \
     cron \
     git \
     libc-client-dev \
@@ -118,6 +122,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     supervisor \
     unzip \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
