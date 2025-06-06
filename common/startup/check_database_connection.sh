@@ -29,4 +29,4 @@ function check_database_connection {
 
 }
 
-check_db_connection
+check_database_connection
