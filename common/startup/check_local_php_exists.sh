@@ -9,4 +9,4 @@ fi
 
 }
 
-check_local_php
+check_local_php_exists

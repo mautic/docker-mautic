@@ -14,10 +14,10 @@ export MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
 
 export MAUTIC_VOLUMES=(
   "$MAUTIC_VOLUME_CONFIG"
+  "$MAUTIC_VAR"
+  # TODO consider adding var/* as volumes checks for future because they might need to exist but also have correct perms
   "$MAUTIC_VOLUME_LOGS"
   "$MAUTIC_VOLUME_MEDIA"
-  "$MAUTIC_VAR"
-  # "$MAUTIC_CONSOLE" intentionally omitted as it is a file, not a directory
 )
 
 
