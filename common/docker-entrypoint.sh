@@ -28,13 +28,28 @@ export REQUIRED_MAUTIC_VARIABLES=('MAUTIC_DB_HOST' 'MAUTIC_DB_PORT' 'MAUTIC_DB_U
 /startup/check_local_php_exists.sh
 
 
-if [ "$DOCKER_MAUTIC_ROLE" = "mautic_worker" ]; then
-  /entrypoint_mautic_worker.sh
-elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_cron" ]; then
-  /entrypoint_mautic_cron.sh
-elif [ "$DOCKER_MAUTIC_ROLE" = "mautic_web" ]; then
-  /entrypoint_mautic_web.sh "$@"
-else
-  echo "no entrypoint specified, exiting"
-  exit 1
+# if it is a cron/worker we will wait for mautic to be installed before starting
+if [[ "${DOCKER_MAUTIC_ROLE}" == "mautic_cron" || "${DOCKER_MAUTIC_ROLE}" == "mautic_worker" ]]; then
+  # wait until Mautic is installed
+  until php -r "include('${MAUTIC_VOLUME_CONFIG}/local.php'); exit(isset(\$parameters['site_url']) ? 0 : 1);"; do
+    echo "Mautic not installed, waiting to start ${DOCKER_MAUTIC_ROLE}"
+    sleep 5
+  done
 fi
+
+
+case "${DOCKER_MAUTIC_ROLE}" in
+  mautic_web)
+    /entrypoint_mautic_web.sh "$@"
+    ;;
+  mautic_cron)
+    /entrypoint_mautic_cron.sh
+    ;;
+  mautic_worker)
+    /entrypoint_mautic_worker.sh
+    ;;
+  *)
+    echo "no entrypoint specified, exiting"
+    exit 1
+    ;;
+esac
