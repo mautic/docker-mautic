@@ -105,7 +105,6 @@ jobs:
       - name: Set BUILD_DATE
         run: echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
