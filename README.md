@@ -32,6 +32,10 @@ Some examples:
 * `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
 * `5.0.3-apache`: specific point release of the `apache` variant
 
+It's also possible to target a specific build for a given patch:
+
+* `<major.minor.patch>-<YYYYMMDD>-<variant>`
+
 ## Variants
 
 The Docker images exist in 2 variants:
