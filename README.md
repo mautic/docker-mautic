@@ -32,6 +32,8 @@ Some examples:
 * `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
 * `5.0.3-apache`: specific point release of the `apache` variant
 
+Additionally, the tag `latest` is available, which will always provide the newest Mautic version using the `apache` variant of the Docker image.
+
 ## Variants
 
 The Docker images exist in 2 variants:
