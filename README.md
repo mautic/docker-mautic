@@ -32,6 +32,7 @@ Some examples:
 * `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
 * `5.0.3-apache`: specific point release of the `apache` variant
 
+
 Additionally, the tag `latest` is available, which will always provide the newest Mautic version using the `apache` variant of the Docker image.
 
 It's also possible to target a specific build for a given patch:
@@ -183,7 +184,7 @@ docker compose exec --user www-data --workdir /var/www/html mautic_web /bin/bash
 ### Running a Mautic CLI command
 
 ```bash
-docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks!"
+docker compose exec --user www-data --workdir /var/www/html mautic_web php ./bin/console mautic:install https://mautic.example.com --admin_email="admin@mautic.local" --admin_password="Maut1cR0cks\!"
 ```
 
 ## Contributing
@@ -204,7 +205,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/cibero42"><img src="https://avatars.githubusercontent.com/u/102629460?v=4?s=100" width="100px;" alt="Renato"/><br /><sub><b>Renato</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=cibero42" title="Code">💻</a> <a href="https://github.com/mautic/docker-mautic/commits?author=cibero42" title="Documentation">📖</a> <a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Acibero42" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/mautic/docker-mautic/commits?author=cibero42" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://academy.leewayweb.com"><img src="https://avatars.githubusercontent.com/u/1532615?v=4?s=100" width="100px;" alt="Mauro Chojrin"/><br /><sub><b>Mauro Chojrin</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=mchojrin" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://okeefe.dev"><img src="https://avatars.githubusercontent.com/u/872224?v=4?s=100" width="100px;" alt="Matt O'Keefe"/><br /><sub><b>Matt O'Keefe</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=o-mutt" title="Code">💻</a> <a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Ao-mutt" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://okeefe.dev"><img src="https://avatars.githubusercontent.com/u/872224?v=4?s=100" width="100px;" alt="Matt O'Keefe"/><br /><sub><b>Matt O'Keefe</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Ao-mutt" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.4success.com.br"><img src="https://avatars.githubusercontent.com/u/19995615?v=4?s=100" width="100px;" alt="Renan William"/><br /><sub><b>Renan William</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=renanwilliam" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.ruthcheesley.co.uk"><img src="https://avatars.githubusercontent.com/u/2930593?v=4?s=100" width="100px;" alt="Ruth Cheesley"/><br /><sub><b>Ruth Cheesley</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=RCheesley" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://johnlinhart.com"><img src="https://avatars.githubusercontent.com/u/1235442?v=4?s=100" width="100px;" alt="John Linhart"/><br /><sub><b>John Linhart</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Aescopecz" title="Reviewed Pull Requests">👀</a></td>
