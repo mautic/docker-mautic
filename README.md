@@ -34,6 +34,10 @@ Some examples:
 
 Additionally, the tag `latest` is available, which will always provide the newest Mautic version using the `apache` variant of the Docker image.
 
+It's also possible to target a specific build for a given patch:
+
+* `<major.minor.patch>-<YYYYMMDD>-<variant>`
+
 ## Variants
 
 The Docker images exist in 2 variants:
