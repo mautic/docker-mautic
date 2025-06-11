@@ -1,3 +1,3 @@
-FROM mautic/mautic:5-apache
+FROM mautic/mautic:latest
 
 COPY ./plugins/ /var/www/html/docroot/plugins/
