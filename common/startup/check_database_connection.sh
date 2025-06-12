@@ -8,12 +8,13 @@ function check_database_connection {
 	while [[ "${IS_MYSQL_ALIVE}" != "mysqld is alive" ]]; do
 		FAILURE_COUNT=$((FAILURE_COUNT + 1))
 		if [[ $FAILURE_COUNT -gt $MAX_FAILURE_COUNT ]]; then
-			echo "error: MySQL is not responding after ${MAX_FAILURE_COUNT} attempts. Exiting."
+			echo "Startup Checks Error: MySQL is not responding after ${MAX_FAILURE_COUNT} attempts. Exiting." >&2
+			echo "Please ensure the MySQL server is running and accessible from this container." >&2
 			exit 1
 		fi
 
 		if [[ "${IS_MYSQL_ALIVE}" =~ "error" ]]; then
-			echo "MySQL response contained error: ${IS_MYSQL_ALIVE}"
+			echo "Startup Checks Error: MySQL response contained error: ${IS_MYSQL_ALIVE}" >&2
 		else
 			echo "MySQL is not ready yet, waiting..."
 		fi
@@ -28,6 +29,7 @@ function check_database_connection {
 function check_mysql_connection {
 	# Make use of lexical scoping of the local IS_MYSQL_ALIVE variable
 	local MAUTIC_DB_PORT="${MAUTIC_DB_PORT:-3306}"
+	echo "Checking DB connection to ${MAUTIC_DB_HOST}:${MAUTIC_DB_PORT} with user ${MAUTIC_DB_USER}"
 	IS_MYSQL_ALIVE=$(mysqladmin --host="${MAUTIC_DB_HOST}" --port="${MAUTIC_DB_PORT}" --user="${MAUTIC_DB_USER}" --password="${MAUTIC_DB_PASSWORD}" ping 2>&1)
 }
 
