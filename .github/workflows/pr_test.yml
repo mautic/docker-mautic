@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - mautic5
+    paths:
+      - 'apache/**'
+      - 'fpm/**'
+      - 'common/**'
 
 jobs:
   docker-build:
