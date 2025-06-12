@@ -27,6 +27,7 @@ function check_database_connection {
 
 function check_mysql_connection {
 	# Make use of lexical scoping of the local IS_MYSQL_ALIVE variable
+	local MAUTIC_DB_PORT="${MAUTIC_DB_PORT:-3306}"
 	IS_MYSQL_ALIVE=$(mysqladmin --host="${MAUTIC_DB_HOST}" --port="${MAUTIC_DB_PORT}" --user="${MAUTIC_DB_USER}" --password="${MAUTIC_DB_PASSWORD}" ping 2>&1)
 }
 
