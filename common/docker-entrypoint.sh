@@ -1,6 +1,13 @@
 #!/bin/bash
 set -eu
 
+# DEBUG flag to enable debug output. To turn on debug set DEBUG=1 (e.g. docker compose up -d --build --env DEBUG=1)
+if [[ "${DEBUG}" == "1" || "${DEBUG}" == "true" ]]; then
+  export DEBUG=1
+else
+  export DEBUG=0
+fi
+
 # set a few variables to be used in the entrypoint scripts
 export MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
 export MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
@@ -12,15 +19,18 @@ export MAUTIC_CONSOLE="${MAUTIC_CONSOLE:-/var/www/html/bin/console}"
 export MAUTIC_WWW_USER="${MAUTIC_WWW_USER:-www-data}"
 export MAUTIC_WWW_GROUP="${MAUTIC_WWW_GROUP:-www-data}"
 
-export MAUTIC_VOLUMES=(
-  "$MAUTIC_VOLUME_CONFIG"
-  "$MAUTIC_VAR"
-  # TODO consider adding var/* as volumes checks for future because they might need to exist but also have correct perms
-  "$MAUTIC_VOLUME_LOGS"
-  "$MAUTIC_VOLUME_MEDIA"
-)
+# TODO consider adding "var/*" as volumes checks for future because they might need to exist but also have correct perms
+export MAUTIC_VOLUMES="\
+${MAUTIC_VOLUME_CONFIG} \
+${MAUTIC_VAR} \
+${MAUTIC_VOLUME_LOGS} \
+${MAUTIC_VOLUME_MEDIA}"
 
-export REQUIRED_MAUTIC_VARIABLES=('MAUTIC_DB_HOST' 'MAUTIC_DB_USER' 'MAUTIC_DB_PASSWORD' 'DOCKER_MAUTIC_ROLE')
+export REQUIRED_MAUTIC_VARIABLES="\
+MAUTIC_DB_HOST \
+MAUTIC_DB_USER \
+MAUTIC_DB_PASSWORD \
+DOCKER_MAUTIC_ROLE"
 
 /startup/check_volumes_exist_ownership.sh
 /startup/check_environment_variables.sh
@@ -33,8 +43,8 @@ COUNTER=0
 if [[ "${DOCKER_MAUTIC_ROLE}" == "mautic_cron" || "${DOCKER_MAUTIC_ROLE}" == "mautic_worker" ]]; then
   # wait until Mautic is installed
   until php -r "include('${MAUTIC_VOLUME_CONFIG}/local.php'); exit(isset(\$parameters['site_url']) ? 0 : 1);"; do
-    # only show message every 30 seconds
-    if (( COUNTER % 6 == 0 )); then
+    # only show message every 30 seconds (or DEBUG is enabled)
+    if (( COUNTER % 6 == 0 || $DEBUG -eq 1 )); then
       echo "[${DOCKER_MAUTIC_ROLE}]: Waiting for Mautic to be installed, current attempt: ${COUNTER}."
     fi
     COUNTER=$((COUNTER + 1))
@@ -54,7 +64,8 @@ case "${DOCKER_MAUTIC_ROLE}" in
     /entrypoint_mautic_worker.sh
     ;;
   *)
-    echo "DOCKER_MAUTIC_ROLE was empty or unexpected value no entrypoint specified, exiting" >&2
+		echo "----- Startup Checks Error Found -----" >&2
+    echo "DOCKER_MAUTIC_ROLE was found to be \"${DOCKER_MAUTIC_ROLE}\" which is not one of the valid values (mautic_web, mautic_cron, mautic_worker), exiting" >&2
     exit 1
     ;;
 esac
