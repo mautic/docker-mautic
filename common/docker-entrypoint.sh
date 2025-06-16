@@ -2,11 +2,14 @@
 set -eu
 
 # DEBUG flag to enable debug output. To turn on debug set DEBUG=1 (e.g. docker compose up -d --build --env DEBUG=1)
-if [[ "${DEBUG}" == "1" || "${DEBUG}" == "true" ]]; then
-  export DEBUG=1
+TEMP_DEBUG="${DEBUG:-0}"
+if [[ "$TEMP_DEBUG" == "1" || "${TEMP_DEBUG:-0}" == "true" || "${TEMP_DEBUG:-1}" -eq 1 ]]; then
+  echo "Startup debug logging enabled."
+  DEBUG=1
 else
-  export DEBUG=0
+  DEBUG=0
 fi
+export DEBUG
 
 # set a few variables to be used in the entrypoint scripts
 export MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
