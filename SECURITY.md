@@ -35,7 +35,7 @@ Security updates are provided for the most recent minor version of each supporte
 Main exclusions:
 - Development, alpha, beta, or release candidate Docker images
 - Docker images for unsupported Mautic versions
-- [Extended Long Term Support (ELTS)](https://mau.tc/elts) releases are currently unsupported **on Docker**
+- [Extended Long Term Support (ELTS)](https://mau.tc/elts) releases are handled privately, making public Docker images published through here unsupported
 
 ## How to report a Docker security issue
 
