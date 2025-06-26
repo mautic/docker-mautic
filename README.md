@@ -4,21 +4,12 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
-> [!IMPORTANT]
->You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
->Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
-
-## Issues
-
-For general questions about this Docker image, please visit [our forum](https://forum.mautic.org/c/support/docker-support/112). We ask that you only open [GitHub issues](https://github.com/mautic/docker-mautic/issues) for bug reports or feature requests. This helps ensure you get wider community support and allows others with similar questions to find answers more easily.
-
-To reach the developers directly, you can find us in the #docker channel on [Mautic's Slack](https://www.mautic.org/slack/).
+> _This version refers to Docker images and examples for Mautic 6. If you would like information about older versions, see [Mautic 4](https://github.com/mautic/docker-mautic/tree/mautic4) and [Mautic 5](https://github.com/mautic/docker-mautic/tree/mautic5)._
 
 ## Versions
 
-All Mautic 5 Docker images follow the following naming stategy.
+All Mautic 6 Docker images follow the following naming stategy.
 
 `<major.minor.patch>-<variant>`
 
@@ -28,9 +19,9 @@ There are some defaults if parts are omitted:
 
 Some examples:
 
-* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
-* `5.0.3-apache`: specific point release of the `apache` variant
+* `6-apache`: latest stable version of Mautic 6 of the `apache` variant
+* `6.0-fpm`: latest version in the 6.0 minor release in the `fpm` variant 
+* `6.0.3-apache`: specific point release of the `apache` variant
 
 
 Additionally, the tag `latest` is available, which will always provide the newest stable Mautic version using the `apache` variant of the Docker image.
@@ -93,11 +84,11 @@ For each example, there are 2 files where settings can be set:
 
 ## Building your own images
 
-You can build your own images easily using the `docker build` command in the root of this directory:
+You can build your own images using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:6-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:6-fpm
 ```
 
 ## Persistent storage
@@ -153,8 +144,8 @@ See the general Mautic documentation for more info.
 
 ### Customization
 
-Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
-This is an ongoing effort we hope to support in an upcoming 5.x release.  
+Currently this image has no way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
+This is an ongoing effort we hope to support in an upcoming 7.x release.  
   
 
 For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
