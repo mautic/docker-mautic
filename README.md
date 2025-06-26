@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 6, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic5._
 
 > [!IMPORTANT]
 >You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
@@ -18,7 +18,7 @@ To reach the developers directly, you can find us in the #docker channel on [Mau
 
 ## Versions
 
-All Mautic 5 Docker images follow the following naming stategy.
+All Mautic 5 and 6 Docker images follow the following naming stategy.
 
 `<major.minor.patch>-<variant>`
 
@@ -28,9 +28,9 @@ There are some defaults if parts are omitted:
 
 Some examples:
 
-* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
-* `5.0.3-apache`: specific point release of the `apache` variant
+* `6-apache`: latest stable version of Mautic 6 of the `apache` variant
+* `6.0-fpm`: latest version in the 6.0 minor release in the `fpm` variant 
+* `6.0.3-apache`: specific point release of the `apache` variant
 
 
 Additionally, the tag `latest` is available, which will always provide the newest stable Mautic version using the `apache` variant of the Docker image.
