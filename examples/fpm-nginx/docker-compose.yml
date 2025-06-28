@@ -1,17 +1,15 @@
-version: '3'
-
 x-mautic-volumes:
   &mautic-volumes
   - ./mautic/config:/var/www/html/config:z
   - ./mautic/logs:/var/www/html/var/logs:z
   - ./mautic/media/files:/var/www/html/docroot/media/files:z
   - ./mautic/media/images:/var/www/html/docroot/media/images:z
-  - ./cron:/opt/mautic/cron:z
+#  - ./cron:/opt/mautic/cron:z # Uncomment this line to customize your cron configuration
   - mautic-docroot:/var/www/html/docroot:z
 
 services:
   db:
-    image: mysql:8.0
+    image: mysql:lts
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -33,15 +31,17 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - mautic-docroot:/var/www/html/docroot:z
+      - ./mautic/media/files:/var/www/html/docroot/media/files:z
+      - ./mautic/media/images:/var/www/html/docroot/media/images:z
     depends_on:
       - mautic_web
     ports:
-      - 8002:80
+      - 8080:80
     networks:
       - default
 
   mautic_web:
-    image: mautic/mautic:5-fpm
+    image: mautic/mautic:6-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -64,7 +64,7 @@ services:
       - default
 
   mautic_cron:
-    image: mautic/mautic:5-fpm
+    image: mautic/mautic:6-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -79,7 +79,7 @@ services:
       - default
 
   mautic_worker:
-    image: mautic/mautic:5-fpm
+    image: mautic/mautic:6-fpm
     links:
       - db:mysql
     volumes: *mautic-volumes

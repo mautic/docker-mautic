@@ -22,6 +22,76 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image_type: [apache, fpm]
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image and export locally (for SAST scan)
+        uses: docker/build-push-action@v6
+        with:
+          file: ${{ matrix.image_type }}/Dockerfile
+          tags: mautic-${{ matrix.image_type }}
+          load: true
+          platforms: linux/amd64
+          build-args: |
+            MAUTIC_VERSION=${{ inputs.mautic_version }}
+
+      - name: Save image to tar file
+        run: docker save mautic-${{ matrix.image_type }} -o image.tar
+
+      - name: Upload image as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mautic-${{ matrix.image_type }}
+          path: image.tar
+
+  sast:
+    runs-on: ubuntu-latest
+    needs: test-build
+    strategy:
+      matrix:
+        image_type: [apache, fpm]
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mautic-${{ matrix.image_type }}
+
+      - name: Load Docker image
+        run: docker load -i image.tar
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: 'mautic-${{ matrix.image_type }}'
+          format: 'sarif'
+          exit-code: '0' # Won't fail on vulns found
+          ignore-unfixed: true # Won't flag if there isn't a fix to the CVE
+          output: 'trivy-results-${{ matrix.image_type }}.sarif'
+
+      - name: Upload Trivy SARIF to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
+
   build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
@@ -32,6 +102,9 @@ jobs:
       packages: write
 
     steps:
+      - name: Set BUILD_DATE
+        run: echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -46,6 +119,7 @@ jobs:
           # generate Docker tags based on the following events/attributes
           tags: |
             type=semver,pattern={{version}},value=${{ inputs.mautic_version }}
+            type=raw,value=${{ inputs.mautic_version }}-${{ env.BUILD_DATE }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_minor }}
             type=semver,pattern={{major}},value=${{ inputs.mautic_version }},enable=${{ inputs.overwrite_latest_major }}
             type=raw,value=latest,enable=${{ inputs.tag_as_latest && matrix.image_type == 'apache' }},suffix=
@@ -73,7 +147,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
           file: ${{ matrix.image_type }}/Dockerfile

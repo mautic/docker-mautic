@@ -26,11 +26,12 @@ services:
       - default
 
   mautic_web:
-    image: mautic/mautic:latest
+    build:
+      dockerfile: Dockerfile
     links:
       - db:mysql
     ports:
-      - 1111:80
+      - 8080:80
     volumes: *mautic-volumes
 
     environment:
@@ -43,7 +44,7 @@ services:
       start_period: 5s
       interval: 5s
       timeout: 5s
-      retries: 100
+      retries: 10
     depends_on:
       db:
         condition: service_healthy
@@ -51,7 +52,8 @@ services:
       - default
 
   mautic_cron:
-    image: mautic/mautic:latest
+    build:
+      dockerfile: Dockerfile
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -66,7 +68,8 @@ services:
       - default
 
   mautic_worker:
-    image: mautic/mautic:latest
+    build:
+      dockerfile: Dockerfile
     links:
       - db:mysql
     volumes: *mautic-volumes
