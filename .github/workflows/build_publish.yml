@@ -43,7 +43,6 @@ jobs:
           file: ${{ matrix.image_type }}/Dockerfile
           tags: mautic-${{ matrix.image_type }}
           load: true
-          sbom: true
           platforms: linux/amd64
           build-args: |
             MAUTIC_VERSION=${{ inputs.mautic_version }}
@@ -56,12 +55,6 @@ jobs:
         with:
           name: mautic-${{ matrix.image_type }}
           path: image.tar
-      
-      - name: Upload SBOM as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mautic-${{ matrix.image_type }}-sbom
-          path: sbom.json 
 
   sast:
     runs-on: ubuntu-latest
