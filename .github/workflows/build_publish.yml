@@ -92,6 +92,36 @@ jobs:
         with:
           sarif_file: 'trivy-results-${{ matrix.image_type }}.sarif'
 
+  sbom:
+    runs-on: ubuntu-latest
+    needs: test-build
+    strategy:
+      matrix:
+        image_type: [apache, fpm]
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Docker image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mautic-${{ matrix.image_type }}
+
+      - name: Load Docker image
+        run: docker load -i image.tar
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          scan-type: 'image'
+          image-ref: 'mautic-${{ matrix.image_type }}'
+          format: 'github'
+          output: 'dependency-results.sbom.json'
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
+
   build-and-push-image:
     runs-on: ubuntu-latest
     strategy:
