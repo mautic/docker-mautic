@@ -16,7 +16,7 @@ function check_volumes_exist_ownership {
     exit 1
   fi
 
-  PERM_ERROR_FOUND=0
+    local PERM_ERROR_FOUND=0
   local VOLUME_PERMISSIONS_FAILURE_MESSAGE
   for perm_volume in ${MAUTIC_VOLUMES}; do
   # check ownership and assign ownership if not MAUTIC_WWW_USER:MAUTIC_WWW_GROUP
