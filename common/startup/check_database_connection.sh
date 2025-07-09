@@ -25,7 +25,8 @@ function check_database_connection {
     sleep 1
 
     # try the connection
-    check_mysql_connection
+    log_debug "Checking DB connection to ${MAUTIC_DB_HOST}:${MAUTIC_DB_PORT} with user ${MAUTIC_DB_USER}"
+    IS_MYSQL_ALIVE=$(mysqladmin --host="${MAUTIC_DB_HOST}" --port="${MAUTIC_DB_PORT}" --user="${MAUTIC_DB_USER}" --password="${MAUTIC_DB_PASSWORD}" ping 2>&1)
   done
 
   # we either maxed our connection attempts or we got a successful response
@@ -33,12 +34,6 @@ function check_database_connection {
   if [[ "${IS_MYSQL_ALIVE}" == "mysqld is alive" ]]; then
     log_debug "MySQL is alive and well."
   fi
-}
-
-function check_mysql_connection {
-  # Make use of lexical scoping of the local IS_MYSQL_ALIVE variable
-  log_debug "Checking DB connection to ${MAUTIC_DB_HOST}:${MAUTIC_DB_PORT} with user ${MAUTIC_DB_USER}"
-  IS_MYSQL_ALIVE=$(mysqladmin --host="${MAUTIC_DB_HOST}" --port="${MAUTIC_DB_PORT}" --user="${MAUTIC_DB_USER}" --password="${MAUTIC_DB_PASSWORD}" ping 2>&1)
 }
 
 log_debug "Checking database connection is alive and well..."
