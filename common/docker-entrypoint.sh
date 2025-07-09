@@ -1,15 +1,9 @@
 #!/bin/bash
 set -e
 
-# DEBUG flag to enable debug output. To turn on debug set DEBUG=1 (e.g. docker compose up -d --build --env DEBUG=1)
-TEMP_DEBUG="${DEBUG:-0}"
-if [[ "$TEMP_DEBUG" == "1" || "${TEMP_DEBUG}" == "true" || "${TEMP_DEBUG}" -eq 1 ]]; then
-  echo "Startup debug logging enabled."
-  DEBUG=1
-else
-  DEBUG=0
-fi
-export DEBUG
+export DEBUG=${DEBUG:="false"}
+source /startup/logger.sh
+log_debug "Startup Debug Logging Enabled."
 
 # default the db port to 3306 if not set
 export MAUTIC_DB_PORT="${MAUTIC_DB_PORT:-3306}"
@@ -44,22 +38,6 @@ DOCKER_MAUTIC_ROLE"
 /startup/check_database_connection.sh
 /startup/check_local_php_exists.sh
 
-
-COUNTER=0
-# if it is a cron/worker we will wait for mautic to be installed before starting
-if [[ "${DOCKER_MAUTIC_ROLE}" == "mautic_cron" || "${DOCKER_MAUTIC_ROLE}" == "mautic_worker" ]]; then
-  # wait until Mautic is installed
-  until php -r "include('${MAUTIC_VOLUME_CONFIG}/local.php'); exit(isset(\$parameters['site_url']) ? 0 : 1);"; do
-    # only show message every 30 seconds (or DEBUG is enabled)
-    if (( COUNTER % 6 == 0 || $DEBUG -eq 1 )); then
-      echo "[${DOCKER_MAUTIC_ROLE}]: Waiting for Mautic to be installed, current attempt: ${COUNTER}."
-    fi
-    COUNTER=$((COUNTER + 1))
-    sleep 5
-  done
-fi
-
-
 case "${DOCKER_MAUTIC_ROLE}" in
   mautic_web)
     /entrypoint_mautic_web.sh "$@"
@@ -71,8 +49,8 @@ case "${DOCKER_MAUTIC_ROLE}" in
     /entrypoint_mautic_worker.sh
     ;;
   *)
-    echo "----- Startup Checks Error Found -----" >&2
-    echo "DOCKER_MAUTIC_ROLE was found to be \"${DOCKER_MAUTIC_ROLE}\" which is not one of the valid values (mautic_web, mautic_cron, mautic_worker), exiting" >&2
+    log_startup_error_header
+    log_error "DOCKER_MAUTIC_ROLE was found to be \"${DOCKER_MAUTIC_ROLE}\" which is not one of the valid values (mautic_web, mautic_cron, mautic_worker), exiting"
     exit 1
     ;;
 esac

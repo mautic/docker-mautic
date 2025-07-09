@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Start script that will wait for mautic to be installed before setting up cron jobs
+/startup/wait_for_mautic_install.sh
+
 mkdir -p /opt/mautic/cron
 
 if [ ! -f /opt/mautic/cron/mautic  ]; then
