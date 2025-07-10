@@ -116,33 +116,29 @@ The following environment variables can be used to configure how your setup shou
 
 ##### Mautic Behaviour
 
- - `MAUTIC_DB_HOST`: IP address or hostname of the MySQL server.
- - `MAUTIC_DB_PORT`: port which the MySQL server is listening on. Defaults to `3306`.
- - `MAUTIC_DB_DATABASE`: Database which holds Mautic's tables.
- - `MAUTIC_DB_USER`: MySQL user which should be used by Mautic.
- - `MAUTIC_DB_PASSWORD`: Passowrd of the MySQL user which should be used by Mautic.
- - `DOCKER_MAUTIC_ROLE`: which role does the container has to perform.  
-   Defaults to `mautic_web`, other supported values are `mautic_worker` and `mautic_cron`.
- - `DOCKER_MAUTIC_LOAD_TEST_DATA`: should the test data be loaded on start or not.  
-   Defaults to `false`, other supported value is `true`.  
-   This variable is only usable when using the `web` role.
- - `DOCKER_MAUTIC_RUN_MIGRATIONS`: should the Doctrine migrations be executed on start.  
-   Defaults to `false`, other supported value is `true`.  
-   This variable is only usable when using the `web` role.
- - `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL`: Number of workers to start consuming mails.  
-   Defaults to `2`
- - `DOCKER_MAUTIC_WORKERS_CONSUME_HIT`: Number of workers to start consuming hits.  
-   Defaults to `2`
- - `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED`: Number of workers to start consuming failed e-mails.  
-   Defaults to `2`
+Variable | Default | Required | Accepted Values | Description
+---|---|---|---
+`DEBUG` | false | | `true`, `false` | Enable verbose logs
+`DOCKER_MAUTIC_ROLE` | mautic_web | | `mautic_cron`, `mautic_web`, `mautic_worker (string) | Container role
+`DOCKER_MAUTIC_LOAD_TEST_DATA` | false | | `true`, `false` | Load demo instance
+`DOCKER_MAUTIC_RUN_MIGRATIONS` | false | | `true`, `false` | Update directory and database structure (please run on major updates)
+`DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL` | 2 | | integer | Number of workers to start consuming e-mails
+`DOCKER_MAUTIC_WORKERS_CONSUME_HIT` | 2 | | integer | Number of workers to start consuming hits
+`DOCKER_MAUTIC_WORKERS_CONSUME_FAILED` | 2 | | integer | Number of workers to start consuming failed e-mails
+`MAUTIC_DB_HOST` | *none* | X | IPv4, IPv6, hostname | MySQL server's IP address or hostname
+`MAUTIC_DB_PORT` | 3306 | | 1 - 65535 (integer) | MySQL server's port
+`MAUTIC_DB_DATABASE` | *none* | X | string | Database which holds Mautic's tables
+`MAUTIC_DB_USER` | *none* | X | string | MySQL user for Mautic
+`MAUTIC_DB_PASSWORD` | *none* | X | string | MySQL password for Mautic
 
 ##### PHP Settings
-
- - `PHP_INI_VALUE_DATE_TIMEZONE`: defaults to `UTC`
- - `PHP_INI_VALUE_MEMORY_LIMIT`: defaults to `512M`
- - `PHP_INI_VALUE_UPLOAD_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_POST_MAX_FILESIZE`: defaults to `512M`
- - `PHP_INI_VALUE_MAX_EXECUTION_TIME`: defaults to `300`
+Variable | Default
+---|---
+`PHP_INI_VALUE_DATE_TIMEZONE` | `UTC`
+`PHP_INI_VALUE_MEMORY_LIMIT` | `512M`
+`PHP_INI_VALUE_UPLOAD_MAX_FILESIZE` | `512M`
+`PHP_INI_VALUE_POST_MAX_FILESIZE` | `512M`
+`PHP_INI_VALUE_MAX_EXECUTION_TIME` | `300`
 
 #### Mautic settings
 
