@@ -117,7 +117,7 @@ The following environment variables can be used to configure how your setup shou
 ##### Mautic Behaviour
 
 Variable | Default | Required | Accepted Values | Description
----|---|---|---
+---|---|---|---|---
 `DEBUG` | false | | `true`, `false` | Enable verbose logs
 `DOCKER_MAUTIC_ROLE` | mautic_web | | `mautic_cron`, `mautic_web`, `mautic_worker (string) | Container role
 `DOCKER_MAUTIC_LOAD_TEST_DATA` | false | | `true`, `false` | Load demo instance
