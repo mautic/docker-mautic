@@ -1,4 +1,4 @@
-# Mautic Docker Image
+# Official Mautic Docker Image
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -6,11 +6,11 @@
 > [!NOTE]
 > _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
+## Issues
+
 > [!IMPORTANT]
 >You might face several issues when using the FPM images, due to the way those are currently implemented. **We strongly advise using Apache instead of FPM for the time being**. You might face security issues when using the exemplified nginx.conf. Only proceed with FPM if you are familiar with Nginx configuration!
 >Please refer to [#317](https://github.com/mautic/docker-mautic/issues/317) for updates on this topic.
-
-## Issues
 
 For general questions about this Docker image, please visit [our forum](https://forum.mautic.org/c/support/docker-support/112). We ask that you only open [GitHub issues](https://github.com/mautic/docker-mautic/issues) for bug reports or feature requests. This helps ensure you get wider community support and allows others with similar questions to find answers more easily.
 
