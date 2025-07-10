@@ -80,9 +80,10 @@ The [examples](examples/) folder contains examples of `docker-compose` setups th
 > it shows how it **could** be used, not how it **should** be used.  
 > Do not use those examples in production without reviewing, understanding and configuring them.
 
-* `basic`: standard example using the `apache` image with `doctrine` as async queue.
-* `fpm-nginx`: example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
-* `rabbitmq-worker`: example using the `apache` image with `rabbitmq` as async queue.
+* [basic](examples/basic/): standard example using the `apache` image with `doctrine` as async queue.
+* [fpm-nginx](examples/fpm-nginx/): example using the `fpm` image in combination with an `nginx` with `doctrine` as async queue.
+* [rabbitmq-worker](examples/rabbitmq-worker/): example using the `apache` image with `rabbitmq` as async queue.
+* [custom-plugins](examples/custom-plugins/): example using a custom build based on `apache` to install non-marketplace plugins on Mautic.
 
 For each example, there are 2 files where settings can be set:
 
