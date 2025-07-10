@@ -1,12 +1,9 @@
 #!/bin/bash
 
-mkdir -p /opt/mautic/cron
+# Start script that will wait for mautic to be installed before setting up cron jobs
+/startup/wait_for_mautic_install.sh
 
-# wait until Mautic is installed
-until php -r "include('$MAUTIC_VOLUME_CONFIG/local.php'); exit(isset(\$parameters['site_url']) ? 0 : 1);"; do
-  echo "Mautic not installed, waiting to start cron"
-  sleep 5
-done
+mkdir -p /opt/mautic/cron
 
 if [ ! -f /opt/mautic/cron/mautic  ]; then
   cp -p /templates/mautic_cron /opt/mautic/cron/mautic

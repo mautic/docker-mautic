@@ -81,6 +81,9 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
     DOCKER_MAUTIC_RUN_MIGRATIONS=false \
     DOCKER_MAUTIC_LOAD_TEST_DATA=false
 
+# Debug flag for startup scripts
+ENV DEBUG=false
+
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
 # Copy php settings and extensions from builder
@@ -94,7 +97,7 @@ COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
 # Copy all files needed for startup
 COPY --from=builder --chmod=755 /common/startup/ /startup/
-COPY --from=builder --chmod=755 /common/templates/ /templates/
+COPY --from=builder --chown=www-data:www-data --chmod=755 /common/templates/ /templates/
 COPY --from=builder --chmod=755 /common/docker-entrypoint.sh /entrypoint.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_web.sh /entrypoint_mautic_web.sh
 COPY --from=builder --chmod=755 /common/entrypoint_mautic_cron.sh /entrypoint_mautic_cron.sh
