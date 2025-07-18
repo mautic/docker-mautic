@@ -122,7 +122,6 @@ Variable | Default | Required | Accepted Values | Description
 `DEBUG` | false | | `true`, `false` | Enable verbose logs
 `DOCKER_MAUTIC_ROLE` | mautic_web | | `mautic_cron`, `mautic_web`, `mautic_worker (string) | Container role
 `DOCKER_MAUTIC_LOAD_TEST_DATA` | false | | `true`, `false` | Load demo instance
-`DOCKER_MAUTIC_RUN_MIGRATIONS` | false | | `true`, `false` | Update directory and database structure (please run on major updates)
 `DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL` | 2 | | integer | Number of workers to start consuming e-mails
 `DOCKER_MAUTIC_WORKERS_CONSUME_HIT` | 2 | | integer | Number of workers to start consuming hits
 `DOCKER_MAUTIC_WORKERS_CONSUME_FAILED` | 2 | | integer | Number of workers to start consuming failed e-mails
