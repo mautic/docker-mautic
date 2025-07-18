@@ -9,9 +9,7 @@ if [ "$DOCKER_MAUTIC_LOAD_TEST_DATA" = "true" ]; then
 fi
 
 # run migrations
-if [ "$DOCKER_MAUTIC_RUN_MIGRATIONS" = "true" ]; then
-  su -s /bin/bash $MAUTIC_WWW_USER -c "php $MAUTIC_CONSOLE doctrine:migration:migrate -n"
-fi
+su -s /bin/bash $MAUTIC_WWW_USER -c "php $MAUTIC_CONSOLE doctrine:migration:migrate -n"
 
 # execute the provided entrypoint
 "$@"

@@ -65,6 +65,15 @@ RUN cd /opt && \
 
 FROM php:8.3-fpm
 
+LABEL vendor="Mautic"
+LABEL maintainer="Mautic core team <>"
+
+# Define Mautic volumes to persist data
+VOLUME /var/www/html/config
+VOLUME /var/www/html/var/logs
+VOLUME /var/www/html/docroot/media/files
+VOLUME /var/www/html/docroot/media/images
+
 # Setting PHP properties
 ENV PHP_INI_VALUE_DATE_TIMEZONE='UTC' \
     PHP_INI_VALUE_MEMORY_LIMIT=512M \
@@ -143,15 +152,7 @@ RUN cd /var/www/html && \
 # Set correct ownership for Mautic var folder
 RUN chown -R www-data:www-data /var/www/html/var/
 
-# Define Mautic volumes to persist data
-VOLUME /var/www/html/config
-VOLUME /var/www/html/var/logs
-VOLUME /var/www/html/docroot/media
-
 WORKDIR /var/www/html/docroot
-
-LABEL vendor="Mautic"
-LABEL maintainer="Mautic core team <>"
 
 ENTRYPOINT ["/entrypoint.sh"]
 
