@@ -7,5 +7,5 @@ MAUTIC_DB_DATABASE="${MYSQL_DATABASE}"
 MAUTIC_DB_USER="${MYSQL_USER}"
 MAUTIC_DB_PASSWORD="${MYSQL_PASSWORD}"
 
-MAUTIC_MESSENGER_DSN_EMAIL="amqp://guest:guest@rabbitmq:5672/mautic/messages"
-MAUTIC_MESSENGER_DSN_HIT="amqp://guest:guest@rabbitmq:5672/mautic/messages"
+MAUTIC_MESSENGER_DSN_EMAIL="amqp://guest:guest@rabbitmq:5672/mautic"
+MAUTIC_MESSENGER_DSN_HIT="amqp://guest:guest@rabbitmq:5672/mautic"
