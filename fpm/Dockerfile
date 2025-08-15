@@ -1,4 +1,4 @@
-FROM php:8.3-fpm AS builder
+FROM php:8.3-fpm-bookworm AS builder
 
 # Copy everything from common for building
 COPY ./common/ /common/
@@ -63,7 +63,7 @@ RUN cd /opt && \
     rm -rf /opt/mautic/var/cache/js && \
     find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
-FROM php:8.3-fpm
+FROM php:8.3-fpm-bookworm
 
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
