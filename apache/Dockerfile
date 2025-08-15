@@ -1,4 +1,4 @@
-FROM php:8.3-apache AS builder
+FROM php:8.3-apache-bookworm AS builder
 
 # Copy everything from common for building
 COPY ./common/ /common/
