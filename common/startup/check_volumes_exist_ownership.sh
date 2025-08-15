@@ -13,7 +13,7 @@ function check_volumes_exist_ownership {
 
   if [[ $ERROR_FOUND -eq 1 ]]; then
     log_startup_error_header
-    log_error "Please ensure the volume(s) are mounted correctly and is accessible."
+    log_error "Please ensure the volume(s) is mounted correctly and is accessible."
     log_error "If you are running this container as a non-root user, you may need to run the container with elevated privileges."
     exit 1
   fi
