@@ -12,6 +12,8 @@ export MAUTIC_DB_PORT="${MAUTIC_DB_PORT:-3306}"
 export MAUTIC_VOLUME_CONFIG="${MAUTIC_VOLUME_CONFIG:-/var/www/html/config}"
 export MAUTIC_VOLUME_LOGS="${MAUTIC_VOLUME_LOGS:-/var/www/html/var/logs}"
 export MAUTIC_VOLUME_MEDIA="${MAUTIC_VOLUME_MEDIA:-/var/www/html/docroot/media}"
+export MAUTIC_VOLUME_FILES="${MAUTIC_VOLUME_FILES:-/var/www/html/docroot/media/files}"
+export MAUTIC_VOLUME_IMAGES="${MAUTIC_VOLUME_IMAGES:-/var/www/html/docroot/media/images}"
 
 export MAUTIC_VAR="${MAUTIC_VAR:-/var/www/html/var}"
 export MAUTIC_CONSOLE="${MAUTIC_CONSOLE:-/var/www/html/bin/console}"
@@ -25,7 +27,9 @@ export MAUTIC_VOLUMES="\
 ${MAUTIC_VOLUME_CONFIG} \
 ${MAUTIC_VAR} \
 ${MAUTIC_VOLUME_LOGS} \
-${MAUTIC_VOLUME_MEDIA}"
+${MAUTIC_VOLUME_MEDIA} \
+${MAUTIC_VOLUME_FILES} \
+${MAUTIC_VOLUME_IMAGES} "
 
 export REQUIRED_MAUTIC_VARIABLES="\
 MAUTIC_DB_HOST \
