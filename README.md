@@ -96,8 +96,8 @@ For each example, there are 2 files where settings can be set:
 You can build your own images easily using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:6-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:6-fpm
 ```
 
 ## Persistent storage
@@ -161,7 +161,7 @@ For now, please build your own images based on the official ones to add the need
 
 ## Day to day tasks
 
-You can execute commands directly against the [Mautic CLI](https://docs.mautic.org/en/5.x/configuration/command_line_interface.html#mautic-commands). To do so you have two options:
+You can execute commands directly against the [Mautic CLI](https://docs.mautic.org/en/6.0/configuration/command_line_interface.html#mautic-commands). To do so you have two options:
 
 1. Connect to the running container and run the commands.
 1. Run the commands as `exec` via docker (compose).
