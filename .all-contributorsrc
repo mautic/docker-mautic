@@ -119,6 +119,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kiart-tantasi",
+      "name": "Kiart Tantasi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76615399?v=4",
+      "profile": "https://www.petchblog.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
