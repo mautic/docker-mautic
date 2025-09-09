@@ -28,9 +28,9 @@ There are some defaults if parts are omitted:
 
 Some examples:
 
-* `5-apache`: latest stable version of Mautic 5 of the `apache` variant
-* `5.0-fpm`: latest version in the 5.0 minor release in the `fpm` variant 
-* `5.0.3-apache`: specific point release of the `apache` variant
+* `6-apache`: latest stable version of Mautic 6 of the `apache` variant
+* `6.0-fpm`: latest version in the 6.0 minor release in the `fpm` variant 
+* `6.0.6-apache`: specific point release of the `apache` variant
 
 
 Additionally, the tag `latest` is available, which will always provide the newest stable Mautic version using the `apache` variant of the Docker image.
@@ -97,8 +97,8 @@ For each example, there are 2 files where settings can be set:
 You can build your own images easily using the `docker build` command in the root of this directory:
 
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:5-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:5-fpm
+docker build . -f apache/Dockerfile -t mautic/mautic:6-apache
+docker build . -f fpm/Dockerfile -t mautic/mautic:6-fpm
 ```
 
 ## Persistent storage
@@ -150,7 +150,7 @@ See the general Mautic documentation for more info.
 ### Customization
 
 Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
-This is an ongoing effort we hope to support in an upcoming 5.x release.  
+This is an ongoing effort we hope to support in an upcoming 6.x release.  
   
 
 For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
