@@ -4,10 +4,10 @@ ARG BASE_TAG=8.3-apache-bookworm
 # Define Mautic version by package tag
 ARG MAUTIC_VERSION=6.x-dev
 
+FROM php:${BASE_TAG} AS builder
+
 # Flavour of the image, apache or nginx
 ENV FLAVOUR=apache
-
-FROM php:${BASE_TAG} AS builder
 
 # Copy everything from common for building
 COPY ./common/ /common/
