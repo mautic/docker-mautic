@@ -19,9 +19,9 @@ else
 fi
 
 # start the proper service based on FLAVOUR
-if [ "$FLAVOUR" = "nginx" ]; then \
+if [ "${FLAVOUR}" = "nginx" ]; then \
   php-fpm
-elif [ "$FLAVOUR" = "apache" ]; then \
+elif [ "${FLAVOUR}" = "apache" ]; then \
   apache2-foreground
 else
   log "[${DOCKER_MAUTIC_ROLE}]: FLAVOUR variable is not set correctly, exiting."
