@@ -6,9 +6,6 @@ ARG MAUTIC_VERSION=6.x-dev
 
 FROM php:${BASE_TAG} AS builder
 
-# Flavour of the image, apache or nginx
-ENV FLAVOUR=apache
-
 # Copy everything from common for building
 COPY ./common/ /common/
 
@@ -98,6 +95,9 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
 
 # Debug flag for startup scripts
 ENV DEBUG=false
+
+# Flavour of the image, apache or nginx
+ENV FLAVOUR=apache
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
