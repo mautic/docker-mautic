@@ -140,13 +140,13 @@ RUN apt-get update \
     mariadb-client \
     supervisor \
     unzip \
+    && if [ "$FLAVOUR" = "nginx" ]; then \
+        apt-get install --no-install-recommends -y libfcgi-bin ; \
+    fi \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/cron.daily/* \
-    && if [ "$FLAVOUR" = "nginx" ]; then \
-        apt-get install --no-install-recommends -y libfcgi-bin ; \
-    fi
+    && rm /etc/cron.daily/*
 
 # Install Node.JS (LTS)
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
@@ -171,5 +171,3 @@ RUN chown -R www-data:www-data /var/www/html/var/
 WORKDIR /var/www/html/docroot
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["apache2-foreground"]
