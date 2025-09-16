@@ -4,6 +4,9 @@ ARG BASE_TAG=8.3-apache-bookworm
 # Define Mautic version by package tag
 ARG MAUTIC_VERSION=6.x-dev
 
+# Flavour of the image, apache or nginx
+ENV FLAVOUR=apache
+
 FROM php:${BASE_TAG} AS builder
 
 # Copy everything from common for building
@@ -121,7 +124,6 @@ COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/su
 # Install composer
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
-
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -141,7 +143,10 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    && rm /etc/cron.daily/*
+    && rm /etc/cron.daily/* \
+    && if [ "$FLAVOUR" = "nginx" ]; then \
+        apt-get install --no-install-recommends -y libfcgi-bin ; \
+    fi
 
 # Install Node.JS (LTS)
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
@@ -154,8 +159,11 @@ RUN cd /var/www/html && \
     php bin/console mautic:assets:generate && \
     php bin/console cache:clear
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN if [ "$FLAVOUR" = "apache" ]; then \
+        sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf ; \
+        sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf ; \
+        a2enmod rewrite \
+    fi
 
 # Enable Apache Rewrite Module
 RUN a2enmod rewrite
