@@ -165,9 +165,6 @@ RUN if [ "$FLAVOUR" = "apache" ]; then \
         a2enmod rewrite \
     fi
 
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
-
 # Set correct ownership for Mautic var folder
 RUN chown -R www-data:www-data /var/www/html/var/
 
