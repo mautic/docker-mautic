@@ -32,7 +32,7 @@ function check_database_connection {
   # we either maxed our connection attempts or we got a successful response
   log_debug "MySQL connection check response: ${IS_MYSQL_ALIVE}"
   if [[ "${IS_MYSQL_ALIVE}" == "mysqld is alive" ]]; then
-    log_debug "MySQL is alive and well."
+    log "MySQL is alive and well."
   fi
 }
 
