@@ -24,7 +24,6 @@ function check_database_connection {
   done
 
   # Max attempts reached
-  log_startup_error_header
   log_error "MySQL is not responding after ${MAX_FAILURE_COUNT} attempts. Exiting."
   log_error "Please ensure the MySQL server is running and accessible from this container."
   exit 1
