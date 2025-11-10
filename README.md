@@ -119,17 +119,17 @@ The following environment variables can be used to configure how your setup shou
 
 Variable | Default | Required | Accepted Values | Description
 ---|---|---|---|---
-`DEBUG` | false | | `true`, `false` | Enable verbose logs
-`DOCKER_MAUTIC_ROLE` | mautic_web | | `mautic_cron`, `mautic_web`, `mautic_worker (string) | Container role
-`DOCKER_MAUTIC_LOAD_TEST_DATA` | false | | `true`, `false` | Load demo instance
-`DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL` | 2 | | integer | Number of workers to start consuming e-mails
-`DOCKER_MAUTIC_WORKERS_CONSUME_HIT` | 2 | | integer | Number of workers to start consuming hits
-`DOCKER_MAUTIC_WORKERS_CONSUME_FAILED` | 2 | | integer | Number of workers to start consuming failed e-mails
-`MAUTIC_DB_HOST` | *none* | X | IPv4, IPv6, hostname | MySQL server's IP address or hostname
-`MAUTIC_DB_PORT` | 3306 | | 1 - 65535 (integer) | MySQL server's port
-`MAUTIC_DB_DATABASE` | *none* | X | string | Database which holds Mautic's tables
-`MAUTIC_DB_USER` | *none* | X | string | MySQL user for Mautic
-`MAUTIC_DB_PASSWORD` | *none* | X | string | MySQL password for Mautic
+`DEBUG` | false | ✖️ | `true`, `false` | Enable verbose logs
+`DOCKER_MAUTIC_ROLE` | mautic_web | ✖️ | `mautic_cron`, `mautic_web`, `mautic_worker (string) | Container role
+`DOCKER_MAUTIC_LOAD_TEST_DATA` | false | ✖️ | `true`, `false` | Load demo instance
+`DOCKER_MAUTIC_WORKERS_CONSUME_EMAIL` | 2 | ✖️ | integer | Number of workers to start consuming e-mails
+`DOCKER_MAUTIC_WORKERS_CONSUME_HIT` | 2 | ✖️ | integer | Number of workers to start consuming hits
+`DOCKER_MAUTIC_WORKERS_CONSUME_FAILED` | 2 | ✖️ | integer | Number of workers to start consuming failed e-mails
+`MAUTIC_DB_HOST` | *none* | ☑️ | IPv4, IPv6, hostname | MySQL server's IP address or hostname
+`MAUTIC_DB_PORT` | 3306 | ✖️ | 1 - 65535 (integer) | MySQL server's port
+`MAUTIC_DB_DATABASE` | *none* | ☑️ | string | Database which holds Mautic's tables
+`MAUTIC_DB_USER` | *none* | ☑️ | string | MySQL user for Mautic
+`MAUTIC_DB_PASSWORD` | *none* | ☑️ | string | MySQL password for Mautic
 
 ##### PHP Settings
 Variable | Default
