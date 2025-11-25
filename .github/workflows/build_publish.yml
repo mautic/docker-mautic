@@ -37,7 +37,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build image and export locally (for SAST scan)
+      - name: Compute BASE_TAG from Mautic version
+        id: phpver
+        run: |
+          MAJOR=$(echo "${{ inputs.mautic_version }}" | cut -d. -f1)
+          if [ "$MAJOR" = "5" ]; then PHPVER="8.2";
+          elif [ "$MAJOR" = "6" ]; then PHPVER="8.3";
+          elif [ "$MAJOR" = "7" ]; then PHPVER="8.4";
+          else echo "Unsupported Mautic major version: $MAJOR"; exit 1; fi
+          echo "PHPVER=$PHPVER" >> $GITHUB_ENV
+
+      - name: Build image and export locally (for SCA scan)
         uses: docker/build-push-action@v6
         with:
           file: Dockerfile
@@ -45,7 +55,7 @@ jobs:
           load: true
           platforms: linux/amd64
           build-args: |
-            BASE_TAG=8.3-apache-bookworm
+            BASE_TAG=${{ env.PHPVER }}-${{ matrix.image_type }}-bookworm
             MAUTIC_VERSION=${{ inputs.mautic_version }}
             FLAVOUR=${{ matrix.image_type }}
 
@@ -179,16 +189,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute BASE_TAG from Mautic version
+        id: phpver
+        run: |
+          MAJOR=$(echo "${{ inputs.mautic_version }}" | cut -d. -f1)
+          if [ "$MAJOR" = "5" ]; then PHPVER="8.2";
+          elif [ "$MAJOR" = "6" ]; then PHPVER="8.3";
+          elif [ "$MAJOR" = "7" ]; then PHPVER="8.4";
+          else echo "Unsupported Mautic major version: $MAJOR"; exit 1; fi
+          echo "PHPVER=$PHPVER" >> $GITHUB_ENV
+
       - name: Build and Push Docker image
         uses: docker/build-push-action@v5
         with:
           file: Dockerfile
           context: .
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }}
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:cache-${{ matrix.image_type }},mode=max,image-manifest=true
           platforms: linux/amd64,linux/arm64
           build-args: |
-            BASE_TAG=8.3-apache-bookworm
+            BASE_TAG=${{ env.PHPVER }}-${{ matrix.image_type }}-bookworm
             MAUTIC_VERSION=${{ inputs.mautic_version }}
             FLAVOUR=${{ matrix.image_type }}
           push: true
