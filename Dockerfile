@@ -97,7 +97,8 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
 ENV DEBUG=false
 
 # Flavour of the image, apache or nginx
-ENV FLAVOUR=apache
+ARG FLAVOUR=apache
+ENV FLAVOUR=${FLAVOUR}
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
