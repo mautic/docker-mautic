@@ -19,7 +19,7 @@ else
 fi
 
 # start the proper service based on FLAVOUR
-if [ "${FLAVOUR}" = "nginx" ]; then \
+if [ "${FLAVOUR}" = "fpm" ]; then \
   php-fpm
 elif [ "${FLAVOUR}" = "apache" ]; then \
   apache2-foreground

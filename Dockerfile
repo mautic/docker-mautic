@@ -96,7 +96,7 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
 # Debug flag for startup scripts
 ENV DEBUG=false
 
-# Flavour of the image, apache or nginx
+# Flavour of the image, apache or fpm
 ARG FLAVOUR=apache
 ENV FLAVOUR=${FLAVOUR}
 
@@ -141,7 +141,7 @@ RUN apt-get update \
     mariadb-client \
     supervisor \
     unzip \
-    && if [ "$FLAVOUR" = "nginx" ]; then \
+    && if [ "$FLAVOUR" = "fpm" ]; then \
         apt-get install --no-install-recommends -y libfcgi-bin ; \
     fi \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
