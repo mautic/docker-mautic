@@ -125,7 +125,7 @@ body:
       label: Acknowledgements
       description: Please confirm the following before submitting your issue.
       options:
-        - label: I agree to follow this project's [Code of Conduct](https://github.com/mautic/docker-mautic/blob/mautic5/CODE_OF_CONDUCT.md)
+        - label: I agree to follow this project's [Code of Conduct](https://github.com/mautic/docker-mautic/blob/main/CODE_OF_CONDUCT.md)
           required: true
         - label: This issue is **NOT** a security vulnerability. (Security vulnerabilities should be reported via the [Security](https://github.com/mautic/docker-mautic/security) tab.)
           required: true

@@ -5,7 +5,7 @@ permissions:
 on:
   pull_request:
     branches:
-      - mautic5
+      - main
     paths:
       - 'Dockerfile'
       - 'common/**'
