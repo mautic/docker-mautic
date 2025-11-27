@@ -1,4 +1,10 @@
-FROM php:8.3-apache-bookworm AS builder
+# Define base image verison
+ARG BASE_TAG=8.3-apache-bookworm
+
+# Define Mautic version by package tag
+ARG MAUTIC_VERSION=6.x-dev
+
+FROM php:${BASE_TAG} AS builder
 
 # Copy everything from common for building
 COPY ./common/ /common/
@@ -55,15 +61,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin -
 
 RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
 
-# Define Mautic version by package tag
-ARG MAUTIC_VERSION=5.x-dev
-
 RUN cd /opt && \
-    COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
+    COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction --no-security-blocking && \
     rm -rf /opt/mautic/var/cache/js && \
     find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
-FROM php:8.3-apache-bookworm
+FROM php:${BASE_TAG}
 
 LABEL vendor="Mautic"
 LABEL maintainer="Mautic core team <>"
@@ -93,6 +96,10 @@ ENV DOCKER_MAUTIC_ROLE=mautic_web \
 # Debug flag for startup scripts
 ENV DEBUG=false
 
+# Flavour of the image, apache or fpm
+ARG FLAVOUR=apache
+ENV FLAVOUR=${FLAVOUR}
+
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/docroot
 
 # Copy php settings and extensions from builder
@@ -118,7 +125,6 @@ COPY --from=builder /common/templates/supervisord.conf /etc/supervisor/conf.d/su
 # Install composer
 COPY --from=builder /usr/bin/composer /usr/bin/composer
 
-
 # Install PHP extensions requirements and other dependencies
 RUN apt-get update \
     && apt-get upgrade -y \
@@ -135,6 +141,9 @@ RUN apt-get update \
     mariadb-client \
     supervisor \
     unzip \
+    && if [ "$FLAVOUR" = "fpm" ]; then \
+        apt-get install --no-install-recommends -y libfcgi-bin ; \
+    fi \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -151,11 +160,11 @@ RUN cd /var/www/html && \
     php bin/console mautic:assets:generate && \
     php bin/console cache:clear
 
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# Enable Apache Rewrite Module
-RUN a2enmod rewrite
+RUN if [ "$FLAVOUR" = "apache" ]; then \
+        sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
+        && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf \
+        && a2enmod rewrite; \
+    fi
 
 # Set correct ownership for Mautic var folder
 RUN chown -R www-data:www-data /var/www/html/var/
@@ -163,5 +172,3 @@ RUN chown -R www-data:www-data /var/www/html/var/
 WORKDIR /var/www/html/docroot
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["apache2-foreground"]
