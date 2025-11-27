@@ -1,6 +1,6 @@
 # Official Mautic Docker Image
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
@@ -214,6 +214,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nick-vanpraet"><img src="https://avatars.githubusercontent.com/u/7923739?v=4?s=100" width="100px;" alt="Nick Vanpraet"/><br /><sub><b>Nick Vanpraet</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/pulls?q=is%3Apr+reviewed-by%3Anick-vanpraet" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://druid.fi"><img src="https://avatars.githubusercontent.com/u/1140272?v=4?s=100" width="100px;" alt="Marko Korhonen"/><br /><sub><b>Marko Korhonen</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=back-2-95" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.petchblog.net/"><img src="https://avatars.githubusercontent.com/u/76615399?v=4?s=100" width="100px;" alt="Kiart Tantasi"/><br /><sub><b>Kiart Tantasi</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=kiart-tantasi" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Aarplexan"><img src="https://avatars.githubusercontent.com/u/72907341?v=4?s=100" width="100px;" alt="Aarplexan"/><br /><sub><b>Aarplexan</b></sub></a><br /><a href="https://github.com/mautic/docker-mautic/commits?author=Aarplexan" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
