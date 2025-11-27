@@ -4,7 +4,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 > [!NOTE]
-> _This version refers to Docker images and examples for Mautic 5, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
+> _This version refers to Docker images and examples for Mautic 5 and above, previous Mautic versions aren't actively supported anymore. If you would like information about older versions, see https://github.com/mautic/docker-mautic/tree/mautic4._
 
 ## Issues
 
@@ -18,7 +18,7 @@ To reach the developers directly, you can find us in the #docker channel on [Mau
 
 ## Versions
 
-All Mautic 5 Docker images follow the following naming stategy.
+All Mautic 5 and above Docker images follow the following naming stategy.
 
 `<major.minor.patch>-<variant>`
 
@@ -94,11 +94,22 @@ For each example, there are 2 files where settings can be set:
 
 ## Building your own images
 
-You can build your own images easily using the `docker build` command in the root of this directory:
+You can build your own images easily using the `docker build` command in the root of this directory, parsing the following ARGs depending on the version you wish to build:
 
+ | MAUTIC_VERSION | BASE_TAG | FLAVOUR
+---|---|---|---
+5.2.X (Apache) | `5.2.0` to `5.2.8` | 8.2-apache-bookworm | apache
+5.2.X (FPM) | `5.2.0` to `5.2.8` | 8.2-fpm-bookworm | fpm
+6.X.X (Apache) | `6.0.0` to `6.0.6` | 8.3-apache-bookworm | apache
+6.X.X (FPM) | `6.0.0` to `6.0.6` | 8.3-fpm-bookworm | fpm
+7.X.X (Apache) | `7.0.0-beta` | 8.4-apache-bookworm | apache
+7.X.X (FPM) | `7.0.0-beta` | 8.4-fpm-bookworm | fpm
+
+### Example
+
+To build Mautic 6.0.6 apache, run:
 ```
-docker build . -f apache/Dockerfile -t mautic/mautic:6-apache
-docker build . -f fpm/Dockerfile -t mautic/mautic:6-fpm
+docker build . --build-arg FLAVOUR=apache --build-arg BASE_TAG=8.3-apache-bookworm --build-arg MAUTIC_VERSION=6.0.6 mautic/mautic:6-apache
 ```
 
 ## Persistent storage
