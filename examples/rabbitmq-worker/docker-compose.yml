@@ -28,6 +28,8 @@ services:
   rabbitmq:
     image: rabbitmq:3
     environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
       - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST}
     volumes: 
       - rabbitmq-data:/var/lib/rabbitmq
