@@ -1,9 +1,6 @@
 # Define base image verison
 ARG BASE_TAG=8.3-apache-bookworm
 
-# Define Mautic version by package tag
-ARG MAUTIC_VERSION=6.x-dev
-
 FROM php:${BASE_TAG} AS builder
 
 # Copy everything from common for building
@@ -60,6 +57,9 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 RUN echo "memory_limit = -1" > /usr/local/etc/php/php.ini
+
+# Define Mautic version by package tag
+ARG MAUTIC_VERSION=6.x-dev
 
 RUN echo "########################### \n ${MAUTIC_VERSION} \n #########################" && \
     cd /opt && \
