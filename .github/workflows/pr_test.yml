@@ -33,7 +33,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             BASE_TAG=8.3-apache-bookworm
-            MAUTIC_VERSION=6.0.7
+            MAUTIC_VERSION=6.0-dev
             FLAVOUR=${{ matrix.image_type }}
 
       - name: Save image to tar file
