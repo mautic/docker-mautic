@@ -91,7 +91,7 @@ jobs:
         run: docker load -i image.tar
 
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.34.0
         with:
           image-ref: 'mautic-${{ matrix.image_type }}'
           format: 'sarif'
@@ -126,7 +126,7 @@ jobs:
         run: docker load -i image.tar
 
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.34.0
         with:
           scan-type: 'image'
           image-ref: 'mautic-${{ matrix.image_type }}'
