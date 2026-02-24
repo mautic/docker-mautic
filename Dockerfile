@@ -15,7 +15,7 @@ RUN apt-get update \
     curl \
     git \
     unzip \
-    && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
@@ -130,7 +130,7 @@ RUN apt-get update \
     && rm /etc/cron.daily/*
 
 # Install Node.JS (LTS)
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
