@@ -14,9 +14,10 @@ RUN apt-get update \
     ca-certificates \
     curl \
     git \
-    nodejs \
-    npm \
-    unzip
+    unzip \
+    && curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
 
 # PHP extensions install script
 ARG IPE_VERSION=2.9.28
