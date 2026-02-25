@@ -15,9 +15,9 @@ RUN apt-get update \
     curl \
     git \
     unzip \
-    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
 
 # PHP extensions install script
 ARG IPE_VERSION=2.9.28
