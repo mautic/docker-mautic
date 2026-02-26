@@ -11,7 +11,7 @@ CVE-2020-36632
 
 # Temporary ignore for esbuild's golang stdlib vulnerability
 # Issue: Unexpected behavior from Is methods for IPv4-mapped IPv6 addresses
-# CVE-2024-24790
+CVE-2024-24790
 
 # Added due to PR #475 & v7.0.1 launch
 # Temporary ignore for esbuild's golang crypto/tls vulnerability
