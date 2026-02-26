@@ -129,7 +129,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
-# Install Node.JS (LTS)
+# Install Node.JS
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
