@@ -16,7 +16,8 @@ RUN apt-get update \
     git \
     unzip \
     && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
-    && apt-get install -y nodejs \
+    && apt-get install --no-install-recommends -y nodejs \
+    && rm -rf /var/lib/apt/lists/* \
     && npm install -g npm@latest
 
 # PHP extensions install script
@@ -42,7 +43,10 @@ ARG MAUTIC_VERSION=7.x-dev
 RUN cd /opt && \
     COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
     rm -rf /opt/mautic/var/cache/js && \
-    find /opt/mautic/node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
+    cd /opt/mautic && \
+    npm ci && \
+    php bin/console mautic:assets:generate && \
+    find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) -exec rm -rf {} +
 
 FROM php:${BASE_TAG}
 
@@ -129,16 +133,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm /etc/cron.daily/*
 
-# Install Node.JS
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest
-
-# Rebuild web assets
-RUN cd /var/www/html && \
-    npm install && \
-    php bin/console mautic:assets:generate && \
-    php bin/console cache:clear
+# Clear cache to ensure correct paths after copy from builder
+RUN cd /var/www/html && php bin/console cache:clear
 
 RUN if [ "$FLAVOUR" = "apache" ]; then \
         sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
