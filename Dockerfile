@@ -93,6 +93,16 @@ COPY --from=builder /common/templates/php.ini /usr/local/etc/php/php.ini
 
 COPY --from=builder --chown=www-data:www-data /opt/mautic /var/www/html
 
+# Verify web assets were built in the builder stage
+RUN for f in \
+        docroot/media/css/app.css \
+        docroot/media/css/libraries.css \
+        docroot/media/js/app.js \
+        docroot/media/js/libraries.js \
+        docroot/media/libraries/ckeditor/ckeditor.js; do \
+    test -s "/var/www/html/$f" || { echo "ERROR: Missing asset: $f"; exit 1; }; \
+    done
+
 # Copy all files needed for startup
 COPY --from=builder --chmod=755 /common/startup/ /startup/
 COPY --from=builder --chown=www-data:www-data --chmod=755 /common/templates/ /templates/
