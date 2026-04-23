@@ -7,4 +7,6 @@ deploy-test-m3-apache.sh
 examples/*/*
 !examples/*/.env
 !examples/*/.mautic_env
-!examples/*/docker-compose.yml
+!examples/*/*compose.yml
+!examples/*/*compose.yaml
+!examples/basic-with-redis-cache/mautic/config/local.php
