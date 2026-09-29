@@ -92,6 +92,15 @@ For each example, there are 2 files where settings can be set:
 * the `.mautic_env` file:
   Should be used for all Mautic specific variables.
 
+## Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform with a one-click deployment template for Mautic:
+
+[![Deploy on Easypanel][easypanel-btn]][easypanel-deploy]
+
+[easypanel-btn]: https://easypanel.io/img/deploy-on-easypanel-40.svg
+[easypanel-deploy]: https://easypanel.io/templates/mautic5
+
 ## Building your own images
 
 You can build your own images easily using the `docker build` command in the root of this directory, parsing the following ARGs depending on the version you wish to build:
