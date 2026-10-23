@@ -17,3 +17,12 @@ CVE-2024-24790
 # Temporary ignore for esbuild's golang crypto/tls vulnerability
 # Issue: Unexpected session resumption in crypto/tls
 CVE-2025-68121
+
+# Temporary ignore for CKEditor transitive simple-git vulnerability
+# Issue: simple-git unsafe-operation guard does not block trailer command configuration
+CVE-2026-102828
+
+# Added due to temporary ignore for CKEditor transitive simple-git vulnerability
+# Issue: simple-git unsafe-operation guard does not block trailer command configuration
+CVE-2026-102828
+CVE-2026-102829
