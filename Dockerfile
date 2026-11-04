@@ -1,4 +1,4 @@
-# Define base image verison
+# Define base image version
 ARG BASE_TAG=8.3-apache-bookworm
 
 FROM php:${BASE_TAG} AS builder
