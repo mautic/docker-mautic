@@ -32,7 +32,7 @@ jobs:
           load: true
           platforms: linux/amd64
           build-args: |
-            BASE_TAG=8.3-apache-bookworm
+            BASE_TAG=8.3-${{ matrix.image_type }}-bookworm
             MAUTIC_VERSION=7.2.1
             FLAVOUR=${{ matrix.image_type }}
 
