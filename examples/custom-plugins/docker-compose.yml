@@ -28,6 +28,9 @@ services:
   mautic_web:
     build:
       dockerfile: Dockerfile
+      args:
+        MAUTIC_IMAGE: ${MAUTIC_IMAGE:-mautic/mautic:7.2.2-apache}
+        COMPOSER_PACKAGE: ${COMPOSER_PACKAGE:-}
     links:
       - db:mysql
     ports:
@@ -53,6 +56,9 @@ services:
   mautic_cron:
     build:
       dockerfile: Dockerfile
+      args:
+        MAUTIC_IMAGE: ${MAUTIC_IMAGE:-mautic/mautic:7.2.2-apache}
+        COMPOSER_PACKAGE: ${COMPOSER_PACKAGE:-}
     links:
       - db:mysql
     volumes: *mautic-volumes
@@ -69,6 +75,9 @@ services:
   mautic_worker:
     build:
       dockerfile: Dockerfile
+      args:
+        MAUTIC_IMAGE: ${MAUTIC_IMAGE:-mautic/mautic:7.2.2-apache}
+        COMPOSER_PACKAGE: ${COMPOSER_PACKAGE:-}
     links:
       - db:mysql
     volumes: *mautic-volumes

@@ -15,21 +15,73 @@ This directory provides a setup to run [Mautic](https://www.mautic.org/) using D
    cd docker-mautic/examples/custom-plugins
    ```
 
-2. Crete a `plugins` subdirectory, and add your plugins
+2. Create a `plugins` subdirectory and add your plugins (one directory per plugin).
+   Leave the directory empty if you only use Composer packages.
 
    ```bash
    mkdir plugins
-   cp /your/plugins/path plugins/
+   cp -r /your/plugins/path plugins/
    ```
 
-3. Start the environment:
+3. Set the database passwords in `.env`, then build and start the environment:
 
    ```bash
+   docker compose build
    docker compose up -d
    ```
 
 4. Access Mautic in your browser at:
    [http://localhost:8080](http://localhost:8080)
+
+## Composer dependencies and frontend builds
+
+The Dockerfile uses the same `MAUTIC_IMAGE` in both stages, defaulting to
+`mautic/mautic:7.2.2-apache`. This published release includes the fix for
+[CVE-2026-115188](https://github.com/mautic/mautic/security/advisories/GHSA-mxjf-pghx-h299).
+The builder installs Node.js, npm and native build
+tools so Composer can execute its scripts, including the `npm ci` called by
+Mautic's `post-update-cmd`. Scripts remain enabled when installing packages.
+
+Compose reads `MAUTIC_IMAGE` and `COMPOSER_PACKAGE` from `.env` for all three
+services on every build. To add a Composer package, set these values in `.env`,
+replacing `vendor/plugin:^1.0` with a compatible package and version constraint:
+
+```dotenv
+MAUTIC_IMAGE=mautic/mautic:7.2.2-apache
+COMPOSER_PACKAGE=vendor/plugin:^1.0
+```
+
+Leave `COMPOSER_PACKAGE` empty when only copying local plugins. Then build and
+start the services:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+For multiple packages or custom Composer repositories, edit the builder stage
+before the asset generation and cleanup step. If a plugin needs its own frontend
+build, add its documented commands there as well, then remove its `node_modules`
+and build cache while retaining its generated assets.
+
+The builder installs npm dependencies even when `COMPOSER_PACKAGE` is empty,
+generates Mautic assets and removes the core frontend build
+dependencies and cache. The final stage copies the application, including
+Composer dependencies and generated assets, into the original runtime image. It
+inherits that image's PHP configuration, entrypoint and role support without
+copying Node/npm or system build tools.
+
+To select another Apache release, update `MAUTIC_IMAGE` in `.env` to a published,
+patched Apache image before rebuilding. Both stages use that image:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+Rebuild all three services after changing plugins or Composer requirements so
+web, cron and workers use the same application. Activate newly installed plugins
+with Mautic's plugin management after starting the environment.
 
 ## Configuration
 

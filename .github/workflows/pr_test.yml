@@ -32,9 +32,51 @@ jobs:
           load: true
           platforms: linux/amd64
           build-args: |
-            BASE_TAG=8.3-apache-bookworm
-            MAUTIC_VERSION=7.0.0
+            BASE_TAG=8.3-${{ matrix.image_type }}-bookworm
+            MAUTIC_VERSION=7.2.1
             FLAVOUR=${{ matrix.image_type }}
+
+      - name: Verify compiled GrapesJS assets in the runtime image
+        run: |
+          docker run --rm --entrypoint php mautic-${{ matrix.image_type }} -r '
+            $dir = "/var/www/html/docroot/plugins/GrapesJsBuilderBundle/Assets/library/js/dist/";
+            $manifest = json_decode(file_get_contents($dir . "manifest.json"), true, 512, JSON_THROW_ON_ERROR);
+            foreach (["builder.js", "builder.css"] as $asset) {
+                $file = $manifest[$asset] ?? null;
+                if (!is_string($file) || basename($file) !== $file || !is_file($dir . $file) || filesize($dir . $file) === 0) {
+                    fwrite(STDERR, "Missing or empty GrapesJS asset: " . $asset . PHP_EOL);
+                    exit(1);
+                }
+            }
+          '
+          docker run --rm --entrypoint sh mautic-${{ matrix.image_type }} -c '
+            test ! -d /var/www/html/docroot/plugins/GrapesJsBuilderBundle/node_modules &&
+            test ! -d /var/www/html/docroot/plugins/GrapesJsBuilderBundle/.parcel-cache
+          '
+
+      - name: Verify core assets without frontend build tools
+        run: |
+          docker run --rm --entrypoint php mautic-${{ matrix.image_type }} -r '
+            $docroot = "/var/www/html/docroot";
+            $manifest = json_decode(file_get_contents($docroot . "/assets/build/manifest.json"), true, 512, JSON_THROW_ON_ERROR);
+            foreach (["app.js", "css/app.scss"] as $asset) {
+                $file = $manifest[$asset] ?? null;
+                if (!is_string($file) || !is_file($docroot . $file) || filesize($docroot . $file) === 0) {
+                    fwrite(STDERR, "Missing or empty core asset: " . $asset . PHP_EOL);
+                    exit(1);
+                }
+            }
+          '
+          docker run --rm --entrypoint sh mautic-${{ matrix.image_type }} -c '
+            ! command -v node &&
+            ! command -v npm &&
+            test ! -d /var/www/html/var/cache/js &&
+            test ! -d /var/www/html/node_modules/simple-git &&
+            test ! -d /var/www/html/node_modules/@simple-git &&
+            test -s /var/www/html/node_modules/jquery/dist/jquery.js &&
+            test -s /var/www/html/node_modules/vimeo-froogaloop2/javascript/froogaloop.min.js &&
+            test -s /var/www/html/docroot/media/js/libraries.js
+          '
 
       - name: Save image to tar file
         run: docker save mautic-${{ matrix.image_type }} -o image.tar
