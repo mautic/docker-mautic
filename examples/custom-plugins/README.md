@@ -36,15 +36,26 @@ This directory provides a setup to run [Mautic](https://www.mautic.org/) using D
 ## Composer dependencies and frontend builds
 
 The Dockerfile uses the same `MAUTIC_IMAGE` in both stages, defaulting to
-`mautic/mautic:7.2.1-apache`. The builder installs Node.js, npm and native build
+`mautic/mautic:7.2.2-apache`. This published release includes the fix for
+[CVE-2026-115188](https://github.com/mautic/mautic/security/advisories/GHSA-mxjf-pghx-h299).
+The builder installs Node.js, npm and native build
 tools so Composer can execute its scripts, including the `npm ci` called by
 Mautic's `post-update-cmd`. Scripts remain enabled when installing packages.
 
-To add a Composer package, replace `vendor/plugin:^1.0` with a package and version
-constraint compatible with your Mautic release:
+Compose reads `MAUTIC_IMAGE` and `COMPOSER_PACKAGE` from `.env` for all three
+services on every build. To add a Composer package, set these values in `.env`,
+replacing `vendor/plugin:^1.0` with a compatible package and version constraint:
+
+```dotenv
+MAUTIC_IMAGE=mautic/mautic:7.2.2-apache
+COMPOSER_PACKAGE=vendor/plugin:^1.0
+```
+
+Leave `COMPOSER_PACKAGE` empty when only copying local plugins. Then build and
+start the services:
 
 ```bash
-docker compose build --build-arg COMPOSER_PACKAGE='vendor/plugin:^1.0'
+docker compose build
 docker compose up -d
 ```
 
@@ -53,16 +64,18 @@ before the asset generation and cleanup step. If a plugin needs its own frontend
 build, add its documented commands there as well, then remove its `node_modules`
 and build cache while retaining its generated assets.
 
-The builder generates Mautic assets and removes the core frontend build
+The builder installs npm dependencies even when `COMPOSER_PACKAGE` is empty,
+generates Mautic assets and removes the core frontend build
 dependencies and cache. The final stage copies the application, including
 Composer dependencies and generated assets, into the original runtime image. It
 inherits that image's PHP configuration, entrypoint and role support without
 copying Node/npm or system build tools.
 
-To select another Apache release, pass the same image to both stages:
+To select another Apache release, update `MAUTIC_IMAGE` in `.env` to a published,
+patched Apache image before rebuilding. Both stages use that image:
 
 ```bash
-docker compose build --build-arg MAUTIC_IMAGE=mautic/mautic:7.2.1-apache
+docker compose build
 docker compose up -d
 ```
 

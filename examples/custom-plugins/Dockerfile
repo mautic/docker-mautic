@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-ARG MAUTIC_IMAGE=mautic/mautic:7.2.1-apache
+ARG MAUTIC_IMAGE=mautic/mautic:7.2.2-apache
 
 FROM ${MAUTIC_IMAGE} AS builder
 
@@ -16,6 +16,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000
 
 COPY ./plugins/ /var/www/html/docroot/plugins/
 
+# Asset generation also needs dependencies when no Composer package is added.
+RUN npm ci --include=dev --no-audit --no-fund
+
 # Optional Composer package, for example vendor/plugin:^1.0.
 ARG COMPOSER_PACKAGE
 RUN if [ -n "$COMPOSER_PACKAGE" ]; then \
@@ -29,6 +32,7 @@ RUN php bin/console mautic:assets:generate && \
 
 FROM ${MAUTIC_IMAGE}
 
+RUN rm -rf /var/www/html/node_modules
 COPY --from=builder --chown=www-data:www-data /var/www/html/ /var/www/html/
 RUN cd /var/www/html && php bin/console cache:clear && \
     chown -R www-data:www-data var/
