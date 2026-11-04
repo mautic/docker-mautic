@@ -16,8 +16,9 @@ ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000
 
 COPY ./plugins/ /var/www/html/docroot/plugins/
 
-# Asset generation also needs dependencies when no Composer package is added.
-RUN npm ci --include=dev --no-audit --no-fund
+# Reinstall dependencies and apply Mautic's patches even without a Composer package.
+RUN npm ci --include=dev --no-audit --no-fund && \
+    npx --no-install patch-package --error-on-fail
 
 # Optional Composer package, for example vendor/plugin:^1.0.
 ARG COMPOSER_PACKAGE
