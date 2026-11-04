@@ -43,18 +43,21 @@ RUN cd /opt && \
     COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_PROCESS_TIMEOUT=10000 composer create-project mautic/recommended-project:${MAUTIC_VERSION} mautic --no-interaction && \
     rm -rf /opt/mautic/var/cache/js
 
-# Composer installs the GrapesJS sources without the compiled builder assets.
-# Build them before copying Mautic into the runtime image.
+# Older releases already ship compiled GrapesJS assets. Build them only when
+# absent from the Composer package, before copying Mautic into the runtime image.
 RUN cd /opt/mautic/docroot/plugins/GrapesJsBuilderBundle && \
-    npm ci --include=dev --no-audit --no-fund && \
-    npm run build && \
-    rm -rf node_modules .parcel-cache
+    if [ ! -s Assets/library/js/dist/builder.js ]; then \
+        npm ci --include=dev --no-audit --no-fund && \
+        npm run build && \
+        rm -rf node_modules .parcel-cache; \
+    fi
 
 # Generate the core assets while the frontend build dependencies are available.
 # Keep only the libraries needed at runtime when copying to the final image.
 RUN cd /opt/mautic && \
     npm install && \
     php bin/console mautic:assets:generate && \
+    rm -rf var/cache/js && \
     find node_modules -mindepth 1 -maxdepth 1 -not \( -name 'jquery' -or -name 'vimeo-froogaloop2' \) | xargs rm -rf
 
 FROM php:${BASE_TAG}

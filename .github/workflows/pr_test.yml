@@ -70,6 +70,7 @@ jobs:
           docker run --rm --entrypoint sh mautic-${{ matrix.image_type }} -c '
             ! command -v node &&
             ! command -v npm &&
+            test ! -d /var/www/html/var/cache/js &&
             test ! -d /var/www/html/node_modules/simple-git &&
             test ! -d /var/www/html/node_modules/@simple-git &&
             test -s /var/www/html/node_modules/jquery/dist/jquery.js &&
