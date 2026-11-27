@@ -160,11 +160,14 @@ See the general Mautic documentation for more info.
 
 ### Customization
 
-Currently this image has no easy way to extend Mautic (e.g. adding extra `composer` dependencies or installing extra plugins or themes).  
-This is an ongoing effort we hope to support in an upcoming 6.x release.  
-  
+Build a derived image to add Composer dependencies, plugins or themes. Composer's
+installation and update scripts require Node/npm, including `npm ci` in Mautic
+7.2.1. Run these commands in a builder stage and copy the resulting application
+into a runtime stage based on the same Mautic image.
 
-For now, please build your own images based on the official ones to add the needed dependencies, plugins and themes.
+The [custom-plugins example](examples/custom-plugins/README.md) provides this
+workflow, build commands and a Compose setup for the web, cron and worker roles.
+Node/npm and frontend build tools stay in the builder stage.
 
 ## Day to day tasks
 
